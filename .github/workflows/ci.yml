@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: Check & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # npm install (not ci) because package-lock.json is not committed
+      - name: Install dependencies
+        run: npm install
+
+      - name: Type check (astro check)
+        run: npm run check
+
+      - name: Build production site
+        run: npm run build
