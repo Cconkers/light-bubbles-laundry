@@ -103,11 +103,14 @@ depender de él daría un comportamiento inconsistente además de invasivo.
 
 ### 3. Pista de audio
 
-Activo actual: `public/music/Ropa Limpia.mp3`, 2,5MB.
+Activo listo para web: `public/music/Ropa Limpia-web.mp3`, **264KB**, 45 s, mono 48 kbps,
+sin metadatos ni artwork incrustado. Está dentro del límite de 400 KB.
+
+El original (`public/music/Ropa Limpia.mp3`, 2,5MB) permanece fuera del repositorio.
 
 - `[PLACEHOLDER: confirmar derechos de uso de la pista]` — imprescindible antes de publicar.
-- **Reencodear**: objetivo por debajo de **400KB**, mediante bitrate menor (96-128 kbps bastan para música ambiental de fondo) o recorte a un bucle corto.
-- El bucle debe ser continuo, sin corte audible en el punto de empalme.
+- El bucle actual dura 45 s. Si el punto de empalme produce un corte audible, acortarlo
+  hasta el compás anterior o utilizar un crossfade corto.
 - Volumen normalizado y conservador: el audio ambiental se sitúa claramente por debajo del nivel de una voz.
 - Formato: MP3 basta por compatibilidad universal. Añadir OGG/AAC solo si se mide un problema real.
 

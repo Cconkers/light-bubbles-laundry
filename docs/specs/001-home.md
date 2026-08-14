@@ -124,7 +124,7 @@ Primera pantalla. Es la sección que más puede degradar el resultado si se reca
 - **CTA primario** — "Ver tarifas" (D-011, `PRODUCT.md` — Primary CTA).
 - **CTA secundario** — "Cómo funciona", ancla a §4.
 - **Fondo** — lavado de color con `--gradient-hero` y formas orgánicas, o la fotografía del local. Debe respetar el vacío de la referencia y **no** llevar velo oscuro; la legibilidad se resuelve con superficie clara translúcida (`VISUAL_DIRECTION.md` §5).
-  > Si se usa fotografía, el activo disponible es `public/images/background-img.png` (1536x1024, **PNG de 2MB sin optimizar**). Servirlo tal cual haría fracasar el objetivo de LCP: hay que moverlo a `src/` para que pase por `astro:assets`, o convertirlo a WebP con variantes responsive. No referenciarlo en crudo desde `public/`.
+  > Si se usa fotografía, los activos disponibles son `public/images/background-img.webp` (1536x1024, 146KB) y `public/images/background-img-sm.webp` (768x512, 46KB). **No referirlos en crudo desde `public/`**: deben moverse a `src/` para que pasen por `astro:assets`, que emite las variantes responsive adecuadas y gestiona el caché. Sin ese paso el LCP seguiría siendo subóptimo.
 - **Logo de marca** — puede aparecer a mayor tamaño como elemento gráfico. Sin burbujas decorativas adyacentes (D-017).
 - **Móvil:** H1 y CTA primario visibles **sin scroll**.
 

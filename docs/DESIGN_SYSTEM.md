@@ -592,10 +592,22 @@ Móvil primero. Los breakpoints coinciden con los de Tailwind y con los tiers de
 
 | Archivo | Rol | Estado |
 |---------|-----|--------|
-| [`src/assets/brand/logo.webp`](../src/assets/brand/logo.webp) | **Maestro.** 1230x1186, canal alfa, 198KB | Vigente |
-| `public/images/logo_burbujas_de_luz.png` | Original aplanado del que deriva el maestro. 1254x1254, sin alfa, 1,5MB | Origen. No se consume desde código. |
+| [`src/assets/brand/logo.png`](../src/assets/brand/logo.png) | **Maestro lossless.** 1230x1186, RGBA, 1,9MB. Canal alfa reconstruido. | Vigente |
+| [`src/assets/brand/logo.webp`](../src/assets/brand/logo.webp) | Derivado web. 1230x1186, canal alfa, 198KB. | Vigente |
+| `public/images/logo_burbujas_de_luz.png` | Origen aplanado (sin alfa). 1254x1254, 1,5MB. No en repositorio. | Fuera del repo (untracked) |
 | `src/assets/images/logo.png` | Copia antigua con marca de agua, 353KB | **Se retira en SPEC-001** |
 | `public/images/logo.png` | Copia antigua servida sin optimizar | Ya borrada (commit `9c1b277`) |
+
+El PNG lossless (`logo.png`) es el **master de mayor fidelidad**: sin pérdida de datos,
+conserva la información exacta que entró en la reconstrucción. El WebP es la versión
+derivada para servir en web. Ambos viven en `src/` para pasar por `astro:assets`. En
+componentes se usa el PNG como fuente: Astro emite WebP dimensionado por uso en build time.
+
+> El PNG comprometido pesa 1,9 MB, inusual para un activo de texto, porque el logo
+> contiene gradientes complejos y especularidades que el compresor lossless no puede
+> simplificar. La alternativa (WebP 198 KB con pérdida mínima) sirve igual de bien para
+> renderizado; el PNG solo aporta si se hace edición posterior o si algún día un diseñador
+> deriva un SVG de él.
 
 El maestro vive en `src/`, no en `public/`, para que pase por `astro:assets` y Astro emita
 WebP dimensionado por uso en lugar de servir el original completo.
@@ -628,9 +640,21 @@ el espacio de respeto se controla en CSS y no queda horneado en el bitmap.
 
 | Archivo | Rol | Nota |
 |---------|-----|------|
-| `public/images/background-img.png` | Fotografía de fondo del hero. 1536x1024, PNG, 2MB | **Sin optimizar.** `SPEC-001` debe servirla por `astro:assets` o convertirla a WebP; 2MB de PNG en el hero incumpliría el objetivo de LCP. |
-| `public/design/*.webp` | Referencias de diseño, no UI | Ver D-019 |
-| `public/music/Ropa Limpia.mp3` | Pista ambiental, 2,5MB | Especificada en [`SPEC-002`](./specs/002-audio.md) (D-021). **Debe reencodearse por debajo de 400KB** y solo se descarga cuando el usuario activa el audio. Derechos de uso pendientes de confirmar. |
+| `public/images/background-img.webp` | Fotografía de fondo, variante desktop. 1536x1024, 146KB. | Vigente |
+| `public/images/background-img-sm.webp` | Fotografía de fondo, variante mobile. 768x512, 46KB. | Vigente |
+| `public/images/background-img.png` | Original PNG sin optimizar, 2MB. No en repositorio. | Fuera del repo (untracked) |
+| `public/design/mockup_burbujas_de_luz1.webp` | Design board completo (paleta, tipografía, componentes, wireframes). 91KB. | Vigente |
+| `public/design/mockup_burbujas_de_luz2.webp` | Vista a pantalla completa de la web. 89KB. | Vigente |
+| `public/design/*.webp` (referencias hero, board, responsive) | Referencias de diseño originales | Ver D-019 |
+| `public/music/Ropa Limpia-web.mp3` | Pista ambiental lista para web. 264KB, 45s, mono 48kbps. | Vigente |
+| `public/music/Ropa Limpia.mp3` | Original, 2,5MB. No en repositorio. | Fuera del repo (untracked) |
+
+El fondo web tiene dos variantes comprometidas. `SPEC-001` debe servirlas desde `src/`
+vía `astro:assets` en lugar de referenciarlas en crudo desde `public/`, para que Astro
+emita las variantes responsive y gestione el caché correctamente.
+
+La pista ambiental está dentro del límite de 400 KB (D-021 / [`SPEC-002`](./specs/002-audio.md)).
+Los derechos de uso siguen pendientes de confirmar antes de publicar.
 
 ### Uso
 

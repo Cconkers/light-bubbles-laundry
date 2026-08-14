@@ -904,7 +904,8 @@ de fallo es grave y silencioso: cualquier herramienta que escriba en `CLAUDE.md`
 
 D-004 registró que el audio quedaba fuera de los objetivos de producto, porque Howler.js
 figuraba en `PLANNING.md` sin haberse instalado nunca. Después se incorporó al repositorio una
-pista real, `public/music/Ropa Limpia.mp3` (2,5MB), con intención de usarla en el sitio. Eso
+pista real (`public/music/Ropa Limpia.mp3`, 2,5MB original, no comprometida), con intención de
+usarla en el sitio. Eso
 reabre la cuestión, que ya no es "¿instalamos una librería de audio?" sino "¿qué papel tiene
 el audio en el producto y cómo se implementa sin dañar la accesibilidad ni el rendimiento?".
 
@@ -935,7 +936,7 @@ producto. Si el audio solo se descarga cuando se pide, su coste es cero para qui
 
 - El audio nunca puede ser la única vía de transmitir información.
 - Hace falta un control visible y persistente, con su propio espacio en la interfaz.
-- La pista actual (2,5MB) probablemente deba reencodearse a un bitrate menor o recortarse a un bucle corto. Ver `SPEC-002`.
+- La pista se reencodó a `public/music/Ropa Limpia-web.mp3` (264KB, 45s, mono 48kbps). Está dentro del límite de 400KB especificado en `SPEC-002`.
 - La consecuencia de D-004 "sin audio en el sitio, y `MuteButton` deja de tener sentido" queda modificada: el control de silencio vuelve a ser un componente necesario.
 - La prohibición de sonido asociada a las burbujas (D-009) **no cambia**: las burbujas siguen siendo silenciosas y no interactivas. El audio es ambiental, no reactivo.
 
