@@ -84,7 +84,7 @@ export async function initScene(canvas: HTMLCanvasElement): Promise<BubbleScene>
   let bubbleSystem = new BubbleSystem(scene, getParticleLimit(tier));
   bubbleSystem.mesh.renderOrder = 2;
 
-  const clock = new THREE.Clock();
+  const timer = new THREE.Timer();
   let animationId = 0;
   let isRunning = !document.hidden;
 
@@ -112,9 +112,10 @@ export async function initScene(canvas: HTMLCanvasElement): Promise<BubbleScene>
     if (!isRunning) return;
 
     animationId = requestAnimationFrame(animate);
-    const deltaTime = Math.min(clock.getDelta(), 0.05);
+    timer.update();
+    const deltaTime = Math.min(timer.getDelta(), 0.05);
     bubbleSystem.update(deltaTime);
-    laundryRoom.update(clock.elapsedTime);
+    laundryRoom.update(timer.getElapsed());
     renderer.render(scene, camera);
   }
 
@@ -122,7 +123,8 @@ export async function initScene(canvas: HTMLCanvasElement): Promise<BubbleScene>
     isRunning = !document.hidden;
 
     if (isRunning) {
-      clock.getDelta();
+      // Swallow the time gap accumulated while the tab was hidden
+      timer.update();
       animate();
     } else {
       cancelAnimationFrame(animationId);
