@@ -1,0 +1,63 @@
+---
+/**
+ * Decoración ligera de burbujas en CSS (D-003, D-009).
+ * aria-hidden y pointer-events:none — invisibles para lectores de pantalla.
+ * Densidad por breakpoint: ≤6 móvil, ≤10 tablet, ≤14 desktop.
+ * Animación: transform + opacity únicamente (sin animar top/left).
+ * Se desactivan con prefers-reduced-motion (ver global.css @keyframes).
+ */
+
+type Bubble = {
+  size: 'sm' | 'md' | 'lg' | 'xl';
+  color: 'violet' | 'pink' | 'cyan';
+  /** left%, bottom% — posición de inicio, no animada */
+  left: number;
+  bottom: number;
+  /** duración en segundos (18-40) */
+  duration: number;
+  /** retraso en segundos (0-20) */
+  delay: number;
+  /** true = oculta en móvil, visible desde md */
+  tabletPlus?: boolean;
+  /** true = oculta hasta lg */
+  desktopOnly?: boolean;
+};
+
+const bubbles: Bubble[] = [
+  // ── 6 siempre visibles (móvil) ──────────────────────────────────────────
+  { size:'xl',  color:'violet', left:8,  bottom:5,  duration:34, delay:0  },
+  { size:'md',  color:'cyan',   left:82, bottom:12, duration:22, delay:5  },
+  { size:'lg',  color:'pink',   left:55, bottom:2,  duration:28, delay:10 },
+  { size:'sm',  color:'violet', left:30, bottom:18, duration:18, delay:3  },
+  { size:'md',  color:'pink',   left:68, bottom:35, duration:26, delay:8  },
+  { size:'sm',  color:'cyan',   left:15, bottom:45, duration:20, delay:14 },
+  // ── 4 visibles desde tablet ─────────────────────────────────────────────
+  { size:'lg',  color:'cyan',   left:90, bottom:60, duration:32, delay:2,  tabletPlus:true },
+  { size:'sm',  color:'violet', left:42, bottom:70, duration:19, delay:11, tabletPlus:true },
+  { size:'md',  color:'pink',   left:25, bottom:80, duration:24, delay:6,  tabletPlus:true },
+  { size:'xl',  color:'violet', left:72, bottom:80, duration:38, delay:16, tabletPlus:true },
+  // ── 4 visibles desde desktop ────────────────────────────────────────────
+  { size:'md',  color:'cyan',   left:5,  bottom:65, duration:21, delay:9,  desktopOnly:true },
+  { size:'sm',  color:'pink',   left:48, bottom:90, duration:18, delay:13, desktopOnly:true },
+  { size:'lg',  color:'violet', left:93, bottom:30, duration:36, delay:1,  desktopOnly:true },
+  { size:'sm',  color:'cyan',   left:60, bottom:55, duration:20, delay:18, desktopOnly:true },
+];
+
+const sizeClass = (s: string) => `bubble--${s}`;
+const colorClass = (c: string) => `bubble--${c}`;
+const responsive = (b: Bubble) =>
+  b.desktopOnly ? 'hidden lg:block' : b.tabletPlus ? 'hidden md:block' : '';
+---
+
+<div
+  class="bubble-container"
+  aria-hidden="true"
+  role="presentation"
+>
+  {bubbles.map((b) => (
+    <span
+      class:list={['bubble', sizeClass(b.size), colorClass(b.color), responsive(b)]}
+      style={`left:${b.left}%;bottom:${b.bottom}%;animation-duration:${b.duration}s;animation-delay:-${b.delay}s;`}
+    />
+  ))}
+</div>

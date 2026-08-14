@@ -1,0 +1,51 @@
+---
+/**
+ * Contenedor de tarjeta reutilizable.
+ * Variantes: plain | tinted | featured | sunken.
+ * Radio radius-card, sombra shadow-sm. Sin esquinas vivas.
+ */
+interface Props {
+  variant?: 'plain' | 'tinted' | 'featured' | 'sunken';
+  interactive?: boolean;
+  href?: string;
+  class?: string;
+}
+
+const {
+  variant = 'plain',
+  interactive = false,
+  href,
+  class: cls = '',
+} = Astro.props;
+
+const base = [
+  'rounded-card overflow-hidden',
+  'transition-shadow duration-[var(--duration-base)]',
+].join(' ');
+
+const variantStyles: Record<string, string> = {
+  plain:    'bg-surface shadow-sm border border-border',
+  tinted:   'bg-surface-sunken border border-border',
+  featured: 'bg-surface shadow-sm border-2 border-accent',
+  sunken:   'bg-surface-sunken',
+};
+
+const classes = [
+  base,
+  variantStyles[variant],
+  interactive ? 'cursor-pointer hover-lift' : '',
+  cls,
+].filter(Boolean).join(' ');
+---
+
+{
+  href ? (
+    <a href={href} class={classes}>
+      <slot />
+    </a>
+  ) : (
+    <div class={classes}>
+      <slot />
+    </div>
+  )
+}

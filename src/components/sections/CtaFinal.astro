@@ -1,0 +1,92 @@
+---
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { contact } from '../../data/content';
+
+/**
+ * CTA Final — cierre orientado a visita física.
+ * Fondo con --gradient-wash (pastel). Sin bloque oscuro (D-005).
+ * Contacto directo: tel: y WhatsApp con placeholder (D-010).
+ * id="cta" para ancla del header (Tarifas, Preguntas) y CTA del hero.
+ */
+---
+
+<section
+  id="cta"
+  class="relative py-[var(--section-gap)] px-[var(--gutter)] overflow-hidden"
+  aria-labelledby="cta-heading"
+  data-reveal
+>
+  <!-- Fondo pastel — sin negro ni oscuridades (D-005) -->
+  <div
+    class="absolute inset-0 -z-10"
+    style="background: var(--gradient-wash);"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Forma orgánica decorativa -->
+  <div
+    class="absolute -bottom-24 -right-24 h-80 w-80 -z-10 opacity-40"
+    style="background: radial-gradient(circle, #F1E5FF 0%, transparent 70%);
+           border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;"
+    aria-hidden="true"
+  ></div>
+
+  <div class="mx-auto max-w-[var(--content-max)] text-center">
+
+    <h2
+      id="cta-heading"
+      class="mb-4 font-bold text-text"
+      style="font-size: clamp(1.75rem, 4vw, 2.75rem); letter-spacing: -0.02em;"
+    >
+      ¿Listo para tu primera visita?
+    </h2>
+
+    <p
+      class="mb-10 text-text-secondary mx-auto"
+      style="font-size: 1.125rem; line-height: 1.6; max-width: 44ch;"
+    >
+      Descubre las tarifas y cómo funciona. Sin reservas, sin colas: ven cuando quieras.
+    </p>
+
+    <!-- CTA principal -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+      <Button href="#servicios" variant="primary">
+        Ver tarifas
+      </Button>
+    </div>
+
+    <!-- Contacto directo -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+      <!-- Teléfono -->
+      <a
+        href={`tel:${contact.phone}`}
+        class="inline-flex items-center gap-2 font-semibold text-primary
+               min-h-[44px] px-4 rounded-pill
+               transition-colors duration-[var(--duration-fast)]
+               hover:bg-primary-subtle
+               focus-visible:outline-none focus-visible:shadow-focus"
+        aria-label={`Llamar a Burbujas de Luz: ${contact.phone}`}
+      >
+        <Icon name="phone" size={20} />
+        {contact.phone}
+      </a>
+
+      <!-- WhatsApp -->
+      <a
+        href={`https://wa.me/${contact.whatsapp}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 font-semibold text-success
+               min-h-[44px] px-4 rounded-pill
+               transition-colors duration-[var(--duration-fast)]
+               hover:bg-success-subtle
+               focus-visible:outline-none focus-visible:shadow-focus"
+        aria-label="Escribir por WhatsApp a Burbujas de Luz"
+      >
+        <Icon name="whatsapp" size={20} />
+        WhatsApp
+      </a>
+    </div>
+  </div>
+</section>

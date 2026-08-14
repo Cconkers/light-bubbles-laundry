@@ -1,0 +1,126 @@
+---
+import { Image } from 'astro:assets';
+import logoWebp from '../../assets/brand/logo.webp';
+import Icon from '../ui/Icon.astro';
+import { site, contact } from '../../data/content';
+
+/**
+ * Footer — información práctica y cierre de marca.
+ * Superficie clara (--color-background-alt). Sin bg-black (D-005).
+ * Logo a 120px de ancho (respeta mínimo de 104px en móvil).
+ * Todo dato de contacto es placeholder (D-010).
+ * Redes: bloque omitido por falta de datos confirmados.
+ * id="contacto" para ancla del header.
+ */
+
+const year = new Date().getFullYear();
+---
+
+<footer
+  id="contacto"
+  class="bg-background-alt border-t border-border"
+  role="contentinfo"
+>
+  <div class="mx-auto max-w-[var(--content-max)] px-[var(--gutter)]">
+
+    <!-- Bloque principal -->
+    <div class="py-12 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+
+      <!-- Marca -->
+      <div class="flex flex-col gap-4">
+        <a
+          href="/"
+          class="inline-block focus-visible:outline-none focus-visible:shadow-focus rounded-md"
+          aria-label="Burbujas de Luz — inicio"
+        >
+          <Image
+            src={logoWebp}
+            alt="Burbujas de Luz"
+            width={240}
+            height={232}
+            loading="lazy"
+            decoding="async"
+            style="width:120px;height:auto;"
+          />
+        </a>
+        <p class="text-text-secondary" style="font-size:0.9375rem;line-height:1.6;max-width:28ch;">
+          Lavandería autoservicio en Sevilla. Lava, seca y disfruta a tu ritmo.
+        </p>
+      </div>
+
+      <!-- Información práctica -->
+      <div class="flex flex-col gap-4">
+        <h2
+          class="font-semibold text-text"
+          style="font-size:0.8125rem;letter-spacing:0.08em;text-transform:uppercase;"
+        >
+          Información
+        </h2>
+        <ul class="flex flex-col gap-3" role="list">
+          <!-- Dirección -->
+          <li class="flex items-start gap-2 text-text-secondary" style="font-size:0.9375rem;line-height:1.5;">
+            <Icon name="map-pin" size={18} class="mt-0.5 shrink-0 text-primary" />
+            <span>{contact.address}</span>
+          </li>
+          <!-- Horario -->
+          <li class="flex items-start gap-2 text-text-secondary" style="font-size:0.9375rem;line-height:1.5;">
+            <Icon name="clock" size={18} class="mt-0.5 shrink-0 text-primary" />
+            <span>{contact.hours}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contacto -->
+      <div class="flex flex-col gap-4">
+        <h2
+          class="font-semibold text-text"
+          style="font-size:0.8125rem;letter-spacing:0.08em;text-transform:uppercase;"
+        >
+          Contacto
+        </h2>
+        <ul class="flex flex-col gap-3" role="list">
+          <!-- Teléfono -->
+          <li>
+            <a
+              href={`tel:${contact.phone}`}
+              class="inline-flex items-center gap-2 text-text-secondary min-h-[44px]
+                     transition-colors duration-[var(--duration-fast)]
+                     hover:text-primary
+                     focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
+              style="font-size:0.9375rem;"
+            >
+              <Icon name="phone" size={18} class="text-primary" />
+              {contact.phone}
+            </a>
+          </li>
+          <!-- Email -->
+          <li>
+            <a
+              href={`mailto:${contact.email}`}
+              class="inline-flex items-center gap-2 text-text-secondary min-h-[44px]
+                     transition-colors duration-[var(--duration-fast)]
+                     hover:text-primary
+                     focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
+              style="font-size:0.9375rem;"
+            >
+              <Icon name="mail" size={18} class="text-primary" />
+              {contact.email}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Barra inferior -->
+    <div
+      class="py-6 border-t border-border flex flex-col sm:flex-row
+             items-center justify-between gap-3 text-muted"
+      style="font-size:0.8125rem;"
+    >
+      <p>
+        © {year} {site.name} · {site.tagline} · {site.location}
+      </p>
+      <!-- [PLACEHOLDER: aviso legal / política de privacidad] -->
+    </div>
+  </div>
+</footer>

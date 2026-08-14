@@ -595,7 +595,7 @@ Móvil primero. Los breakpoints coinciden con los de Tailwind y con los tiers de
 | [`src/assets/brand/logo.png`](../src/assets/brand/logo.png) | **Maestro lossless.** 1230x1186, RGBA, 1,9MB. Canal alfa reconstruido. | Vigente |
 | [`src/assets/brand/logo.webp`](../src/assets/brand/logo.webp) | Derivado web. 1230x1186, canal alfa, 198KB. | Vigente |
 | `public/images/logo_burbujas_de_luz.png` | Origen aplanado (sin alfa). 1254x1254, 1,5MB. No en repositorio. | Fuera del repo (untracked) |
-| `src/assets/images/logo.png` | Copia antigua con marca de agua, 353KB | **Se retira en SPEC-001** |
+| `src/assets/images/logo.png` | Copia antigua con marca de agua | **Retirada en SPEC-001** |
 | `public/images/logo.png` | Copia antigua servida sin optimizar | Ya borrada (commit `9c1b277`) |
 
 El PNG lossless (`logo.png`) es el **master de mayor fidelidad**: sin pérdida de datos,
@@ -612,9 +612,9 @@ componentes se usa el PNG como fuente: Astro emite WebP dimensionado por uso en 
 El maestro vive en `src/`, no en `public/`, para que pase por `astro:assets` y Astro emita
 WebP dimensionado por uso en lugar de servir el original completo.
 
-> **Atención:** [`src/pages/index.astro`](../src/pages/index.astro) todavía apunta a
-> `/images/logo.png`, archivo que ya no existe, así que **el logo de la cabecera está roto
-> (404) en el estado actual**. `SPEC-001` lo repara al consumir el maestro con `<Image>`.
+> **Nota:** La referencia rota a `/images/logo.png` en `index.astro` quedó reparada en
+> SPEC-001. El logo de cabecera se sirve ahora mediante `<Image>` de `astro:assets` desde
+> `src/assets/brand/logo.webp`.
 
 **Procedencia y limitación conocida.** El original entregado por el negocio
 (`public/images/logo_burbujas_de_luz.png`, PNG sin pérdida de 1254x1254) **no tiene canal

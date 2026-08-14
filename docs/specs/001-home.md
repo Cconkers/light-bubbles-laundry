@@ -4,7 +4,7 @@
 |---|---|
 | **ID** | SPEC-001 |
 | **Título** | Homepage (`/`) |
-| **Estado** | Ready for implementation |
+| **Estado** | Implemented |
 | **Fecha** | agosto 2026 |
 | **Ruta** | `/` — [`src/pages/index.astro`](../../src/pages/index.astro) |
 

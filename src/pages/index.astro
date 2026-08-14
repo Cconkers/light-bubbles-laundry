@@ -1,188 +1,54 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/sections/Header.astro';
+import Hero from '../components/sections/Hero.astro';
+import Benefits from '../components/sections/Benefits.astro';
+import Services from '../components/sections/Services.astro';
+import HowItWorks from '../components/sections/HowItWorks.astro';
+import CtaFinal from '../components/sections/CtaFinal.astro';
+import Footer from '../components/sections/Footer.astro';
+import { site } from '../data/content';
+
+const pageTitle = `${site.name} — ${site.tagline} en ${site.location}`;
+const pageDescription =
+  `Lavandería autoservicio en ${site.location}. Lava, seca y disfruta con máquinas modernas a tu ritmo. ` +
+  `Consulta las tarifas, capacidades y horario.`;
 ---
 
-<BaseLayout>
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  ogImage="/og-placeholder.webp"
+>
+  <!-- Skip link — primer elemento focusable (SPEC-001 Accesibilidad) -->
   <a href="#main-content" class="skip-link">Saltar al contenido</a>
 
-  <!-- Full-bleed background -->
-  <div
-    class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
-    style="background-image: url('/images/bg-laundry.png');"
-    aria-hidden="true"
-  ></div>
-  <!-- Subtle darkening scrim for text legibility -->
-  <div class="fixed inset-0 -z-10 bg-black/20" aria-hidden="true"></div>
+  <!-- Header fijo -->
+  <Header />
 
-  <!-- ── NAV ───────────────────────────────────────────────── -->
-  <header class="fixed inset-x-0 top-0 z-50">
-    <nav
-      class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4"
-      aria-label="Navegación principal"
-    >
-      <!-- Logo pill -->
-      <a
-        href="/"
-        class="flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 shadow-lg backdrop-blur-md transition hover:bg-white/90"
-      >
-        <img
-          src="/images/logo.png"
-          alt="Burbujas de Luz"
-          width="36"
-          height="36"
-          class="rounded-full"
-          loading="eager"
-        />
-        <span class="hidden text-sm font-bold text-sky-700 sm:inline"
-          >Burbujas de Luz</span
-        >
-      </a>
+  <!-- Contenido principal -->
+  <main id="main-content">
+    <!-- 2. Hero — H1 + CTA primario visibles sin scroll en móvil -->
+    <Hero />
 
-      <!-- Nav links -->
-      <ul class="flex items-center gap-2 text-sm font-semibold">
-        <li>
-          <a
-            href="#como-funciona"
-            class="rounded-full bg-white/60 px-4 py-2 text-slate-700 shadow backdrop-blur-md transition hover:bg-white/90 hover:text-sky-700"
-            >Cómo funciona</a
-          >
-        </li>
-        <li>
-          <a
-            href="#servicios"
-            class="rounded-full bg-white/60 px-4 py-2 text-slate-700 shadow backdrop-blur-md transition hover:bg-white/90 hover:text-sky-700"
-            >Servicios</a
-          >
-        </li>
-        <li>
-          <a
-            href="tel:+34000000000"
-            class="rounded-full bg-sky-500 px-5 py-2 text-white shadow-lg transition hover:bg-sky-600"
-            >📞 Llámanos</a
-          >
-        </li>
-      </ul>
-    </nav>
-  </header>
+    <!-- 3. Benefits -->
+    <Benefits />
 
-  <!-- ── HERO ──────────────────────────────────────────────── -->
-  <main id="main-content" class="flex min-h-dvh flex-col">
-    <section
-      class="flex flex-1 flex-col items-center justify-center px-6 pt-28 pb-16 text-center"
-    >
-      <!-- Frosted hero card -->
-      <div
-        class="w-full max-w-lg rounded-3xl bg-white/55 px-8 py-10 shadow-2xl backdrop-blur-md"
-      >
-        <p
-          class="mb-2 text-xs font-bold uppercase tracking-widest text-sky-600"
-        >
-          Sevilla · Autoservicio
-        </p>
-        <h1 class="text-4xl font-extrabold leading-tight text-sky-700 md:text-5xl">
-          Lava, seca<br />
-          <span class="text-pink-500">y disfruta</span>
-        </h1>
-        <p class="mt-4 text-base text-slate-600">
-          Tu ropa lista en menos tiempo, con más cuidado y a tu manera.
-          Abierto todos los días.
-        </p>
+    <!-- 4. Services -->
+    <Services />
 
-        <!-- CTAs -->
-        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <a
-            href="https://wa.me/34000000000"
-            target="_blank"
-            rel="noopener"
-            class="inline-flex items-center justify-center gap-2 rounded-full bg-sky-500 px-7 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-sky-600 hover:shadow-sky-300/50"
-          >
-            💬 Escríbenos por WhatsApp
-          </a>
-          <a
-            href="#como-funciona"
-            class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-sky-400 px-7 py-3 text-sm font-bold text-sky-700 transition hover:bg-sky-50"
-          >
-            ¿Cómo funciona?
-          </a>
-        </div>
-      </div>
+    <!-- 5. How it works -->
+    <HowItWorks />
 
-      <!-- Feature chips -->
-      <ul
-        id="servicios"
-        class="mt-8 flex flex-wrap justify-center gap-3"
-        aria-label="Ventajas del servicio"
-      >
-        {
-          [
-            { icon: '🗓️', label: 'Abierto todos los días' },
-            { icon: '🫧', label: 'Grandes capacidades' },
-            { icon: '🌿', label: 'Productos de calidad' },
-            { icon: '🧺', label: 'Cuidamos tu ropa' },
-          ].map(({ icon, label }) => (
-            <li class="flex items-center gap-2 rounded-full bg-white/70 px-5 py-2.5 text-sm font-semibold text-slate-700 shadow backdrop-blur-sm">
-              <span aria-hidden="true">{icon}</span>
-              {label}
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <!-- ── CÓMO FUNCIONA ──────────────────────────────────── -->
-    <section
-      id="como-funciona"
-      class="px-6 pb-20"
-      aria-labelledby="steps-heading"
-    >
-      <div class="mx-auto max-w-3xl">
-        <h2
-          id="steps-heading"
-          class="mb-8 text-center text-2xl font-extrabold text-white drop-shadow-md"
-        >
-          3 pasos, ¡sin complicaciones!
-        </h2>
-
-        <ol class="grid gap-4 sm:grid-cols-3">
-          {
-            [
-              {
-                step: '1',
-                title: 'Lava',
-                desc: 'Elige la lavadora y carga tu ropa.',
-                color: 'from-sky-400/80 to-sky-500/80',
-              },
-              {
-                step: '2',
-                title: 'Seca',
-                desc: 'Selecciona la temperatura perfecta.',
-                color: 'from-pink-400/80 to-pink-500/80',
-              },
-              {
-                step: '3',
-                title: 'Disfruta',
-                desc: 'Tu ropa lista en menos tiempo.',
-                color: 'from-violet-400/80 to-violet-500/80',
-              },
-            ].map(({ step, title, desc, color }) => (
-              <li
-                class={`flex flex-col items-center rounded-2xl bg-gradient-to-br ${color} p-6 text-center text-white shadow-xl backdrop-blur-md`}
-              >
-                <span class="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/30 text-xl font-extrabold">
-                  {step}
-                </span>
-                <h3 class="text-lg font-extrabold">{title}</h3>
-                <p class="mt-1 text-sm opacity-90">{desc}</p>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-    </section>
+    <!-- 6. CTA Final -->
+    <CtaFinal />
   </main>
 
-  <!-- ── FOOTER ────────────────────────────────────────────── -->
-  <footer class="bg-black/40 px-6 py-4 text-center text-xs text-white/70 backdrop-blur-sm">
-    © {new Date().getFullYear()} Burbujas de Luz · Lavandería Autoservicio · Sevilla
-  </footer>
+  <!-- 7. Footer -->
+  <Footer />
+
+  <!-- Scroll reveals — cargado diferido, sin bloquear el render (D-018) -->
+  <script>
+    import '../scripts/scroll-reveal';
+  </script>
 </BaseLayout>

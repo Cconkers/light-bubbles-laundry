@@ -1,0 +1,73 @@
+---
+/**
+ * Botón reutilizable. Renderiza <a> si tiene href, <button> si no.
+ * Variantes: primary | secondary | ghost.
+ * Altura táctil mínima 44px. Sin gradiente en relleno (D-007).
+ */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md';
+  external?: boolean;
+  class?: string;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  external = false,
+  class: cls = '',
+  disabled = false,
+  type = 'button',
+  ariaLabel,
+} = Astro.props;
+
+const baseStyles = [
+  'inline-flex items-center justify-center gap-2',
+  'font-semibold rounded-pill',
+  'min-h-[44px]',
+  'transition-all duration-[var(--duration-base)]',
+  'focus-visible:outline-none focus-visible:shadow-focus',
+].join(' ');
+
+const sizeStyles = size === 'sm'
+  ? 'px-5 py-2 text-sm'
+  : 'px-7 py-3 text-base';
+
+const variantStyles: Record<string, string> = {
+  primary:   'bg-primary text-text-on-fill hover:bg-primary-hover shadow-sm hover:shadow-md',
+  secondary: 'border-2 border-primary text-primary bg-transparent hover:bg-primary-subtle',
+  ghost:     'text-text-secondary hover:bg-surface-sunken hover:text-primary',
+};
+
+const classes = [baseStyles, sizeStyles, variantStyles[variant], cls].filter(Boolean).join(' ');
+
+const externalProps = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class={classes}
+      aria-label={ariaLabel}
+      {...externalProps}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      type={type}
+      class={classes}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      aria-disabled={disabled ? 'true' : undefined}
+    >
+      <slot />
+    </button>
+  )
+}
