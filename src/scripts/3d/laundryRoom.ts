@@ -9,9 +9,9 @@ const COLUMN_COUNT: Record<DeviceTier, number> = {
   desktop: 6,
 };
 
-const UNIT_W = 1.05;
-const COLUMN_GAP = 0.12;
-const WALL_Z = -2.85;
+const DOBLE_WASHER_WIDTH = 3.90; // Ancho del par de lavadoras
+const GAP_IN_BETWEEN_WASHERS = 0; // Separacion del par de lavadoras
+const WALL_Z = -1; // Posicion de la pared
 
 export const LAUNDRY_POV_TARGET = new THREE.Vector3(0, 1.72, WALL_Z + 0.65);
 
@@ -19,7 +19,7 @@ function createSevillaInterior(): THREE.Group {
   const env = new THREE.Group();
 
   const floorMat = new THREE.MeshStandardMaterial({
-    color: 0xd4c4b0,
+    color: 0xe8ddd0,
     roughness: 0.78,
     metalness: 0.02,
   });
@@ -69,16 +69,16 @@ function createSevillaInterior(): THREE.Group {
 
 async function buildMachineWall(columns: number): Promise<THREE.Group> {
   const wallGroup = new THREE.Group();
-  const totalWidth = columns * UNIT_W + (columns - 1) * COLUMN_GAP;
-  const startX = -totalWidth * 0.5 + UNIT_W * 0.5;
+  const totalWidth = columns * DOBLE_WASHER_WIDTH + (columns - 1) * GAP_IN_BETWEEN_WASHERS;
+  const startX = -totalWidth * 0.5 + DOBLE_WASHER_WIDTH * 0.5;
 
   const columnPromises = Array.from({ length: columns }, () =>
-    createStackedColumn(UNIT_W),
+    createStackedColumn(DOBLE_WASHER_WIDTH),
   );
   const stackedColumns = await Promise.all(columnPromises);
 
   stackedColumns.forEach((column, index) => {
-    column.position.set(startX + index * (UNIT_W + COLUMN_GAP), 0, WALL_Z);
+    column.position.set(startX + index * (DOBLE_WASHER_WIDTH + GAP_IN_BETWEEN_WASHERS), 0, WALL_Z);
     wallGroup.add(column);
   });
 

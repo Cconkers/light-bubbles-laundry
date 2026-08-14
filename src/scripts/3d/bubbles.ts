@@ -4,7 +4,6 @@ import {
   getDeviceTier,
   getParticleLimit,
   isCursorInteractionEnabled,
-  type DeviceTier,
 } from './performance';
 
 interface BubbleParticle {
@@ -16,8 +15,7 @@ interface BubbleParticle {
   vz: number;
   phase: number;
   phaseSpeed: number;
-  size: number;
-  opacity: number;
+  colorMix: number;
 }
 
 const WORLD_WIDTH = 14;
@@ -31,127 +29,82 @@ const IMPULSE_DECAY = 4.5;
 const BUBBLE_COLOR_INNER = '#E0F7FA';
 const BUBBLE_COLOR_OUTER = '#B2EBF2';
 
-const SPHERE_SEGMENTS: Record<DeviceTier, number> = {
-  mobile: 20,
-  tablet: 28,
-  desktop: 32,
-};
+const innerColor = new THREE.Color(BUBBLE_COLOR_INNER);
+const outerColor = new THREE.Color(BUBBLE_COLOR_OUTER);
+const mixedColor = new THREE.Color();
 
-const dummy = new THREE.Object3D();
-const instancePosition = new THREE.Vector3();
-const instanceScale = new THREE.Vector3();
-const instanceQuaternion = new THREE.Quaternion();
+function createSoftBubbleTexture(): THREE.CanvasTexture {
+  const size = 256;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
 
-function createBubbleShaderMaterial(): THREE.ShaderMaterial {
-  return new THREE.ShaderMaterial({
-    uniforms: {
-      uTime: { value: 0 },
-    },
-    vertexShader: `
-      attribute float instanceOpacity;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('No 2D context for bubble texture');
 
-      varying vec3 vWorldNormal;
-      varying vec3 vViewDir;
-      varying vec3 vWorldPos;
-      varying float vOpacity;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = size / 2 - 1;
 
-      void main() {
-        vec4 worldPosition = modelMatrix * instanceMatrix * vec4(position, 1.0);
-        vWorldPos = worldPosition.xyz;
-        vWorldNormal = normalize(mat3(modelMatrix * instanceMatrix) * normal);
-        vec4 mvPosition = viewMatrix * worldPosition;
-        vViewDir = normalize(-mvPosition.xyz);
-        vOpacity = instanceOpacity;
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
-      uniform float uTime;
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.clip();
 
-      varying vec3 vWorldNormal;
-      varying vec3 vViewDir;
-      varying vec3 vWorldPos;
-      varying float vOpacity;
+  // Transparent body — mostly the rim is visible
+  const body = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+  body.addColorStop(0, 'rgba(224, 247, 250, 0.55)');
+  body.addColorStop(0.30, 'rgba(178, 235, 242, 0.30)');
+  body.addColorStop(0.65, 'rgba(178, 235, 242, 0.12)');
+  body.addColorStop(0.88, 'rgba(179, 229, 252, 0.05)');
+  body.addColorStop(1, 'rgba(179, 229, 252, 0)');
+  ctx.fillStyle = body;
+  ctx.fillRect(0, 0, size, size);
 
-      vec3 soapIridescence(float angle, vec3 worldPos) {
-        float film = angle * 6.28318 + worldPos.y * 1.4 + worldPos.x * 0.9 + uTime * 0.15;
-        vec3 wave = 0.5 + 0.5 * cos(film + vec3(0.0, 2.1, 4.2));
-        vec3 base = vec3(0.72, 0.93, 0.97);
-        return mix(base, wave * vec3(0.85, 0.95, 1.0), 0.55);
-      }
+  // Specular highlight — top-left glint
+  const hx = cx - r * 0.22;
+  const hy = cy - r * 0.28;
+  const hl = ctx.createRadialGradient(hx, hy, 0, hx, hy, r * 0.38);
+  hl.addColorStop(0, 'rgba(255, 255, 255, 0.92)');
+  hl.addColorStop(0.30, 'rgba(255, 255, 255, 0.25)');
+  hl.addColorStop(1, 'rgba(255, 255, 255, 0)');
+  ctx.fillStyle = hl;
+  ctx.fillRect(0, 0, size, size);
 
-      void main() {
-        vec3 normal = normalize(vWorldNormal);
-        vec3 viewDir = normalize(vViewDir);
+  // Rim light
+  const rim = ctx.createRadialGradient(cx, cy, r * 0.70, cx, cy, r);
+  rim.addColorStop(0, 'rgba(178, 235, 242, 0)');
+  rim.addColorStop(0.50, 'rgba(178, 235, 242, 0.28)');
+  rim.addColorStop(1, 'rgba(224, 247, 250, 0)');
+  ctx.fillStyle = rim;
+  ctx.fillRect(0, 0, size, size);
 
-        float ndv = clamp(abs(dot(normal, viewDir)), 0.0, 1.0);
-        float fresnel = pow(1.0 - ndv, 2.8);
+  ctx.restore();
 
-        vec3 iridescence = soapIridescence(fresnel, vWorldPos);
-
-        vec3 keyLight = normalize(vec3(0.35, 1.0, 0.55));
-        vec3 halfVector = normalize(keyLight + viewDir);
-        float specular = pow(max(dot(normal, halfVector), 0.0), 140.0);
-        vec3 highlight = vec3(1.0) * specular * 1.1;
-
-        vec3 fillLight = normalize(vec3(-0.6, 0.25, 0.75));
-        vec3 halfFill = normalize(fillLight + viewDir);
-        float specFill = pow(max(dot(normal, halfFill), 0.0), 70.0);
-        highlight += vec3(0.82, 0.94, 1.0) * specFill * 0.45;
-
-        float rim = smoothstep(0.55, 0.98, fresnel);
-        float body = (1.0 - ndv) * 0.06;
-
-        vec3 color = iridescence * (rim * 0.55 + body);
-        color += highlight;
-        color += vec3(0.9, 0.98, 1.0) * rim * 0.12;
-
-        float alpha = (rim * 0.62 + specular * 0.35 + body) * vOpacity;
-        alpha = clamp(alpha, 0.02, 0.72);
-
-        if (alpha < 0.015) discard;
-
-        gl_FragColor = vec4(color, alpha);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    side: THREE.DoubleSide,
-    blending: THREE.NormalBlending,
-  });
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+  return texture;
 }
 
-function getSphereSegments(): number {
-  return SPHERE_SEGMENTS[getDeviceTier()];
-}
-
-function createOrganicBubbleSize(): number {
-  const roll = Math.random();
-
-  if (roll < 0.18) {
-    return 4.2 + Math.random() * 2.8;
-  }
-
-  if (roll < 0.48) {
-    return 2.6 + Math.random() * 1.6;
-  }
-
-  return 1.4 + Math.pow(Math.random(), 1.35) * 1.8;
-}
-
-function createBubbleOpacity(): number {
-  return 0.5 + Math.random() * 0.5;
+function createBubbleColorMix(): number {
+  return Math.random();
 }
 
 export class BubbleSystem {
-  readonly mesh: THREE.InstancedMesh;
-  private readonly geometry: THREE.SphereGeometry;
-  private readonly material: THREE.ShaderMaterial;
-  private readonly opacities: Float32Array;
+  readonly mesh: THREE.Points;
+  private readonly geometry: THREE.BufferGeometry;
+  private readonly material: THREE.PointsMaterial;
+  private readonly texture: THREE.CanvasTexture;
+  private readonly positions: Float32Array;
+  private readonly colors: Float32Array;
   private readonly particles: BubbleParticle[] = [];
   private readonly mouseWorld = new THREE.Vector2(0, 0);
   private scrollProgress = 0;
-  private elapsed = 0;
   private readonly cursorEnabled: boolean;
   private readonly boundMouseMove: (event: MouseEvent) => void;
 
@@ -162,71 +115,83 @@ export class BubbleSystem {
     const count = particleCount ?? getParticleLimit(getDeviceTier());
     this.cursorEnabled = isCursorInteractionEnabled();
 
-    const segments = getSphereSegments();
-    this.geometry = new THREE.SphereGeometry(1, segments, segments);
-    this.material = createBubbleShaderMaterial();
-    this.opacities = new Float32Array(count);
+    this.positions = new Float32Array(count * 3);
+    this.colors = new Float32Array(count * 3);
 
-    this.mesh = new THREE.InstancedMesh(this.geometry, this.material, count);
-    this.mesh.frustumCulled = false;
-
-    this.mesh.geometry.setAttribute(
-      'instanceOpacity',
-      new THREE.InstancedBufferAttribute(this.opacities, 1),
+    this.geometry = new THREE.BufferGeometry();
+    this.geometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(this.positions, 3).setUsage(THREE.DynamicDrawUsage),
     );
+    this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colors, 3));
+
+    this.texture = createSoftBubbleTexture();
+
+    // size 0.55 world-units: with sizeAttenuation at ~3 units camera distance
+    // gives roughly 80-130 px sprites — clearly visible without being huge.
+    this.material = new THREE.PointsMaterial({
+      map: this.texture,
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.82,
+      depthWrite: false,
+      blending: THREE.NormalBlending,
+      size: 0.55,
+      sizeAttenuation: true,
+      vertexColors: true,
+      alphaTest: 0.01,
+      fog: true,
+    });
+
+    this.mesh = new THREE.Points(this.geometry, this.material);
+    this.mesh.frustumCulled = false;
+    this.mesh.renderOrder = 2;
 
     for (let i = 0; i < count; i += 1) {
-      const particle = this.createParticle();
-      this.particles.push(particle);
-      this.opacities[i] = particle.opacity;
-      this.updateInstanceMatrix(i, particle);
+      const p = this.createParticle();
+      this.particles.push(p);
+      this.writeParticle(i, p);
     }
 
-    this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    this.mesh.geometry.attributes.instanceOpacity.needsUpdate = true;
-    this.mesh.instanceMatrix.needsUpdate = true;
+    this.geometry.attributes.position.needsUpdate = true;
+    this.geometry.attributes.color.needsUpdate = true;
 
     this.scene.add(this.mesh);
 
-    this.boundMouseMove = (event: MouseEvent) => this.handleMouseMove(event);
-
+    this.boundMouseMove = (e: MouseEvent) => this.handleMouseMove(e);
     if (this.cursorEnabled) {
       window.addEventListener('mousemove', this.boundMouseMove, { passive: true });
     }
   }
 
   update(deltaTime: number): void {
-    this.elapsed += deltaTime;
-    this.material.uniforms.uTime.value = this.elapsed;
-
     const speedMultiplier = 1 + this.scrollProgress * 1.5;
     const turbulence = 1 + this.scrollProgress * 0.8;
 
     for (let i = 0; i < this.particles.length; i += 1) {
-      const particle = this.particles[i];
+      const p = this.particles[i];
 
-      particle.phase += particle.phaseSpeed * deltaTime;
+      p.phase += p.phaseSpeed * deltaTime;
 
-      const swayX = Math.sin(particle.phase) * 0.45 * turbulence;
-      const swayZ = Math.cos(particle.phase * 0.85) * 0.32 * turbulence;
+      const swayX = Math.sin(p.phase) * 0.45 * turbulence;
+      const swayZ = Math.cos(p.phase * 0.85) * 0.32 * turbulence;
 
-      particle.x += (particle.vx + swayX) * deltaTime;
-      particle.y += particle.vy * BASE_RISE_SPEED * speedMultiplier * deltaTime;
-      particle.z += (particle.vz + swayZ) * deltaTime;
+      p.x += (p.vx + swayX) * deltaTime;
+      p.y += p.vy * BASE_RISE_SPEED * speedMultiplier * deltaTime;
+      p.z += (p.vz + swayZ) * deltaTime;
 
-      particle.vx *= Math.exp(-IMPULSE_DECAY * deltaTime);
-      particle.vy *= Math.exp(-IMPULSE_DECAY * deltaTime);
-      particle.vz *= Math.exp(-IMPULSE_DECAY * deltaTime);
+      p.vx *= Math.exp(-IMPULSE_DECAY * deltaTime);
+      p.vy *= Math.exp(-IMPULSE_DECAY * deltaTime);
+      p.vz *= Math.exp(-IMPULSE_DECAY * deltaTime);
 
-      if (this.cursorEnabled) {
-        this.applyCursorImpulse(particle, deltaTime);
-      }
+      if (this.cursorEnabled) this.applyCursorImpulse(p, deltaTime);
 
-      this.wrapParticle(particle);
-      this.updateInstanceMatrix(i, particle);
+      this.wrapParticle(p);
+      this.writeParticle(i, p);
     }
 
-    this.mesh.instanceMatrix.needsUpdate = true;
+    this.geometry.attributes.position.needsUpdate = true;
+    this.geometry.attributes.color.needsUpdate = true;
   }
 
   setScrollProgress(progress: number): void {
@@ -237,10 +202,10 @@ export class BubbleSystem {
     if (this.cursorEnabled) {
       window.removeEventListener('mousemove', this.boundMouseMove);
     }
-
     this.scene.remove(this.mesh);
     this.geometry.dispose();
     this.material.dispose();
+    this.texture.dispose();
   }
 
   private createParticle(): BubbleParticle {
@@ -253,68 +218,64 @@ export class BubbleSystem {
       vz: 0,
       phase: Math.random() * Math.PI * 2,
       phaseSpeed: 0.45 + Math.random() * 1.1,
-      size: createOrganicBubbleSize(),
-      opacity: createBubbleOpacity(),
+      colorMix: createBubbleColorMix(),
     };
   }
 
-  private updateInstanceMatrix(index: number, particle: BubbleParticle): void {
-    const radius = particle.size * 0.5;
+  private writeParticle(index: number, p: BubbleParticle): void {
+    const o = index * 3;
+    this.positions[o] = p.x;
+    this.positions[o + 1] = p.y;
+    this.positions[o + 2] = p.z;
 
-    instancePosition.set(particle.x, particle.y, particle.z);
-    instanceQuaternion.identity();
-    instanceScale.set(radius, radius, radius);
-
-    dummy.matrix.compose(instancePosition, instanceQuaternion, instanceScale);
-    this.mesh.setMatrixAt(index, dummy.matrix);
+    mixedColor.copy(innerColor).lerp(outerColor, p.colorMix);
+    this.colors[o] = mixedColor.r;
+    this.colors[o + 1] = mixedColor.g;
+    this.colors[o + 2] = mixedColor.b;
   }
 
-  private wrapParticle(particle: BubbleParticle): void {
-    const halfWidth = WORLD_WIDTH * 0.5;
-    const halfHeight = WORLD_HEIGHT * 0.5;
-    const halfDepth = WORLD_DEPTH * 0.5;
+  private wrapParticle(p: BubbleParticle): void {
+    const hw = WORLD_WIDTH * 0.5;
+    const hh = WORLD_HEIGHT * 0.5;
+    const hd = WORLD_DEPTH * 0.5;
 
-    if (particle.y > halfHeight) {
-      particle.y = -halfHeight;
-      particle.x = (Math.random() - 0.5) * WORLD_WIDTH;
-      particle.z = (Math.random() - 0.5) * WORLD_DEPTH;
-      particle.vx = 0;
-      particle.vy = 0;
-      particle.vz = 0;
-      particle.size = createOrganicBubbleSize();
-      particle.opacity = createBubbleOpacity();
+    if (p.y > hh) {
+      p.y = -hh;
+      p.x = (Math.random() - 0.5) * WORLD_WIDTH;
+      p.z = (Math.random() - 0.5) * WORLD_DEPTH;
+      p.vx = 0;
+      p.vy = 0;
+      p.vz = 0;
+      p.colorMix = createBubbleColorMix();
     }
 
-    if (particle.x < -halfWidth) particle.x = halfWidth;
-    if (particle.x > halfWidth) particle.x = -halfWidth;
-    if (particle.z < -halfDepth) particle.z = halfDepth;
-    if (particle.z > halfDepth) particle.z = -halfDepth;
+    if (p.x < -hw) p.x = hw;
+    if (p.x > hw) p.x = -hw;
+    if (p.z < -hd) p.z = hd;
+    if (p.z > hd) p.z = -hd;
   }
 
-  private handleMouseMove(event: MouseEvent): void {
-    const normalizedX = (event.clientX / window.innerWidth) * 2 - 1;
-    const normalizedY = -(event.clientY / window.innerHeight) * 2 + 1;
-
+  private handleMouseMove(e: MouseEvent): void {
     this.mouseWorld.set(
-      normalizedX * (WORLD_WIDTH * 0.5),
-      normalizedY * (WORLD_HEIGHT * 0.5),
+      ((e.clientX / window.innerWidth) * 2 - 1) * (WORLD_WIDTH * 0.5),
+      (-(e.clientY / window.innerHeight) * 2 + 1) * (WORLD_HEIGHT * 0.5),
     );
   }
 
-  private applyCursorImpulse(particle: BubbleParticle, deltaTime: number): void {
-    const dx = particle.x - this.mouseWorld.x;
-    const dy = particle.y - this.mouseWorld.y;
-    const distanceSq = dx * dx + dy * dy;
-    const radiusSq = IMPULSE_RADIUS * IMPULSE_RADIUS;
+  private applyCursorImpulse(p: BubbleParticle, deltaTime: number): void {
+    const dx = p.x - this.mouseWorld.x;
+    const dy = p.y - this.mouseWorld.y;
+    const distSq = dx * dx + dy * dy;
+    const radSq = IMPULSE_RADIUS * IMPULSE_RADIUS;
 
-    if (distanceSq > radiusSq || distanceSq < 0.0001) return;
+    if (distSq > radSq || distSq < 0.0001) return;
 
-    const distance = Math.sqrt(distanceSq);
-    const falloff = 1 - distance / IMPULSE_RADIUS;
+    const dist = Math.sqrt(distSq);
+    const falloff = 1 - dist / IMPULSE_RADIUS;
     const impulse = IMPULSE_STRENGTH * falloff * falloff * deltaTime * 60;
 
-    particle.vx += (dx / distance) * impulse;
-    particle.vy += (dy / distance) * impulse * 0.35;
+    p.vx += (dx / dist) * impulse;
+    p.vy += (dy / dist) * impulse * 0.35;
   }
 }
 

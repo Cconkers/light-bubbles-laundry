@@ -1,0 +1,11 @@
+Model Information:
+* title:	Washer Dryer SBS
+* source:	https://sketchfab.com/3d-models/washer-dryer-sbs-79e4cdde40034be5be40eb4d9c9c92a2
+* author:	maimo (https://sketchfab.com/maimo)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Washer Dryer SBS" (https://sketchfab.com/3d-models/washer-dryer-sbs-79e4cdde40034be5be40eb4d9c9c92a2) by maimo (https://sketchfab.com/maimo) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

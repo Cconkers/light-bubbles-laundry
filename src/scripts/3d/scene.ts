@@ -36,7 +36,7 @@ export async function initScene(canvas: HTMLCanvasElement): Promise<BubbleScene>
     0.1,
     100,
   );
-  camera.position.set(0, 1.68, 2.2);
+  camera.position.set(0, 1.68, 1.8);
   camera.lookAt(LAUNDRY_POV_TARGET);
 
   let tier: DeviceTier = getDeviceTier();
@@ -82,7 +82,6 @@ export async function initScene(canvas: HTMLCanvasElement): Promise<BubbleScene>
   scene.add(laundryRoom.group);
 
   let bubbleSystem = new BubbleSystem(scene, getParticleLimit(tier));
-  bubbleSystem.mesh.renderOrder = 2;
 
   const timer = new THREE.Timer();
   let animationId = 0;
@@ -142,7 +141,6 @@ export async function initScene(canvas: HTMLCanvasElement): Promise<BubbleScene>
       laundryRoom = await createLaundryRoom(tier);
       scene.add(laundryRoom.group);
       bubbleSystem = new BubbleSystem(scene, getParticleLimit(tier));
-      bubbleSystem.mesh.renderOrder = 2;
     }
 
     applyRendererSize();
