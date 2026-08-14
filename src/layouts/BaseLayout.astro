@@ -1,6 +1,5 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import BubbleCanvas from '../components/canvas/BubbleCanvas.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -25,11 +24,7 @@ const {
     <title>{title}</title>
     <ClientRouter />
   </head>
-  <body
-    class="relative min-h-dvh bg-gradient-to-b from-bubble-blue-400/10 via-foam-white to-bubble-blue-600/10 text-slate-900 antialiased"
-  >
-    <canvas id="bubble-canvas" aria-hidden="true"></canvas>
-    <BubbleCanvas />
+  <body class="relative min-h-dvh text-slate-900 antialiased">
     <slot />
   </body>
 </html>
