@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
 
       # npm install (not ci) because package-lock.json is not committed
       - name: Install dependencies
