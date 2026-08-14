@@ -1,0 +1,27 @@
+---
+/** Isla client:load — inicializa Three.js sobre #bubble-canvas del layout. */
+---
+
+<script>
+  let activeScene: { dispose: () => void } | null = null;
+
+  async function bootBubbleCanvas() {
+    const canvas = document.getElementById('bubble-canvas');
+
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+
+    const { initScene } = await import('../../scripts/3d/scene');
+    activeScene?.dispose();
+    activeScene = initScene(canvas);
+  }
+
+  function teardownBubbleCanvas() {
+    activeScene?.dispose();
+    activeScene = null;
+  }
+
+  bootBubbleCanvas();
+
+  document.addEventListener('astro:before-swap', teardownBubbleCanvas);
+  window.addEventListener('pagehide', teardownBubbleCanvas);
+</script>

@@ -1,0 +1,35 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import BubbleCanvas from '../components/canvas/BubbleCanvas.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Light Bubbles Laundry — Sevilla',
+  description = 'La fábrica de burbujas. Lavandería local en Sevilla.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <ClientRouter />
+  </head>
+  <body
+    class="relative min-h-dvh bg-gradient-to-b from-bubble-blue-400/10 via-foam-white to-bubble-blue-600/10 text-slate-900 antialiased"
+  >
+    <canvas id="bubble-canvas" aria-hidden="true"></canvas>
+    <BubbleCanvas />
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bubble-blue-400: #4fc3f7;
+  --color-bubble-blue-600: #0288d1;
+  --color-foam-white: #fafafa;
+  --color-caramel-gold-400: #ffb74d;
+  --color-caramel-gold-600: #f57c00;
+
+  --font-display: "Georgia", "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Canvas de fondo Three.js — capa fija detrás del DOM */
+#bubble-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-bubble-blue-600);
+  color: white;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
