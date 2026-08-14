@@ -12,7 +12,7 @@
 
     const { initScene } = await import('../../scripts/3d/scene');
     activeScene?.dispose();
-    activeScene = initScene(canvas);
+    activeScene = await initScene(canvas);
   }
 
   function teardownBubbleCanvas() {

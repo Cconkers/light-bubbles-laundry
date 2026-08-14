@@ -4,6 +4,7 @@ import {
   getDeviceTier,
   getParticleLimit,
   isCursorInteractionEnabled,
+  type DeviceTier,
 } from './performance';
 
 interface BubbleParticle {
@@ -16,162 +17,141 @@ interface BubbleParticle {
   phase: number;
   phaseSpeed: number;
   size: number;
+  opacity: number;
 }
 
-const WORLD_WIDTH = 24;
-const WORLD_HEIGHT = 16;
-const WORLD_DEPTH = 12;
-const BASE_RISE_SPEED = 0.45;
-const IMPULSE_RADIUS = 2.8;
+const WORLD_WIDTH = 14;
+const WORLD_HEIGHT = 10;
+const WORLD_DEPTH = 8;
+const BASE_RISE_SPEED = 0.38;
+const IMPULSE_RADIUS = 3.4;
 const IMPULSE_STRENGTH = 2.4;
 const IMPULSE_DECAY = 4.5;
 
 const BUBBLE_COLOR_INNER = '#E0F7FA';
 const BUBBLE_COLOR_OUTER = '#B2EBF2';
 
-let sharedBubbleTexture: THREE.CanvasTexture | null = null;
+const SPHERE_SEGMENTS: Record<DeviceTier, number> = {
+  mobile: 20,
+  tablet: 28,
+  desktop: 32,
+};
 
-function createBubbleTexture(): THREE.CanvasTexture {
-  const resolution = 128;
-  const canvas = document.createElement('canvas');
-  canvas.width = resolution;
-  canvas.height = resolution;
+const dummy = new THREE.Object3D();
+const instancePosition = new THREE.Vector3();
+const instanceScale = new THREE.Vector3();
+const instanceQuaternion = new THREE.Quaternion();
 
-  const ctx = canvas.getContext('2d');
-  if (!ctx) {
-    throw new Error('No se pudo crear el contexto 2D para la textura de burbujas.');
-  }
-
-  const center = resolution / 2;
-  const radius = center - 1;
-
-  const bodyGradient = ctx.createRadialGradient(
-    center * 0.82,
-    center * 0.78,
-    radius * 0.05,
-    center,
-    center,
-    radius,
-  );
-  bodyGradient.addColorStop(0, 'rgba(224, 247, 250, 0.95)');
-  bodyGradient.addColorStop(0.35, 'rgba(201, 243, 248, 0.72)');
-  bodyGradient.addColorStop(0.65, 'rgba(178, 235, 242, 0.38)');
-  bodyGradient.addColorStop(0.88, 'rgba(178, 235, 242, 0.12)');
-  bodyGradient.addColorStop(1, 'rgba(178, 235, 242, 0)');
-
-  ctx.clearRect(0, 0, resolution, resolution);
-  ctx.fillStyle = bodyGradient;
-  ctx.beginPath();
-  ctx.arc(center, center, radius, 0, Math.PI * 2);
-  ctx.fill();
-
-  const highlight = ctx.createRadialGradient(
-    center * 0.68,
-    center * 0.62,
-    0,
-    center * 0.68,
-    center * 0.62,
-    radius * 0.38,
-  );
-  highlight.addColorStop(0, 'rgba(255, 255, 255, 0.85)');
-  highlight.addColorStop(0.45, 'rgba(255, 255, 255, 0.25)');
-  highlight.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-  ctx.globalCompositeOperation = 'lighter';
-  ctx.fillStyle = highlight;
-  ctx.beginPath();
-  ctx.arc(center * 0.68, center * 0.62, radius * 0.38, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalCompositeOperation = 'source-over';
-
-  const rim = ctx.createRadialGradient(
-    center,
-    center,
-    radius * 0.72,
-    center,
-    center,
-    radius,
-  );
-  rim.addColorStop(0, 'rgba(178, 235, 242, 0)');
-  rim.addColorStop(0.75, 'rgba(129, 212, 250, 0.18)');
-  rim.addColorStop(1, 'rgba(79, 195, 247, 0.35)');
-
-  ctx.strokeStyle = rim;
-  ctx.lineWidth = radius * 0.08;
-  ctx.beginPath();
-  ctx.arc(center, center, radius * 0.92, 0, Math.PI * 2);
-  ctx.stroke();
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.needsUpdate = true;
-
-  return texture;
-}
-
-function getBubbleTexture(): THREE.CanvasTexture {
-  if (!sharedBubbleTexture) {
-    sharedBubbleTexture = createBubbleTexture();
-  }
-
-  return sharedBubbleTexture;
-}
-
-function createBubbleMaterial(map: THREE.Texture): THREE.ShaderMaterial {
+function createBubbleShaderMaterial(): THREE.ShaderMaterial {
   return new THREE.ShaderMaterial({
     uniforms: {
-      map: { value: map },
-      opacity: { value: 0.6 },
+      uTime: { value: 0 },
     },
     vertexShader: `
-      attribute float size;
+      attribute float instanceOpacity;
+
+      varying vec3 vWorldNormal;
+      varying vec3 vViewDir;
+      varying vec3 vWorldPos;
+      varying float vOpacity;
 
       void main() {
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (300.0 / max(-mvPosition.z, 0.001));
+        vec4 worldPosition = modelMatrix * instanceMatrix * vec4(position, 1.0);
+        vWorldPos = worldPosition.xyz;
+        vWorldNormal = normalize(mat3(modelMatrix * instanceMatrix) * normal);
+        vec4 mvPosition = viewMatrix * worldPosition;
+        vViewDir = normalize(-mvPosition.xyz);
+        vOpacity = instanceOpacity;
         gl_Position = projectionMatrix * mvPosition;
       }
     `,
     fragmentShader: `
-      uniform sampler2D map;
-      uniform float opacity;
+      uniform float uTime;
+
+      varying vec3 vWorldNormal;
+      varying vec3 vViewDir;
+      varying vec3 vWorldPos;
+      varying float vOpacity;
+
+      vec3 soapIridescence(float angle, vec3 worldPos) {
+        float film = angle * 6.28318 + worldPos.y * 1.4 + worldPos.x * 0.9 + uTime * 0.15;
+        vec3 wave = 0.5 + 0.5 * cos(film + vec3(0.0, 2.1, 4.2));
+        vec3 base = vec3(0.72, 0.93, 0.97);
+        return mix(base, wave * vec3(0.85, 0.95, 1.0), 0.55);
+      }
 
       void main() {
-        vec4 sampled = texture2D(map, gl_PointCoord);
-        if (sampled.a < 0.02) discard;
-        gl_FragColor = vec4(sampled.rgb, sampled.a * opacity);
+        vec3 normal = normalize(vWorldNormal);
+        vec3 viewDir = normalize(vViewDir);
+
+        float ndv = clamp(abs(dot(normal, viewDir)), 0.0, 1.0);
+        float fresnel = pow(1.0 - ndv, 2.8);
+
+        vec3 iridescence = soapIridescence(fresnel, vWorldPos);
+
+        vec3 keyLight = normalize(vec3(0.35, 1.0, 0.55));
+        vec3 halfVector = normalize(keyLight + viewDir);
+        float specular = pow(max(dot(normal, halfVector), 0.0), 140.0);
+        vec3 highlight = vec3(1.0) * specular * 1.1;
+
+        vec3 fillLight = normalize(vec3(-0.6, 0.25, 0.75));
+        vec3 halfFill = normalize(fillLight + viewDir);
+        float specFill = pow(max(dot(normal, halfFill), 0.0), 70.0);
+        highlight += vec3(0.82, 0.94, 1.0) * specFill * 0.45;
+
+        float rim = smoothstep(0.55, 0.98, fresnel);
+        float body = (1.0 - ndv) * 0.06;
+
+        vec3 color = iridescence * (rim * 0.55 + body);
+        color += highlight;
+        color += vec3(0.9, 0.98, 1.0) * rim * 0.12;
+
+        float alpha = (rim * 0.62 + specular * 0.35 + body) * vOpacity;
+        alpha = clamp(alpha, 0.02, 0.72);
+
+        if (alpha < 0.015) discard;
+
+        gl_FragColor = vec4(color, alpha);
       }
     `,
     transparent: true,
     depthWrite: false,
+    side: THREE.DoubleSide,
     blending: THREE.NormalBlending,
   });
+}
+
+function getSphereSegments(): number {
+  return SPHERE_SEGMENTS[getDeviceTier()];
 }
 
 function createOrganicBubbleSize(): number {
   const roll = Math.random();
 
-  if (roll < 0.15) {
-    return 0.55 + Math.random() * 0.35;
+  if (roll < 0.18) {
+    return 4.2 + Math.random() * 2.8;
   }
 
-  if (roll < 0.45) {
-    return 0.32 + Math.random() * 0.22;
+  if (roll < 0.48) {
+    return 2.6 + Math.random() * 1.6;
   }
 
-  return 0.14 + Math.pow(Math.random(), 1.6) * 0.24;
+  return 1.4 + Math.pow(Math.random(), 1.35) * 1.8;
+}
+
+function createBubbleOpacity(): number {
+  return 0.5 + Math.random() * 0.5;
 }
 
 export class BubbleSystem {
-  readonly points: THREE.Points;
-  private readonly geometry: THREE.BufferGeometry;
+  readonly mesh: THREE.InstancedMesh;
+  private readonly geometry: THREE.SphereGeometry;
   private readonly material: THREE.ShaderMaterial;
-  private readonly texture: THREE.CanvasTexture;
-  private readonly positions: Float32Array;
-  private readonly sizes: Float32Array;
+  private readonly opacities: Float32Array;
   private readonly particles: BubbleParticle[] = [];
   private readonly mouseWorld = new THREE.Vector2(0, 0);
   private scrollProgress = 0;
+  private elapsed = 0;
   private readonly cursorEnabled: boolean;
   private readonly boundMouseMove: (event: MouseEvent) => void;
 
@@ -182,27 +162,31 @@ export class BubbleSystem {
     const count = particleCount ?? getParticleLimit(getDeviceTier());
     this.cursorEnabled = isCursorInteractionEnabled();
 
-    this.positions = new Float32Array(count * 3);
-    this.sizes = new Float32Array(count);
+    const segments = getSphereSegments();
+    this.geometry = new THREE.SphereGeometry(1, segments, segments);
+    this.material = createBubbleShaderMaterial();
+    this.opacities = new Float32Array(count);
+
+    this.mesh = new THREE.InstancedMesh(this.geometry, this.material, count);
+    this.mesh.frustumCulled = false;
+
+    this.mesh.geometry.setAttribute(
+      'instanceOpacity',
+      new THREE.InstancedBufferAttribute(this.opacities, 1),
+    );
 
     for (let i = 0; i < count; i += 1) {
       const particle = this.createParticle();
       this.particles.push(particle);
-      this.writeParticleToBuffers(i, particle);
+      this.opacities[i] = particle.opacity;
+      this.updateInstanceMatrix(i, particle);
     }
 
-    this.geometry = new THREE.BufferGeometry();
-    this.geometry.setAttribute(
-      'position',
-      new THREE.BufferAttribute(this.positions, 3),
-    );
-    this.geometry.setAttribute('size', new THREE.BufferAttribute(this.sizes, 1));
+    this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    this.mesh.geometry.attributes.instanceOpacity.needsUpdate = true;
+    this.mesh.instanceMatrix.needsUpdate = true;
 
-    this.texture = getBubbleTexture();
-    this.material = createBubbleMaterial(this.texture);
-
-    this.points = new THREE.Points(this.geometry, this.material);
-    this.scene.add(this.points);
+    this.scene.add(this.mesh);
 
     this.boundMouseMove = (event: MouseEvent) => this.handleMouseMove(event);
 
@@ -212,6 +196,9 @@ export class BubbleSystem {
   }
 
   update(deltaTime: number): void {
+    this.elapsed += deltaTime;
+    this.material.uniforms.uTime.value = this.elapsed;
+
     const speedMultiplier = 1 + this.scrollProgress * 1.5;
     const turbulence = 1 + this.scrollProgress * 0.8;
 
@@ -220,8 +207,8 @@ export class BubbleSystem {
 
       particle.phase += particle.phaseSpeed * deltaTime;
 
-      const swayX = Math.sin(particle.phase) * 0.55 * turbulence;
-      const swayZ = Math.cos(particle.phase * 0.85) * 0.4 * turbulence;
+      const swayX = Math.sin(particle.phase) * 0.45 * turbulence;
+      const swayZ = Math.cos(particle.phase * 0.85) * 0.32 * turbulence;
 
       particle.x += (particle.vx + swayX) * deltaTime;
       particle.y += particle.vy * BASE_RISE_SPEED * speedMultiplier * deltaTime;
@@ -236,11 +223,10 @@ export class BubbleSystem {
       }
 
       this.wrapParticle(particle);
-      this.writeParticleToBuffers(i, particle);
+      this.updateInstanceMatrix(i, particle);
     }
 
-    this.geometry.attributes.position.needsUpdate = true;
-    this.geometry.attributes.size.needsUpdate = true;
+    this.mesh.instanceMatrix.needsUpdate = true;
   }
 
   setScrollProgress(progress: number): void {
@@ -252,7 +238,7 @@ export class BubbleSystem {
       window.removeEventListener('mousemove', this.boundMouseMove);
     }
 
-    this.scene.remove(this.points);
+    this.scene.remove(this.mesh);
     this.geometry.dispose();
     this.material.dispose();
   }
@@ -260,23 +246,27 @@ export class BubbleSystem {
   private createParticle(): BubbleParticle {
     return {
       x: (Math.random() - 0.5) * WORLD_WIDTH,
-      y: (Math.random() - 0.5) * WORLD_HEIGHT,
-      z: (Math.random() - 0.5) * WORLD_DEPTH,
+      y: 0.8 + Math.random() * (WORLD_HEIGHT - 1),
+      z: -1.5 + Math.random() * 4,
       vx: 0,
       vy: 0,
       vz: 0,
       phase: Math.random() * Math.PI * 2,
-      phaseSpeed: 0.6 + Math.random() * 1.4,
+      phaseSpeed: 0.45 + Math.random() * 1.1,
       size: createOrganicBubbleSize(),
+      opacity: createBubbleOpacity(),
     };
   }
 
-  private writeParticleToBuffers(index: number, particle: BubbleParticle): void {
-    const offset = index * 3;
-    this.positions[offset] = particle.x;
-    this.positions[offset + 1] = particle.y;
-    this.positions[offset + 2] = particle.z;
-    this.sizes[index] = particle.size;
+  private updateInstanceMatrix(index: number, particle: BubbleParticle): void {
+    const radius = particle.size * 0.5;
+
+    instancePosition.set(particle.x, particle.y, particle.z);
+    instanceQuaternion.identity();
+    instanceScale.set(radius, radius, radius);
+
+    dummy.matrix.compose(instancePosition, instanceQuaternion, instanceScale);
+    this.mesh.setMatrixAt(index, dummy.matrix);
   }
 
   private wrapParticle(particle: BubbleParticle): void {
@@ -292,6 +282,7 @@ export class BubbleSystem {
       particle.vy = 0;
       particle.vz = 0;
       particle.size = createOrganicBubbleSize();
+      particle.opacity = createBubbleOpacity();
     }
 
     if (particle.x < -halfWidth) particle.x = halfWidth;

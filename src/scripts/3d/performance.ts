@@ -1,9 +1,9 @@
 export type DeviceTier = 'mobile' | 'tablet' | 'desktop';
 
 export const PARTICLE_LIMITS = {
-  mobile: 100,
-  tablet: 250,
-  desktop: 500,
+  mobile: 14,
+  tablet: 24,
+  desktop: 36,
 } as const;
 
 export const DPR_CAPS = {
