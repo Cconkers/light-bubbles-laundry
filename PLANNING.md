@@ -4,6 +4,125 @@
 > **Concepto creativo:** "Charlie y la Fábrica de Chocolate" reinterpretada como fábrica de burbujas. Atmósfera mágica-industrial, partículas flotantes, micro-interacciones sensoriales.  
 > **Documento:** Guía de referencia técnica para el desarrollo. No generar código sin consultar este archivo.
 
+> **Empieza por §0.** Este documento conserva secciones desactualizadas de forma deliberada,
+> como registro histórico. La sección **§0 Estado actual y decisiones revisadas** prevalece
+> sobre todo lo que viene después.
+
+---
+
+## 0. Estado actual y decisiones revisadas (agosto 2026)
+
+**Esta sección prevalece sobre el resto del documento.** Se añade de forma aditiva: las
+secciones §1 a §7 se conservan sin modificar como registro del planteamiento original y del
+razonamiento que lo sostenía, aunque parte de su contenido ya no describe el proyecto (ver
+[`docs/DECISIONS.md`](docs/DECISIONS.md) D-014).
+
+### 0.1 Qué queda superado
+
+| Afirmación original | Estado real |
+|---------------------|-------------|
+| §1.1 — Astro versión objetivo 5.x | **Astro 7.2.2** |
+| §1.1, §1.4 — GSAP + ScrollTrigger en el stack | **Nunca se instaló** |
+| §1.1, §1.5 — Howler.js en el stack | **Nunca se instaló** |
+| §1.1, §1.3 — Capa inmersiva 3D como capa central | **Aparcada.** Fuera de la interfaz. |
+| §1.2 — `BubbleCanvas`, `MuteButton`, `ScrollAnimations` como islas activas | Ninguna está montada |
+| §1.2 — View Transitions activas en `BaseLayout` | No implementado |
+| §1.6 — Dependencias previstas (`@astrojs/tailwind`, `gsap`, `howler`) | No corresponden al `package.json` real |
+| §2 — `tailwind.config.mjs` en la estructura | **No existe, y es correcto que no exista** |
+| §2 — `src/audio/`, `src/scripts/animations/`, `src/scripts/utils/` | No existen |
+| §3.1-§3.5 — Estrategia de rendimiento del canvas 3D | En pausa junto con la capa 3D |
+| §4 Paso 3 — Paleta `bubble-blue` / `caramel-gold`, titular serif | Sustituida por la paleta y tipografía del design board |
+| §4 Paso 3 — CTA "Reserva tu colada" | Sustituido por **"Ver tarifas"** |
+| §4 Pasos 4-5 — Roadmap de GSAP y audio | No se ejecutarán en esta fase |
+| §6 — PWA e i18n como fases previstas | Explícitamente fuera de alcance |
+
+### 0.2 Stack real
+
+| Capa | Tecnología | Versión instalada |
+|------|-----------|-------------------|
+| Framework | Astro | 7.2.2 |
+| Estilos | Tailwind CSS | 4.3.3, vía `@tailwindcss/vite` |
+| 3D (aparcado) | Three.js | 0.185.1 — instalado, sin importar en runtime |
+| Tipos | TypeScript | 6.0.3 |
+| Diagnósticos | `@astrojs/check` | 0.9.10 |
+
+No hay librería de animación ni de audio. Node requerido: **>= 22.12.0**.
+
+### 0.3 Tailwind v4 se configura en CSS
+
+Tailwind v4 se integra como plugin de Vite y se configura mediante el bloque `@theme` dentro
+de [`src/styles/global.css`](src/styles/global.css). **No existe `tailwind.config.mjs` y no
+debe crearse**; la referencia a ese archivo en el árbol de §2 corresponde al modelo de
+Tailwind v3 y ya no aplica. Ver [`docs/DECISIONS.md`](docs/DECISIONS.md) D-013.
+
+Los tokens actuales de `global.css` (`--font-display: Georgia serif`, `bubble-blue`,
+`caramel-gold`, `foam-white`) contradicen el design board y se migran como primera tarea de
+[`SPEC-001`](docs/specs/001-home.md).
+
+### 0.4 La capa 3D queda aparcada, no eliminada
+
+Se construyó la escena Three.js y después se retiró de la interfaz por no encajar con la
+dirección visual. Los archivos **se conservan dormidos**:
+
+```
+src/scripts/3d/
+├── scene.ts           # Init renderer, cámara, loop rAF
+├── bubbles.ts         # Sistema de partículas
+├── laundryRoom.ts     # Escena de la sala, animación de puerta y tambor
+├── modelLoader.ts     # Carga GLTF
+└── performance.ts     # Detección de tier de dispositivo
+src/components/canvas/
+└── BubbleCanvas.astro # Isla, sin importar desde ningún sitio
+```
+
+`BaseLayout.astro` ya no contiene `#bubble-canvas`. Nada importa estos módulos, por lo que no
+entran en el bundle de producción.
+
+**No los elimines.** Están aparcados a propósito y la decisión es reversible mediante una
+SPEC. Ver [`docs/DECISIONS.md`](docs/DECISIONS.md) D-003.
+
+Las burbujas del MVP son **decoración ligera en CSS/SVG**, no partículas WebGL. Sus límites
+están en [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) — Bubbles.
+
+### 0.5 Dirección de producto y diseño vigente
+
+El concepto original ("Charlie y la Fábrica de Chocolate", atmósfera mágica-industrial,
+micro-interacciones sensoriales con audio) queda sustituido por una dirección **light-first**:
+luminosa, limpia, cercana y mediterránea, con fondo fotográfico o lavados de color en lugar
+de escena 3D.
+
+La documentación de producto y diseño vive ahora en [`docs/`](docs/):
+
+| Documento | Responsabilidad |
+|-----------|-----------------|
+| [`docs/PRODUCT.md`](docs/PRODUCT.md) | Qué construimos y para quién |
+| [`docs/VISUAL_DIRECTION.md`](docs/VISUAL_DIRECTION.md) | Cómo debe verse y sentirse |
+| [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) | Tokens y reglas visuales reutilizables |
+| [`docs/DECISIONS.md`](docs/DECISIONS.md) | Decisiones tomadas y su motivo |
+| [`docs/specs/`](docs/specs/) | Qué implementar en cada tarea |
+| [`AGENTS.md`](AGENTS.md) | Cómo debe trabajar el agente |
+
+Este documento (`PLANNING.md`) sigue siendo la referencia de **arquitectura técnica,
+estructura y objetivos de rendimiento**.
+
+### 0.6 Lo que sigue vigente
+
+- **§2 Convenciones de código:** TypeScript en `src/scripts/`, PascalCase en componentes Astro, kebab-case en IDs y clases, estado global mínimo, sin Zustand/Pinia/Redux.
+- **§3.2 Tiers de dispositivo:** los umbrales (mobile ≤768px, tablet ≤1024px, desktop >1024px) se reutilizan como breakpoints de diseño.
+- **§3.6 Métricas objetivo:** LCP, TBT y CLS siguen siendo los objetivos. Los objetivos de FPS quedan en pausa junto con la capa 3D.
+- **§5 Accesibilidad:** vigente y ampliado en [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) — Contrast rules.
+- **§7 Notas para el equipo:** vigente, con la salvedad de que las desviaciones de stack se registran ahora en [`docs/DECISIONS.md`](docs/DECISIONS.md).
+- Salida **estática (SSG)**, sin backend, sin base de datos y sin autenticación.
+
+### 0.7 Verificación
+
+```bash
+npm run check   # astro check: tipos y diagnósticos
+npm run build   # build de producción
+```
+
+Son los dos comandos que ejecuta CI. **No existe** `npm run astro check`.
+
 ---
 
 ## 1. Stack Técnico y Arquitectura
