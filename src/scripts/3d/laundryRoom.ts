@@ -21,10 +21,10 @@ const MACHINE_H = DOBLE_WASHER_WIDTH * GLTF_H_RATIO;   // ≈ 2.855
 const MACHINE_D = DOBLE_WASHER_WIDTH * GLTF_D_RATIO;   // ≈ 2.460
 
 // Porthole geometry — centred on the column (full-face porthole)
-const PORTHOLE_X_OFFSET = 0;
-const PORTHOLE_Y       = MACHINE_H * 0.44;             // ≈ 1.256
-const PORTHOLE_R       = DOBLE_WASHER_WIDTH * 0.155;   // ≈ 0.604
-const PORTHOLE_Z       = WALL_Z + MACHINE_D * 0.51 + 0.04; // just in front of face
+const PORTHOLE_X_OFFSET = -2;
+const PORTHOLE_Y       = MACHINE_H * 0.55;             // ≈ 1.256
+const PORTHOLE_R       = DOBLE_WASHER_WIDTH * 0.2;   // ≈ 0.604
+const PORTHOLE_Z       = WALL_Z + MACHINE_D * 0.50; // just in front of face
 
 // Door animation timing (seconds)
 const T_OPEN  = 2.0;
@@ -93,7 +93,7 @@ function createMachineAnimation(columnX: number): MachineAnim {
 
   // Drum background
   const bgMesh = new THREE.Mesh(
-    new THREE.CircleGeometry(R * 0.90, 48),
+    new THREE.CircleGeometry(R * 0.80, 48),
     new THREE.MeshBasicMaterial({ color: 0x080808 }),
   );
   bgMesh.position.z = -0.01;
@@ -125,22 +125,9 @@ function createMachineAnimation(columnX: number): MachineAnim {
     clothesMesh.add(rib);
   }
 
-  // Porthole frame ring
-  const frameMat = new THREE.MeshStandardMaterial({
-    color: 0xaaaaaa,
-    metalness: 0.90,
-    roughness: 0.18,
-  });
-  const frameMesh = new THREE.Mesh(
-    new THREE.TorusGeometry(R, R * 0.10, 16, 64),
-    frameMat,
-  );
-  frameMesh.position.z = 0.005;
-  group.add(frameMesh);
-
   // Door pivot — hinge sits at left edge of porthole
   const doorPivot = new THREE.Group();
-  doorPivot.position.set(-R, 0, 0.01);
+  doorPivot.position.set(-0.65, 0, 0);
   group.add(doorPivot);
 
   const glassMat = new THREE.MeshStandardMaterial({
@@ -182,15 +169,15 @@ function createMachineAnimation(columnX: number): MachineAnim {
     // ── door ──
     if (t < T_OPEN) {
       const p = easeOutCubic(t / T_OPEN);
-      doorPivot.rotation.y = p * Math.PI * 0.72;
+      doorPivot.rotation.y = p * Math.PI * -0.72;
       bgMesh.visible = t > T_OPEN * 0.4;
     } else if (t < T_OPEN + T_SPIN + T_SLOW) {
-      doorPivot.rotation.y = Math.PI * 0.72;
+      doorPivot.rotation.y = Math.PI * -0.72;
       bgMesh.visible = true;
       clothesMat.opacity = Math.min((t - T_OPEN) / 0.35, 1.0);
     } else if (t < T_OPEN + T_SPIN + T_SLOW + T_CLOSE) {
       const p = easeInCubic((t - T_OPEN - T_SPIN - T_SLOW) / T_CLOSE);
-      doorPivot.rotation.y = (1 - p) * Math.PI * 0.72;
+      doorPivot.rotation.y = (1 - p) * Math.PI * -0.72;
       clothesMat.opacity = Math.max(1 - p * 2.5, 0);
       bgMesh.visible = true;
     } else {
