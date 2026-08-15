@@ -646,7 +646,8 @@ el espacio de respeto se controla en CSS y no queda horneado en el bitmap.
 | `public/images/background-img-sm.webp` | Copia móvil en `public/`. Preferir `src/assets/`. | Redundante |
 | `public/images/background-img.png` | Original PNG sin optimizar, 2MB. No en repositorio. | Fuera del repo (untracked) |
 | `public/design/mockup_burbujas_de_luz1.webp` | Design board completo (paleta, tipografía, componentes, wireframes). 91KB. | Vigente |
-| `public/design/mockup_burbujas_de_luz2.webp` | Vista a pantalla completa de la web. 89KB. | Vigente |
+| `public/design/mockup_burbujas_de_luz1.png` | Fuente PNG del design board (actualizada). Preferir `.webp` en docs. | Vigente |
+| `public/design/mockup_burbujas_de_luz2.webp` / `.png` | Vista a pantalla completa (retirada; consolidada en el board 1). | Retirada |
 | `public/design/*.webp` (referencias hero, board, responsive) | Referencias de diseño originales | Ver D-019 |
 | `public/music/Ropa Limpia-web.mp3` | Pista ambiental lista para web. 264KB, 45s, mono 48kbps. | Vigente |
 | `public/music/Ropa Limpia.mp3` | Original, 2,5MB. No en repositorio. | Fuera del repo (untracked) |
