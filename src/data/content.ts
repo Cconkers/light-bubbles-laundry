@@ -23,7 +23,7 @@ export const hero = {
   subheadline:
     'Lavandería autoservicio moderna, rápida y eficiente para tu día a día.',
   slogan: 'Limpio, rápido y a tu manera',
-  ctaPrimary: { label: 'Ver tarifas', href: '#cta' },
+  ctaPrimary: { label: 'Ver tarifas', href: '#tarifas' },
   ctaSecondary: { label: 'Cómo funciona', href: '#como-funciona' },
 };
 
@@ -84,6 +84,107 @@ export const services = [
     badge: null,
   },
 ] as const;
+
+export const pricingIntro = {
+  titleLead: 'Tarifas simples,',
+  titleAccent: 'siempre claras',
+  subtitle:
+    'Elige el tamaño que encaje con tu colada. Precios de ejemplo según el mockup; pendientes de confirmación del negocio.',
+  note: 'Precios y capacidades orientativos (maqueta del design board). Pendientes de confirmación del negocio.',
+};
+
+/** Precios de ejemplo tomados del design board (maqueta). Sustituir al confirmar (D-010). */
+export const pricingByCategory = {
+  lavado: [
+    {
+      id: 'lavado-pequena',
+      title: 'Pequeña',
+      capacity: '9 kg',
+      price: '5,50 €',
+      description: 'Ideal para cargas pequeñas',
+      color: 'violet',
+      featured: false,
+      iconSize: 48,
+    },
+    {
+      id: 'lavado-mediana',
+      title: 'Mediana',
+      capacity: '14 kg',
+      price: '8,00 €',
+      description: 'Ideal para el día a día',
+      color: 'pink',
+      featured: true,
+      badge: 'Más popular',
+      iconSize: 56,
+    },
+    {
+      id: 'lavado-grande',
+      title: 'Grande',
+      capacity: '19 kg',
+      price: '11,00 €',
+      description: 'Para grandes cargas',
+      color: 'orange',
+      featured: false,
+      iconSize: 64,
+    },
+    {
+      id: 'lavado-extra',
+      title: 'Extra grande',
+      capacity: '24 kg',
+      price: '13,50 €',
+      description: 'Para edredones y más',
+      color: 'mint',
+      featured: false,
+      iconSize: 72,
+    },
+  ],
+  secado: [
+    {
+      id: 'secado-pequena',
+      title: 'Pequeña',
+      capacity: '9 kg',
+      price: '3,50 €',
+      description: 'Secado rápido de cargas ligeras',
+      color: 'violet',
+      featured: false,
+      iconSize: 48,
+    },
+    {
+      id: 'secado-mediana',
+      title: 'Mediana',
+      capacity: '14 kg',
+      price: '5,00 €',
+      description: 'El tamaño más usado',
+      color: 'pink',
+      featured: true,
+      badge: 'Más popular',
+      iconSize: 56,
+    },
+    {
+      id: 'secado-grande',
+      title: 'Grande',
+      capacity: '19 kg',
+      price: '7,00 €',
+      description: 'Cargas abundantes',
+      color: 'orange',
+      featured: false,
+      iconSize: 64,
+    },
+    {
+      id: 'secado-extra',
+      title: 'Extra grande',
+      capacity: '24 kg',
+      price: '9,00 €',
+      description: 'Edredones y textiles voluminosos',
+      color: 'mint',
+      featured: false,
+      iconSize: 72,
+    },
+  ],
+} as const;
+
+/** @deprecated Usar pricingByCategory — se mantiene por compatibilidad de imports */
+export const pricing = pricingByCategory.lavado;
 
 export const steps = [
   {

@@ -1,0 +1,90 @@
+---
+/**
+ * Wrapper de la cesta de ropa.
+ *
+ * Fuente del dibujo (única): src/assets/icons/laundry-basket.svg
+ * Se inyecta inline (?raw) para que CSS vars / tone funcionen.
+ *
+ * Uso:
+ *   <LaundryBasket size={96} tone="orange" />
+ *
+ * Override fino:
+ *   style="--lb-basket-body: …; --lb-basket-vent: …"
+ */
+import basketSvg from '../../assets/icons/laundry-basket.svg?raw';
+
+interface Props {
+  size?: number;
+  tone?: 'violet' | 'pink' | 'cyan' | 'orange' | 'mint';
+  class?: string;
+}
+
+const { size = 96, tone = 'orange', class: cls = '' } = Astro.props;
+
+/** Mapeo tone → tokens de marca (cuerpo, sombra, rejilla, contorno) */
+const toneVars: Record<NonNullable<Props['tone']>, string> = {
+  violet: [
+    '--lb-basket-body: var(--color-lb-violet-300)',
+    '--lb-basket-body-dark: var(--color-deco-violet)',
+    '--lb-basket-vent: var(--color-primary)',
+    '--lb-basket-vent-shadow: var(--color-primary-hover)',
+    '--lb-basket-stroke: var(--color-text)',
+    '--lb-basket-shine: var(--color-text-on-fill)',
+  ].join('; '),
+  pink: [
+    '--lb-basket-body: var(--color-lb-pink-300)',
+    '--lb-basket-body-dark: var(--color-deco-pink)',
+    '--lb-basket-vent: var(--color-accent)',
+    '--lb-basket-vent-shadow: var(--color-lb-pink-800)',
+    '--lb-basket-stroke: var(--color-text)',
+    '--lb-basket-shine: var(--color-text-on-fill)',
+  ].join('; '),
+  cyan: [
+    '--lb-basket-body: var(--color-lb-cyan-300)',
+    '--lb-basket-body-dark: var(--color-deco-cyan)',
+    '--lb-basket-vent: var(--color-secondary)',
+    '--lb-basket-vent-shadow: var(--color-lb-cyan-800)',
+    '--lb-basket-stroke: var(--color-text)',
+    '--lb-basket-shine: var(--color-text-on-fill)',
+  ].join('; '),
+  orange: [
+    '--lb-basket-body: var(--color-lb-orange-300)',
+    '--lb-basket-body-dark: var(--color-deco-orange)',
+    '--lb-basket-vent: var(--color-primary)',
+    '--lb-basket-vent-shadow: var(--color-accent)',
+    '--lb-basket-stroke: var(--color-text)',
+    '--lb-basket-shine: var(--color-text-on-fill)',
+  ].join('; '),
+  mint: [
+    '--lb-basket-body: var(--color-lb-mint-300)',
+    '--lb-basket-body-dark: var(--color-deco-mint)',
+    '--lb-basket-vent: var(--color-success)',
+    '--lb-basket-vent-shadow: var(--color-lb-mint-900)',
+    '--lb-basket-stroke: var(--color-text)',
+    '--lb-basket-shine: var(--color-text-on-fill)',
+  ].join('; '),
+};
+---
+
+<span
+  class:list={['laundry-basket', `laundry-basket--${tone}`, cls]}
+  style={`${toneVars[tone]}; width:${size}px; height:${size}px;`}
+  aria-hidden="true"
+  set:html={basketSvg}
+/>
+
+<style>
+  .laundry-basket {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+    flex-shrink: 0;
+  }
+
+  .laundry-basket :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>

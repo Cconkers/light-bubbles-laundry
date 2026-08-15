@@ -110,7 +110,7 @@ Fijo en la parte superior, sobre superficie clara translúcida.
 
 - **Logo** — [`src/assets/brand/logo.webp`](../../src/assets/brand/logo.webp) vía `<Image>` de `astro:assets`, enlazado a `/`. Alto de 40-48px respetando el ancho mínimo de 104px en móvil (D-016).
   > **Corrige un fallo existente.** `index.astro` línea 29 apunta a `/images/logo.png`, archivo que ya se borró, de modo que hoy el logo de la cabecera devuelve 404. Al migrar a `<Image>` desaparece la referencia rota.
-- **Navegación** — Inicio, Servicios, Cómo funciona, Tarifas, Preguntas, Contacto. Las rutas aún no existen: en esta SPEC apuntan a anclas de la propia página cuando hay sección equivalente (`#como-funciona`, `#servicios`), y las que no (`Tarifas`, `Preguntas`, `Contacto`) quedan **deshabilitadas o apuntando a la sección de CTA**, nunca a un 404.
+- **Navegación** — Inicio, Servicios, Cómo funciona, Tarifas, Preguntas, Contacto. Las rutas aún no existen: en esta SPEC apuntan a anclas de la propia página cuando hay sección equivalente (`#como-funciona`, `#servicios`). **Tarifas** apunta a `#tarifas` (véase [`SPEC-003`](./003-tarifas.md)). `Preguntas` y `Contacto` quedan apuntando a `#cta` / `#contacto`, nunca a un 404.
 - **Píldora de ubicación** — "Sevilla", decorativa e informativa.
 - **Móvil** — navegación colapsada en menú accesible: operable por teclado, `aria-expanded`, foco atrapado si es overlay, cierre con `Escape`.
 - Superficie clara con `backdrop-filter`. **Nunca oscura** (D-005).
@@ -121,7 +121,7 @@ Primera pantalla. Es la sección que más puede degradar el resultado si se reca
 
 - **H1** — único de la página. Copy candidato: "Tu colada, más fácil, más tiempo para ti". Marcar como copy pendiente de confirmación.
 - **Subtítulo** — una o dos líneas describiendo el servicio.
-- **CTA primario** — "Ver tarifas" (D-011, `PRODUCT.md` — Primary CTA).
+- **CTA primario** — "Ver tarifas" → `#tarifas` (D-011, `PRODUCT.md` — Primary CTA; ancla definida en [`SPEC-003`](./003-tarifas.md)).
 - **CTA secundario** — "Cómo funciona", ancla a §4.
 - **Fondo** — lavado de color con `--gradient-hero` y formas orgánicas, o la fotografía del local. Debe respetar el vacío de la referencia y **no** llevar velo oscuro; la legibilidad se resuelve con superficie clara translúcida (`VISUAL_DIRECTION.md` §5).
   > Si se usa fotografía, los activos disponibles son `public/images/background-img.webp` (1536x1024, 146KB) y `public/images/background-img-sm.webp` (768x512, 46KB). **No referirlos en crudo desde `public/`**: deben moverse a `src/` para que pasen por `astro:assets`, que emite las variantes responsive adecuadas y gestiona el caché. Sin ese paso el LCP seguiría siendo subóptimo.

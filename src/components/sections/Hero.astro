@@ -15,14 +15,6 @@ import { hero } from "../../data/content";
  * - Sin velo oscuro (D-005)
  */
 
-const mobileBg = await getImage({
-  src: bgMobile,
-  width: 768,
-  height: 512,
-  format: "webp",
-  densities: [1, 2],
-});
-
 const desktopBg = await getImage({
   src: bgDesktop,
   widths: [768, 1024, 1280, 1536],
@@ -35,7 +27,7 @@ const desktopBg = await getImage({
   class="relative min-h-dvh flex flex-col overflow-hidden"
   aria-labelledby="hero-heading"
 >
-  <!-- Fondo fotográfico -->
+  <!-- Fondo fotográfico — Image de astro:assets + art-direction -->
   <div class="hero-bg-wrap absolute inset-0 -z-20" aria-hidden="true">
     <picture class="hero-bg-picture">
       <source
@@ -45,13 +37,11 @@ const desktopBg = await getImage({
         width={desktopBg.attributes.width}
         height={desktopBg.attributes.height}
       />
-      <img
-        src={mobileBg.src}
-        srcset={mobileBg.srcSet.attribute}
-        alt=""
-        width={768}
-        height={512}
+      <Image
+        src={bgMobile}
+        widths={[384, 768]}
         sizes="100vw"
+        alt=""
         loading="eager"
         fetchpriority="high"
         decoding="async"
@@ -112,7 +102,7 @@ const desktopBg = await getImage({
 
     <div class="hero-brand">
       <a
-        href="#cta"
+        href="#tarifas"
         aria-label="Ir a la sección de tarifas"
         class="hero-logo-link"
       >
