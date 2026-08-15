@@ -4,7 +4,7 @@
 |---|---|
 | **ID** | SPEC-003 |
 | **Título** | Sección Tarifas en la homepage |
-| **Estado** | `Done` |
+| **Estado** | `Done` — pulido visual en [`SPEC-004`](./004-visual-polish.md) |
 | **Fecha** | agosto 2026 |
 | **Ruta** | `/` — ancla `#tarifas` · [`src/components/sections/Pricing.astro`](../../src/components/sections/Pricing.astro) |
 

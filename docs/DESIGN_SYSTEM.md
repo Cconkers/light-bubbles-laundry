@@ -249,17 +249,21 @@ Fallback obligatorio:
 > Carga: `@font-face` en [`src/styles/global.css`](../src/styles/global.css). Requisito:
 > autoalojada, con `swap` y sin bloquear el render. No se admite CDN de terceros.
 
-| Rol | Tamaño | Peso | Line-height | Uso |
-|-----|--------|------|-------------|-----|
-| `display` | `clamp(2.5rem, 6vw, 4.5rem)` | 700 | 1.05 | Titular de hero |
-| `h1` | `clamp(2rem, 4vw, 3rem)` | 700 | 1.15 | Título de página |
-| `h2` | `clamp(1.5rem, 3vw, 2.25rem)` | 700 | 1.2 | Título de sección |
-| `h3` | `clamp(1.25rem, 2vw, 1.5rem)` | 600 | 1.3 | Título de tarjeta |
-| `body-lg` | `1.125rem` | 400 | 1.6 | Entradilla |
-| `body` | `1rem` | 400 | 1.65 | Texto por defecto |
-| `small` | `0.875rem` | 400 | 1.5 | Metadatos. **Nunca** cuerpo. |
-| `button` | `1rem` | 600 | 1 | Etiquetas de acción |
-| `label` | `0.8125rem` | 600 | 1.4 | Etiquetas, `uppercase`, `letter-spacing: 0.08em` |
+| Rol | Token CSS | Tamaño | Peso | Line-height | Uso |
+|-----|-----------|--------|------|-------------|-----|
+| `display` | `--text-display` | `clamp(2.5rem, 6vw, 4.5rem)` | 700 | `--leading-display` (1.05) | Titular de hero |
+| `h1` | `--text-h1` | `clamp(2rem, 4vw, 3rem)` | 700 | `--leading-h1` (1.15) | Título de página / CTA fuerte |
+| `h2` | `--text-h2` | `clamp(1.5rem, 3vw, 2.25rem)` | 700 | `--leading-h2` (1.2) | Título de sección |
+| `h3` | `--text-h3` | `clamp(1.25rem, 2vw, 1.5rem)` | 600 | `--leading-h3` (1.3) | Título de tarjeta |
+| `body-lg` | `--text-body-lg` | `1.125rem` | 400 | `--leading-body-lg` (1.6) | Entradilla |
+| `body` | `--text-body` | `1rem` | 400 | `--leading-body` (1.65) | Texto por defecto |
+| `small` | `--text-small` | `0.875rem` | 400 | `--leading-small` (1.5) | Metadatos. **Nunca** cuerpo. |
+| `button` | `--text-button` | `1rem` | 600 | `--leading-button` (1) | Etiquetas de acción |
+| `button-sm` | `--text-button-sm` | `0.875rem` | 600 | `--leading-button` (1) | Botón compacto |
+| `label` | `--text-label` | `0.8125rem` | 600 | `--leading-label` (1.4) | Etiquetas, `uppercase`, `--tracking-label` |
+| `price` | `--text-price` | `clamp(1.75rem, 3vw, 2.25rem)` | 700 | `--leading-price` (1.1) | Precio en cards de tarifas |
+
+Implementación: variables en [`src/styles/global.css`](../src/styles/global.css) (`:root`) y clases utilitarias `.type-display`, `.type-h1`, … `.type-price`. **No usar** utilidades de tamaño de Tailwind (`text-sm`, `text-lg`, …) ni `font-size` inline para texto de UI: siempre el token o la clase `.type-*`.
 
 Reglas:
 

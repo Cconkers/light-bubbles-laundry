@@ -1,12 +1,12 @@
 ---
 import Card from "../ui/Card.astro";
 import LaundryBasket from "../ui/LaundryBasket.astro";
+import Bubbles from "../Bubbles.astro";
 import { pricingByCategory, pricingIntro } from "../../data/content";
 
 /**
- * Tarifas — alineado al mockup §3 (SPEC-003).
- * Datos de ejemplo del design board (maqueta); pendientes de confirmación (D-010).
- * Tabs Lavado/Secado con radio + CSS (:has), JS solo para aria/hidden.
+ * Tarifas — SPEC-003 + atmósfera SPEC-004 / D-022.
+ * Cards: layout compacto SPEC-003 (sin pase de “aire” / precio 64px).
  * id="tarifas" para anclas.
  */
 
@@ -16,29 +16,32 @@ const secado = pricingByCategory.secado;
 
 <section
   id="tarifas"
-  class="pricing-section relative py-[var(--section-gap)] px-[var(--gutter)]"
+  class="pricing-section min-h-dvh relative py-[var(--section-gap)] px-[var(--gutter)]"
   aria-labelledby="pricing-heading"
 >
-  <div
-    class="absolute inset-0 -z-10"
-    style="background: var(--gradient-wash);"
-    aria-hidden="true"
-  >
+  <!-- Atmósfera SPEC-004 / D-022: wash + blobs + burbujas suaves -->
+  <div class="pricing-atmosphere" aria-hidden="true">
+    <div class="pricing-atmosphere__wash"></div>
+    <div class="pricing-atmosphere__blob pricing-atmosphere__blob--tl"></div>
+    <div class="pricing-atmosphere__blob pricing-atmosphere__blob--br"></div>
+    <div class="pricing-atmosphere__blob pricing-atmosphere__blob--tr"></div>
+    <div class="pricing-atmosphere__bubbles">
+      <Bubbles />
+    </div>
   </div>
 
-  <div class="mx-auto max-w-[var(--content-max)]">
+  <div class="relative z-0 mx-auto max-w-[var(--content-max)]">
     <div class="mb-8 text-center" data-reveal>
       <h2
         id="pricing-heading"
-        class="font-bold"
-        style="font-size: clamp(1.5rem, 3vw, 2.25rem); letter-spacing: -0.02em; line-height: 1.2;"
+        class="type-h2"
       >
         <span class="text-text">{pricingIntro.titleLead}</span>{" "}
         <span class="pricing-title-accent">{pricingIntro.titleAccent}</span>
       </h2>
       <p
-        class="mt-3 text-text-secondary mx-auto"
-        style="max-width: 48ch; font-size: 1.0625rem; line-height: 1.6;"
+        class="type-body-lg mt-3 text-text-secondary mx-auto"
+        style="max-width: 48ch;"
       >
         {pricingIntro.subtitle}
       </p>
@@ -88,71 +91,67 @@ const secado = pricingByCategory.secado;
       aria-labelledby="label-lavado"
     >
       {
-        lavado.map((plan, i) => {
-          return (
-            <li
-              data-reveal
-              data-reveal-delay={
-                String(Math.min(i + 1, 4)) as "1" | "2" | "3" | "4"
-              }
+        lavado.map((plan, i) => (
+          <li
+            data-reveal
+            data-reveal-delay={
+              String(Math.min(i + 1, 4)) as "1" | "2" | "3" | "4"
+            }
+          >
+            <Card
+              variant={plan.featured ? "featured" : "plain"}
+              class="pricing-card relative flex h-full flex-col items-center gap-3 p-6 pt-8 text-center"
             >
-              <Card
-                variant={plan.featured ? "featured" : "plain"}
-                class="pricing-card relative flex h-full flex-col items-center gap-3 p-6 pt-8 text-center"
+              {"badge" in plan && plan.badge && (
+                <span class="pricing-badge absolute left-1/2 -translate-x-1/2 whitespace-nowrap
+                             rounded-pill bg-primary type-small font-semibold text-text-on-fill shadow-xs">
+                  {plan.badge}
+                </span>
+              )}
+
+              <p class="type-small font-semibold text-text-secondary">
+                {plan.title}
+              </p>
+
+              <p class="type-h3 font-bold text-text">
+                {plan.capacity}
+              </p>
+
+              <div class="flex items-center justify-center" aria-hidden="true">
+                <LaundryBasket
+                  size={Math.max(plan.iconSize + 24, 72)}
+                  tone={
+                    plan.color as
+                      | "violet"
+                      | "pink"
+                      | "cyan"
+                      | "orange"
+                      | "mint"
+                  }
+                />
+              </div>
+
+              <p class="type-price text-text">
+                {plan.price}
+              </p>
+
+              <p class="type-small text-muted flex-1">
+                {plan.description}
+              </p>
+
+              <a
+                href="#como-funciona"
+                class="type-small mt-1 inline-flex min-h-[44px] items-center gap-1 font-semibold text-primary
+                       transition-colors duration-[var(--duration-fast)]
+                       hover:text-primary-hover
+                       focus-visible:outline-none focus-visible:shadow-focus rounded-md px-1"
               >
-                {"badge" in plan && plan.badge && (
-                  <span class="pricing-badge absolute left-1/2 -translate-x-1/2 whitespace-nowrap
-                               rounded-pill bg-primary text-xs font-semibold text-text-on-fill shadow-xs">
-                    {plan.badge}
-                  </span>
-                )}
-
-                <p class="text-sm font-semibold text-text-secondary">
-                  {plan.title}
-                </p>
-
-                <p
-                  class="font-bold text-text"
-                  style="font-size: clamp(1.5rem, 3vw, 1.875rem); line-height: 1.1; letter-spacing: -0.02em;"
-                >
-                  {plan.capacity}
-                </p>
-
-                <div class="flex items-center justify-center" aria-hidden="true">
-                  <LaundryBasket
-                    size={Math.max(plan.iconSize + 24, 72)}
-                    tone={plan.color as 'violet' | 'pink' | 'cyan' | 'orange' | 'mint'}
-                  />
-                </div>
-
-                <p
-                  class="font-bold text-text"
-                  style="font-size: clamp(1.75rem, 3vw, 2.25rem); line-height: 1.1; letter-spacing: -0.02em;"
-                >
-                  {plan.price}
-                </p>
-
-                <p
-                  class="text-muted flex-1"
-                  style="font-size: 0.9375rem; line-height: 1.5;"
-                >
-                  {plan.description}
-                </p>
-
-                <a
-                  href="#como-funciona"
-                  class="mt-1 inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-primary
-                         transition-colors duration-[var(--duration-fast)]
-                         hover:text-primary-hover
-                         focus-visible:outline-none focus-visible:shadow-focus rounded-md px-1"
-                >
-                  Ver detalle
-                  <span aria-hidden="true">→</span>
-                </a>
-              </Card>
-            </li>
-          );
-        })
+                Ver detalle
+                <span aria-hidden="true">→</span>
+              </a>
+            </Card>
+          </li>
+        ))
       }
     </ul>
 
@@ -164,79 +163,71 @@ const secado = pricingByCategory.secado;
       hidden
     >
       {
-        secado.map((plan, i) => {
-          return (
-            <li
-              data-reveal
-              data-reveal-delay={
-                String(Math.min(i + 1, 4)) as "1" | "2" | "3" | "4"
-              }
+        secado.map((plan, i) => (
+          <li
+            data-reveal
+            data-reveal-delay={
+              String(Math.min(i + 1, 4)) as "1" | "2" | "3" | "4"
+            }
+          >
+            <Card
+              variant={plan.featured ? "featured" : "plain"}
+              class="pricing-card relative flex h-full flex-col items-center gap-3 p-6 pt-8 text-center"
             >
-              <Card
-                variant={plan.featured ? "featured" : "plain"}
-                class="pricing-card relative flex h-full flex-col items-center gap-3 p-6 pt-8 text-center"
+              {"badge" in plan && plan.badge && (
+                <span class="pricing-badge absolute left-1/2 -translate-x-1/2 whitespace-nowrap
+                             rounded-pill bg-primary type-small font-semibold text-text-on-fill shadow-xs">
+                  {plan.badge}
+                </span>
+              )}
+
+              <p class="type-small font-semibold text-text-secondary">
+                {plan.title}
+              </p>
+
+              <p class="type-h3 font-bold text-text">
+                {plan.capacity}
+              </p>
+
+              <div class="flex items-center justify-center" aria-hidden="true">
+                <LaundryBasket
+                  size={Math.max(plan.iconSize + 24, 72)}
+                  tone={
+                    plan.color as
+                      | "violet"
+                      | "pink"
+                      | "cyan"
+                      | "orange"
+                      | "mint"
+                  }
+                />
+              </div>
+
+              <p class="type-price text-text">
+                {plan.price}
+              </p>
+
+              <p class="type-small text-muted flex-1">
+                {plan.description}
+              </p>
+
+              <a
+                href="#como-funciona"
+                class="type-small mt-1 inline-flex min-h-[44px] items-center gap-1 font-semibold text-primary
+                       transition-colors duration-[var(--duration-fast)]
+                       hover:text-primary-hover
+                       focus-visible:outline-none focus-visible:shadow-focus rounded-md px-1"
               >
-                {"badge" in plan && plan.badge && (
-                  <span class="pricing-badge absolute left-1/2 -translate-x-1/2 whitespace-nowrap
-                               rounded-pill bg-primary text-xs font-semibold text-text-on-fill shadow-xs">
-                    {plan.badge}
-                  </span>
-                )}
-
-                <p class="text-sm font-semibold text-text-secondary">
-                  {plan.title}
-                </p>
-
-                <p
-                  class="font-bold text-text"
-                  style="font-size: clamp(1.5rem, 3vw, 1.875rem); line-height: 1.1; letter-spacing: -0.02em;"
-                >
-                  {plan.capacity}
-                </p>
-
-                <div class="flex items-center justify-center" aria-hidden="true">
-                  <LaundryBasket
-                    size={Math.max(plan.iconSize + 24, 72)}
-                    tone={plan.color as 'violet' | 'pink' | 'cyan' | 'orange' | 'mint'}
-                  />
-                </div>
-
-                <p
-                  class="font-bold text-text"
-                  style="font-size: clamp(1.75rem, 3vw, 2.25rem); line-height: 1.1; letter-spacing: -0.02em;"
-                >
-                  {plan.price}
-                </p>
-
-                <p
-                  class="text-muted flex-1"
-                  style="font-size: 0.9375rem; line-height: 1.5;"
-                >
-                  {plan.description}
-                </p>
-
-                <a
-                  href="#como-funciona"
-                  class="mt-1 inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-primary
-                         transition-colors duration-[var(--duration-fast)]
-                         hover:text-primary-hover
-                         focus-visible:outline-none focus-visible:shadow-focus rounded-md px-1"
-                >
-                  Ver detalle
-                  <span aria-hidden="true">→</span>
-                </a>
-              </Card>
-            </li>
-          );
-        })
+                Ver detalle
+                <span aria-hidden="true">→</span>
+              </a>
+            </Card>
+          </li>
+        ))
       }
     </ul>
 
-    <p
-      class="mt-8 text-center text-muted"
-      style="font-size: 0.8125rem; line-height: 1.5;"
-      data-reveal
-    >
+    <p class="type-small mt-8 text-center text-muted" data-reveal>
       {pricingIntro.note}
     </p>
   </div>
@@ -244,8 +235,90 @@ const secado = pricingByCategory.secado;
 
 <style>
   .pricing-section {
-    /* No clip del badge “Más popular” que sobresale de la card */
     overflow: visible;
+  }
+
+  /* ── Atmósfera (SPEC-004) ─────────────────────────────────────────────── */
+  .pricing-atmosphere {
+    position: absolute;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .pricing-atmosphere__wash {
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-wash);
+  }
+
+  .pricing-atmosphere__blob {
+    position: absolute;
+    border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+    filter: blur(64px);
+    opacity: 0.55;
+  }
+
+  .pricing-atmosphere__blob--tl {
+    width: min(48vw, 28rem);
+    height: min(40vw, 22rem);
+    top: -12%;
+    left: -8%;
+    background: color-mix(
+      in srgb,
+      var(--color-primary-subtle) 80%,
+      transparent
+    );
+  }
+
+  .pricing-atmosphere__blob--br {
+    width: min(52vw, 32rem);
+    height: min(44vw, 24rem);
+    bottom: -18%;
+    right: -10%;
+    background: color-mix(
+      in srgb,
+      var(--color-secondary-subtle) 75%,
+      transparent
+    );
+  }
+
+  .pricing-atmosphere__blob--tr {
+    width: min(36vw, 20rem);
+    height: min(30vw, 16rem);
+    top: 18%;
+    right: 8%;
+    background: color-mix(
+      in srgb,
+      var(--color-accent-subtle) 70%,
+      transparent
+    );
+    opacity: 0.45;
+  }
+
+  .pricing-atmosphere__bubbles {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+  }
+
+  @media (min-width: 768px) {
+    .pricing-atmosphere__bubbles {
+      opacity: 0.1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .pricing-atmosphere__bubbles {
+      opacity: 0.12;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pricing-atmosphere__blob {
+      filter: blur(48px);
+    }
   }
 
   .pricing-title-accent {
@@ -274,8 +347,9 @@ const secado = pricingByCategory.secado;
     min-height: 44px;
     padding: 0.5rem 1.25rem;
     border-radius: 9999px;
-    font-size: 0.9375rem;
+    font-size: var(--text-button);
     font-weight: 600;
+    line-height: var(--leading-button);
     color: var(--color-text-secondary);
     cursor: pointer;
     transition:

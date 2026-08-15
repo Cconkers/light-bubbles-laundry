@@ -36,15 +36,14 @@ import { contact } from '../../data/content';
 
     <h2
       id="cta-heading"
-      class="mb-4 font-bold text-text"
-      style="font-size: clamp(1.75rem, 4vw, 2.75rem); letter-spacing: -0.02em;"
+      class="type-h1 mb-4 text-text"
     >
       ¿Listo para tu primera visita?
     </h2>
 
     <p
-      class="mb-10 text-text-secondary mx-auto"
-      style="font-size: 1.125rem; line-height: 1.6; max-width: 44ch;"
+      class="type-body-lg mb-10 text-text-secondary mx-auto"
+      style="max-width: 44ch;"
     >
       Descubre las tarifas y cómo funciona. Sin reservas, sin colas: ven cuando quieras.
     </p>
@@ -61,7 +60,7 @@ import { contact } from '../../data/content';
       <!-- Teléfono -->
       <a
         href={`tel:${contact.phone}`}
-        class="inline-flex items-center gap-2 font-semibold text-primary
+        class="inline-flex items-center gap-2 type-button text-primary
                min-h-[44px] px-4 rounded-pill
                transition-colors duration-[var(--duration-fast)]
                hover:bg-primary-subtle
@@ -77,7 +76,7 @@ import { contact } from '../../data/content';
         href={`https://wa.me/${contact.whatsapp}`}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 font-semibold text-success
+        class="inline-flex items-center gap-2 type-button text-success
                min-h-[44px] px-4 rounded-pill
                transition-colors duration-[var(--duration-fast)]
                hover:bg-success-subtle

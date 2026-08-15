@@ -34,7 +34,7 @@ const navLinks = [
         <a
           href={href}
           class:list={[
-            'nav-link rounded-pill px-3 py-1.5 text-sm font-medium text-text',
+            'nav-link type-small rounded-pill px-3 py-1.5 font-medium text-text',
             'transition-colors duration-[var(--duration-fast)]',
             'hover:text-primary focus-visible:outline-none focus-visible:shadow-focus',
             i === 0 && 'nav-link--active',
@@ -48,9 +48,8 @@ const navLinks = [
     <div class="flex items-center gap-2">
       <!-- Píldora Sevilla -->
       <span
-        class="inline-flex items-center gap-1.5 rounded-pill
-               bg-primary text-text-on-fill px-3 py-1.5
-               text-xs font-semibold shadow-xs"
+        class="type-small inline-flex items-center gap-1.5 rounded-pill
+               bg-primary text-text-on-fill px-3 py-1.5 font-semibold shadow-xs"
         aria-label="Ubicación: Sevilla"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
@@ -105,7 +104,7 @@ const navLinks = [
       {navLinks.map(({ label, href }) => (
         <a
           href={href}
-          class="mobile-nav-link rounded-md px-4 py-3 text-base font-medium
+          class="mobile-nav-link type-body rounded-md px-4 py-3 font-medium
                  text-text-secondary transition-colors duration-[var(--duration-fast)]
                  hover:bg-primary-subtle hover:text-primary
                  focus-visible:outline-none focus-visible:shadow-focus"

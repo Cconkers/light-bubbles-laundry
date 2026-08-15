@@ -948,6 +948,49 @@ producto. Si el audio solo se descarga cuando se pide, su coste es cero para qui
 
 ---
 
+## D-022 — Atmósfera de sección: wash + burbujas + blobs (no planos)
+
+**Fecha:** agosto 2026
+**Estado:** Accepted
+**Área:** Design
+**Modifica a:** nada (complementa D-005, D-009)
+
+### Contexto
+
+Tras SPEC-003, la sección Tarifas usaba solo `--gradient-wash` plano. El mockup y el Hero
+comparten un vocabulario más vivo (burbujas CSS, manchas orgánicas, profundidad suave). Sin
+una regla explícita, cada sección nueva tendía a un fondo monocromo distinto.
+
+### Decisión
+
+Las secciones de marketing posteriores al Hero **reutilizan el mismo vocabulario atmosférico**:
+
+1. Base `--gradient-wash` (u otro token de wash light-first).
+2. Burbujas CSS existentes (`Bubbles.astro`) a opacidad percibida ~8–12 % (menos en móvil).
+3. Blobs orgánicos con tokens / `color-mix` (sin hex arbitrarios, D-006).
+
+No se usan fondos planos monocromos como única atmósfera. Los valores numéricos de tipografía
+y espaciado de pulido viven en [`SPEC-004`](./specs/004-visual-polish.md) hasta promoverse al
+design system.
+
+### Motivo
+
+Una sola pieza visual home aumenta reconocimiento de marca y evita el look “dashboard”.
+Reutilizar `Bubbles.astro` cumple D-009 (decoración, no ruido) y D-004 (sin dependencias).
+
+### Consecuencias
+
+- Tarifas y secciones futuras deben incluir capa atmosférica, no solo color de fondo.
+- Opacidad baja obligatoria: las burbujas no compiten con el contenido (D-009).
+- SPEC-004 es la checklist de valores hasta que existan tokens `--text-price-*` etc.
+
+### Relacionado
+
+- [`docs/specs/004-visual-polish.md`](./specs/004-visual-polish.md)
+- D-005, D-006, D-009
+
+---
+
 ## Cómo añadir una nueva decisión
 
 ### Cuándo registrar

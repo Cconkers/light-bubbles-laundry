@@ -43,27 +43,24 @@ const year = new Date().getFullYear();
             style="width:120px;height:auto;"
           />
         </a>
-        <p class="text-text-secondary" style="font-size:0.9375rem;line-height:1.6;max-width:28ch;">
+        <p class="type-small text-text-secondary" style="max-width:28ch;">
           Lavandería autoservicio en Sevilla. Lava, seca y disfruta a tu ritmo.
         </p>
       </div>
 
       <!-- Información práctica -->
       <div class="flex flex-col gap-4">
-        <h2
-          class="font-semibold text-text"
-          style="font-size:0.8125rem;letter-spacing:0.08em;text-transform:uppercase;"
-        >
+        <h2 class="type-label text-text">
           Información
         </h2>
         <ul class="flex flex-col gap-3" role="list">
           <!-- Dirección -->
-          <li class="flex items-start gap-2 text-text-secondary" style="font-size:0.9375rem;line-height:1.5;">
+          <li class="type-small flex items-start gap-2 text-text-secondary">
             <Icon name="map-pin" size={18} class="mt-0.5 shrink-0 text-primary" />
             <span>{contact.address}</span>
           </li>
           <!-- Horario -->
-          <li class="flex items-start gap-2 text-text-secondary" style="font-size:0.9375rem;line-height:1.5;">
+          <li class="type-small flex items-start gap-2 text-text-secondary">
             <Icon name="clock" size={18} class="mt-0.5 shrink-0 text-primary" />
             <span>{contact.hours}</span>
           </li>
@@ -72,10 +69,7 @@ const year = new Date().getFullYear();
 
       <!-- Contacto -->
       <div class="flex flex-col gap-4">
-        <h2
-          class="font-semibold text-text"
-          style="font-size:0.8125rem;letter-spacing:0.08em;text-transform:uppercase;"
-        >
+        <h2 class="type-label text-text">
           Contacto
         </h2>
         <ul class="flex flex-col gap-3" role="list">
@@ -83,11 +77,10 @@ const year = new Date().getFullYear();
           <li>
             <a
               href={`tel:${contact.phone}`}
-              class="inline-flex items-center gap-2 text-text-secondary min-h-[44px]
+              class="type-small inline-flex items-center gap-2 text-text-secondary min-h-[44px]
                      transition-colors duration-[var(--duration-fast)]
                      hover:text-primary
                      focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
-              style="font-size:0.9375rem;"
             >
               <Icon name="phone" size={18} class="text-primary" />
               {contact.phone}
@@ -97,11 +90,10 @@ const year = new Date().getFullYear();
           <li>
             <a
               href={`mailto:${contact.email}`}
-              class="inline-flex items-center gap-2 text-text-secondary min-h-[44px]
+              class="type-small inline-flex items-center gap-2 text-text-secondary min-h-[44px]
                      transition-colors duration-[var(--duration-fast)]
                      hover:text-primary
                      focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
-              style="font-size:0.9375rem;"
             >
               <Icon name="mail" size={18} class="text-primary" />
               {contact.email}
@@ -113,9 +105,8 @@ const year = new Date().getFullYear();
 
     <!-- Barra inferior -->
     <div
-      class="py-6 border-t border-border flex flex-col sm:flex-row
+      class="type-small py-6 border-t border-border flex flex-col sm:flex-row
              items-center justify-between gap-3 text-muted"
-      style="font-size:0.8125rem;"
     >
       <p>
         © {year} {site.name} · {site.tagline} · {site.location}
