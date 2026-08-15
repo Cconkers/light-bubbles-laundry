@@ -24,23 +24,23 @@ type Bubble = {
 };
 
 const bubbles: Bubble[] = [
-  // ── 6 siempre visibles (móvil) ──────────────────────────────────────────
-  { size:'xl',  color:'violet', left:8,  bottom:5,  duration:34, delay:0  },
-  { size:'md',  color:'cyan',   left:82, bottom:12, duration:22, delay:5  },
-  { size:'lg',  color:'pink',   left:55, bottom:2,  duration:28, delay:10 },
-  { size:'sm',  color:'violet', left:30, bottom:18, duration:18, delay:3  },
-  { size:'md',  color:'pink',   left:68, bottom:35, duration:26, delay:8  },
-  { size:'sm',  color:'cyan',   left:15, bottom:45, duration:20, delay:14 },
+  // ── 6 siempre visibles (móvil) — sesgadas a la escena (derecha), lejos del copy ──
+  { size:'xl',  color:'violet', left:78, bottom:8,  duration:34, delay:0  },
+  { size:'md',  color:'cyan',   left:88, bottom:28, duration:22, delay:5  },
+  { size:'lg',  color:'pink',   left:62, bottom:4,  duration:28, delay:10 },
+  { size:'sm',  color:'violet', left:52, bottom:22, duration:18, delay:3  },
+  { size:'md',  color:'pink',   left:72, bottom:42, duration:26, delay:8  },
+  { size:'sm',  color:'cyan',   left:92, bottom:55, duration:20, delay:14 },
   // ── 4 visibles desde tablet ─────────────────────────────────────────────
-  { size:'lg',  color:'cyan',   left:90, bottom:60, duration:32, delay:2,  tabletPlus:true },
-  { size:'sm',  color:'violet', left:42, bottom:70, duration:19, delay:11, tabletPlus:true },
-  { size:'md',  color:'pink',   left:25, bottom:80, duration:24, delay:6,  tabletPlus:true },
-  { size:'xl',  color:'violet', left:72, bottom:80, duration:38, delay:16, tabletPlus:true },
+  { size:'lg',  color:'cyan',   left:94, bottom:62, duration:32, delay:2,  tabletPlus:true },
+  { size:'sm',  color:'violet', left:58, bottom:72, duration:19, delay:11, tabletPlus:true },
+  { size:'md',  color:'pink',   left:80, bottom:78, duration:24, delay:6,  tabletPlus:true },
+  { size:'xl',  color:'violet', left:68, bottom:85, duration:38, delay:16, tabletPlus:true },
   // ── 4 visibles desde desktop ────────────────────────────────────────────
-  { size:'md',  color:'cyan',   left:5,  bottom:65, duration:21, delay:9,  desktopOnly:true },
-  { size:'sm',  color:'pink',   left:48, bottom:90, duration:18, delay:13, desktopOnly:true },
-  { size:'lg',  color:'violet', left:93, bottom:30, duration:36, delay:1,  desktopOnly:true },
-  { size:'sm',  color:'cyan',   left:60, bottom:55, duration:20, delay:18, desktopOnly:true },
+  { size:'md',  color:'cyan',   left:48, bottom:68, duration:21, delay:9,  desktopOnly:true },
+  { size:'sm',  color:'pink',   left:86, bottom:88, duration:18, delay:13, desktopOnly:true },
+  { size:'lg',  color:'violet', left:96, bottom:32, duration:36, delay:1,  desktopOnly:true },
+  { size:'sm',  color:'cyan',   left:74, bottom:58, duration:20, delay:18, desktopOnly:true },
 ];
 
 const sizeClass = (s: string) => `bubble--${s}`;

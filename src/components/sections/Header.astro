@@ -1,14 +1,9 @@
 ---
-import { Image } from 'astro:assets';
-import logoWebp from '../../assets/brand/logo.webp';
-
 /**
- * Header fijo. Superficie clara translúcida (nunca oscura, D-005).
- * Logo vía astro:assets. Navegación con anclas + placeholders no-404.
- * Menú móvil accesible: aria-expanded, aria-controls, Escape, focus-trap.
- *
- * Logo a 104px en móvil, 132px en desktop (DESIGN_SYSTEM mínimos).
- * El tamaño de header se ajusta al logo dada la proporción cuadrada del maestro.
+ * Header fino y transparente en el top del viewport.
+ * Sin logo (el protagonismo está en el Hero; "Inicio" cubre la navegación a /).
+ * Al hacer scroll gana superficie clara translúcida para legibilidad.
+ * Menú móvil: aria-expanded, Escape, foco al cerrar.
  */
 
 const navLinks = [
@@ -22,93 +17,80 @@ const navLinks = [
 ---
 
 <header
-  class="fixed inset-x-0 top-0 z-50 bg-white/80 backdrop-blur-md border-b border-border/50 shadow-xs"
+  id="site-header"
+  class="site-header fixed inset-x-0 top-0 z-50"
   role="banner"
 >
   <div
-    class="mx-auto flex max-w-[var(--content-max)] items-center justify-between px-[var(--gutter)] py-3"
+    class="mx-auto flex max-w-[var(--content-max)] items-center justify-end gap-2
+           px-[var(--gutter)] h-12 lg:h-14 lg:justify-between"
   >
-    <!-- Logo -->
-    <a
-      href="/"
-      class="shrink-0 focus-visible:outline-none focus-visible:shadow-focus rounded-md"
-      aria-label="Burbujas de Luz — ir a inicio"
-    >
-      <Image
-        src={logoWebp}
-        alt="Burbujas de Luz"
-        width={264}
-        height={255}
-        loading="eager"
-        decoding="sync"
-        class="header-logo"
-        style="width:104px;height:auto;"
-      />
-    </a>
-
-    <!-- Navegación desktop -->
+    <!-- Navegación desktop — fina, sin logo -->
     <nav
       aria-label="Navegación principal"
-      class="hidden lg:flex items-center gap-1"
+      class="hidden lg:flex items-center gap-0.5"
     >
-      {navLinks.map(({ label, href }) => (
+      {navLinks.map(({ label, href }, i) => (
         <a
           href={href}
-          class="rounded-pill px-4 py-2 text-sm font-medium text-text-secondary
-                 transition-colors duration-[var(--duration-fast)]
-                 hover:bg-primary-subtle hover:text-primary
-                 focus-visible:outline-none focus-visible:shadow-focus"
+          class:list={[
+            'nav-link rounded-pill px-3 py-1.5 text-sm font-medium text-text',
+            'transition-colors duration-[var(--duration-fast)]',
+            'hover:text-primary focus-visible:outline-none focus-visible:shadow-focus',
+            i === 0 && 'nav-link--active',
+          ]}
         >
           {label}
         </a>
       ))}
+    </nav>
 
-      <!-- Píldora de ubicación -->
+    <div class="flex items-center gap-2">
+      <!-- Píldora Sevilla -->
       <span
-        class="ml-2 inline-flex items-center gap-1.5 rounded-pill
-               bg-primary-subtle px-3 py-1.5 text-xs font-semibold
-               text-primary"
+        class="inline-flex items-center gap-1.5 rounded-pill
+               bg-primary text-text-on-fill px-3 py-1.5
+               text-xs font-semibold shadow-xs"
         aria-label="Ubicación: Sevilla"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"
              stroke-linejoin="round" aria-hidden="true">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
           <circle cx="12" cy="10" r="3"/>
         </svg>
         Sevilla
       </span>
-    </nav>
 
-    <!-- Hamburger (móvil/tablet) -->
-    <button
-      id="menu-toggle"
-      type="button"
-      class="lg:hidden flex items-center justify-center w-11 h-11 rounded-md
-             text-text-secondary transition-colors duration-[var(--duration-fast)]
-             hover:bg-primary-subtle hover:text-primary
-             focus-visible:outline-none focus-visible:shadow-focus"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      aria-label="Abrir menú de navegación"
-    >
-      <svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
-           stroke-linecap="round" aria-hidden="true">
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-      </svg>
-      <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
-           stroke-linecap="round" aria-hidden="true" class="hidden">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
+      <!-- Hamburger móvil -->
+      <button
+        id="menu-toggle"
+        type="button"
+        class="lg:hidden flex items-center justify-center w-10 h-10 rounded-md
+               text-text transition-colors duration-[var(--duration-fast)]
+               hover:bg-white/50 focus-visible:outline-none focus-visible:shadow-focus"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Abrir menú de navegación"
+      >
+        <svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+             stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+             stroke-linecap="round" aria-hidden="true" class="hidden">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
   </div>
 
-  <!-- Menú móvil (overlay) -->
+  <!-- Menú móvil -->
   <div
     id="mobile-menu"
     class="lg:hidden hidden"
@@ -117,7 +99,7 @@ const navLinks = [
     aria-modal="true"
   >
     <nav
-      class="flex flex-col gap-1 border-t border-border bg-white/95 backdrop-blur-md px-4 py-4"
+      class="flex flex-col gap-1 border-t border-border bg-white/95 backdrop-blur-md px-4 py-3"
       aria-label="Navegación móvil"
     >
       {navLinks.map(({ label, href }) => (
@@ -131,38 +113,46 @@ const navLinks = [
           {label}
         </a>
       ))}
-      <div class="mt-2 pt-2 border-t border-border">
-        <span
-          class="inline-flex items-center gap-1.5 rounded-pill
-                 bg-primary-subtle px-3 py-1.5 text-xs font-semibold text-primary"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
-               viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" aria-hidden="true">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          Sevilla
-        </span>
-      </div>
     </nav>
   </div>
 </header>
 
 <style>
-  /* Tamaño desktop del logo */
-  @media (min-width: 1024px) {
-    .header-logo {
-      width: 132px !important;
-    }
+  .site-header {
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color var(--duration-base) var(--ease-soft),
+      border-color var(--duration-base) var(--ease-soft),
+      box-shadow var(--duration-base) var(--ease-soft);
+  }
+
+  .site-header.is-scrolled {
+    background: rgb(255 255 255 / 0.82);
+    backdrop-filter: blur(10px);
+    border-bottom-color: var(--color-border);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .nav-link--active {
+    color: var(--color-primary);
+    box-shadow: inset 0 -2px 0 var(--color-primary);
+    border-radius: 0;
   }
 </style>
 
 <script>
+  const header = document.getElementById('site-header')!;
   const toggle = document.getElementById('menu-toggle')!;
   const menu   = document.getElementById('mobile-menu')!;
   const iconMenu  = document.getElementById('icon-menu')!;
   const iconClose = document.getElementById('icon-close')!;
+
+  const onScroll = () => {
+    header.classList.toggle('is-scrolled', window.scrollY > 12);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
 
@@ -172,9 +162,8 @@ const navLinks = [
     toggle.setAttribute('aria-label', 'Cerrar menú de navegación');
     iconMenu.classList.add('hidden');
     iconClose.classList.remove('hidden');
-    // Foco al primer enlace
-    const first = menu.querySelector<HTMLElement>('a');
-    first?.focus();
+    header.classList.add('is-scrolled');
+    menu.querySelector<HTMLElement>('a')?.focus();
   }
 
   function closeMenu() {
@@ -183,22 +172,20 @@ const navLinks = [
     toggle.setAttribute('aria-label', 'Abrir menú de navegación');
     iconMenu.classList.remove('hidden');
     iconClose.classList.add('hidden');
+    onScroll();
     toggle.focus();
   }
 
   toggle.addEventListener('click', () => (isOpen() ? closeMenu() : openMenu()));
 
-  // Cerrar con Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isOpen()) closeMenu();
   });
 
-  // Cerrar al clicar un enlace del menú móvil
   menu.querySelectorAll<HTMLElement>('.mobile-nav-link').forEach((link) => {
     link.addEventListener('click', closeMenu);
   });
 
-  // Cerrar al cambiar a desktop (resize)
   window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
     if (e.matches && isOpen()) closeMenu();
   });

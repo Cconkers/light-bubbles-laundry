@@ -13,9 +13,16 @@ export const site = {
 };
 
 export const hero = {
-  headline: 'Tu colada, más fácil, más tiempo para ti',
+  headline: {
+    line1: 'Tu colada,',
+    line2a: 'más ',
+    line2b: 'fácil,',
+    line3a: 'más tiempo',
+    line3b: 'para ti',
+  },
   subheadline:
-    'Lavandería autoservicio moderna, rápida y eficiente para tu día a día. [PLACEHOLDER: descripción del servicio confirmada por el negocio]',
+    'Lavandería autoservicio moderna, rápida y eficiente para tu día a día.',
+  slogan: 'Limpio, rápido y a tu manera',
   ctaPrimary: { label: 'Ver tarifas', href: '#cta' },
   ctaSecondary: { label: 'Cómo funciona', href: '#como-funciona' },
 };

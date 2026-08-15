@@ -640,8 +640,10 @@ el espacio de respeto se controla en CSS y no queda horneado en el bitmap.
 
 | Archivo | Rol | Nota |
 |---------|-----|------|
-| `public/images/background-img.webp` | Fotografía de fondo, variante desktop. 1536x1024, 146KB. | Vigente |
-| `public/images/background-img-sm.webp` | Fotografía de fondo, variante mobile. 768x512, 46KB. | Vigente |
+| [`src/assets/images/background.webp`](../src/assets/images/background.webp) | Fotografía de fondo hero, desktop. 1536x1024. Servida vía `astro:assets`. | Vigente |
+| [`src/assets/images/background-sm.webp`](../src/assets/images/background-sm.webp) | Fotografía de fondo hero, mobile. 768x512. Art-direction en `<picture>`. | Vigente |
+| `public/images/background-img.webp` | Copia en `public/` (legado de la optimización previa). Preferir `src/assets/`. | Redundante |
+| `public/images/background-img-sm.webp` | Copia móvil en `public/`. Preferir `src/assets/`. | Redundante |
 | `public/images/background-img.png` | Original PNG sin optimizar, 2MB. No en repositorio. | Fuera del repo (untracked) |
 | `public/design/mockup_burbujas_de_luz1.webp` | Design board completo (paleta, tipografía, componentes, wireframes). 91KB. | Vigente |
 | `public/design/mockup_burbujas_de_luz2.webp` | Vista a pantalla completa de la web. 89KB. | Vigente |
