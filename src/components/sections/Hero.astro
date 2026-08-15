@@ -1,19 +1,17 @@
 ---
 import { Image, getImage } from "astro:assets";
 import Button from "../ui/Button.astro";
-import Icon from "../ui/Icon.astro";
 import Bubbles from "../Bubbles.astro";
 import logoWebp from "../../assets/brand/logo.webp";
 import bgDesktop from "../../assets/images/background.webp";
 import bgMobile from "../../assets/images/background-sm.webp";
-import { hero, site, benefits } from "../../data/content";
+import { hero } from "../../data/content";
 
 /**
  * Hero alineado al mockup:
  * - Escena fotográfica full-bleed (astro:assets + art-direction)
- * - Copy izquierdo SIN caja/fondo (transparente)
- * - H1 Nunito multicolor
- * - Logo grande a la derecha + tagline + eslogan manuscrito
+ * - Flex responsivo: copy + logo (sin offsets vh/vw absolutos)
+ * - H1 multicolor + logo acotado con clamp
  * - Sin velo oscuro (D-005)
  */
 
@@ -30,13 +28,6 @@ const desktopBg = await getImage({
   widths: [768, 1024, 1280, 1536],
   format: "webp",
 });
-
-const benefitAccent: Record<string, string> = {
-  violet: "text-primary",
-  mint: "text-success",
-  cyan: "text-secondary",
-  pink: "text-accent",
-};
 ---
 
 <section
@@ -44,7 +35,7 @@ const benefitAccent: Record<string, string> = {
   class="relative min-h-dvh flex flex-col overflow-hidden"
   aria-labelledby="hero-heading"
 >
-  <!-- Fondo fotográfico: imagen completa, responsive -->
+  <!-- Fondo fotográfico -->
   <div class="hero-bg-wrap absolute inset-0 -z-20" aria-hidden="true">
     <picture class="hero-bg-picture">
       <source
@@ -69,7 +60,6 @@ const benefitAccent: Record<string, string> = {
     </picture>
   </div>
 
-  <!-- Filtro de backgroudn solo izquierda -->
   <div
     class="absolute inset-0 -z-10 pointer-events-none hero-light-wash"
     aria-hidden="true"
@@ -78,10 +68,9 @@ const benefitAccent: Record<string, string> = {
 
   <Bubbles />
 
-  <!-- Contenido principal -->
-  <section class="w-full h-screen">
-    <article class="hero-title-container">
-      <!-- Columna izquierda: copy transparente -->
+  <!-- Copy + logo: flex controla la composición en todos los anchos -->
+  <div class="hero-content">
+    <div class="hero-copy">
       <h1 id="hero-heading" class="hero-title">
         <span class="hero-line1">{hero.headline.line1}</span><br />
         <span class="hero-line2a">{hero.headline.line2a}</span>
@@ -96,7 +85,7 @@ const benefitAccent: Record<string, string> = {
         {hero.subheadline}
       </p>
 
-      <div class="flex flex-wrap gap-3 sm:gap-4">
+      <div class="hero-actions">
         <Button href={hero.ctaPrimary.href} variant="primary">
           {hero.ctaPrimary.label}
           <svg
@@ -119,10 +108,9 @@ const benefitAccent: Record<string, string> = {
           {hero.ctaSecondary.label}
         </Button>
       </div>
-    </article>
+    </div>
 
-    <!-- Columna derecha: logo grande + tagline + eslogan manuscrito -->
-    <article class="hero-brand">
+    <div class="hero-brand">
       <a
         href="#cta"
         aria-label="Ir a la sección de tarifas"
@@ -134,23 +122,19 @@ const benefitAccent: Record<string, string> = {
           loading="eager"
           decoding="sync"
           class="hero-logo"
-          aria-label="Ir a la sección de servicios"
-          width={400}
-          height={400}
+          width={320}
+          height={320}
+          sizes="(max-width: 767px) 36vw, 176px"
         />
       </a>
-    </article>
-  </section>
+    </div>
+  </div>
 </section>
 
 <style>
-  /*
-   * Fondo entero y responsive:
-   * contain = foto completa sin recortar; el wrap rellena bandas si el ratio no coincide.
-   */
   .hero-bg-wrap {
     overflow: hidden;
-    background: var(--gradient-hero, linear-gradient(160deg, #ffffff 0%, #f8f2ff 40%, #ebfaff 100%));
+    background: var(--gradient-hero);
   }
 
   .hero-bg-picture {
@@ -167,72 +151,82 @@ const benefitAccent: Record<string, string> = {
     width: 100%;
     height: 100%;
     max-width: none;
-    object-fit: contain;
-    object-position: center center;
+    object-fit: cover;
+    /* Prioriza pared clara a la izquierda; lavadoras a la derecha */
+    object-position: 70% center;
   }
 
-  /* Solo un lavado suave a la izquierda para legibilidad del H1 */
   .hero-light-wash {
     background: linear-gradient(
-      90deg,
-      #ffffffb8 0%,
-      #54d7ff36 34%,
-      #ffffff08 58%
+      45deg,
+      rgba(43, 0, 255, 0.05) 0%,
+      rgba(102, 19, 255, 0.2) 50%,
+      rgba(204, 0, 255, 0.05) 100%
     );
   }
 
-  .hero-title {
-    display: inline-block;
-    font-weight: 600;
-    line-height: 1.16;
+  /*
+   * Una sola composición compacta a la izquierda (zona libre de la foto).
+   * No space-between a todo el ancho: evita el hueco vacío + logo gigante a la derecha.
+   */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 40rem;
+    margin-inline: 0 auto;
+    min-height: 100dvh;
+    padding:
+      calc(4rem + env(safe-area-inset-top, 0px))
+      clamp(1.25rem, 5vw, 3rem)
+      2rem
+      clamp(1.25rem, 5vw, 3.5rem);
   }
 
-  .hero-logo:hover {
-    opacity: 1;
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .hero-brand {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto;
+  }
+
+  .hero-logo-link {
+    display: block;
+    line-height: 0;
+    border-radius: var(--radius-md);
+  }
+
+  .hero-logo-link:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
   }
 
   .hero-logo {
-    opacity: 0.7;
-    width: 54vw;
+    width: clamp(6.5rem, 36vw, 9.5rem);
     height: auto;
-
-    /* Contorno oscuro muy sutil */
-    filter: drop-shadow(0 0 0.6px rgb(26, 26, 46))
-      drop-shadow(0 2px 8px rgba(26, 26, 46, 0.993));
-
-    transition:
-      transform 200ms ease,
-      opacity 200ms ease,
-      filter 200ms ease;
+    filter: drop-shadow(0 0 1px #a019fa) drop-shadow(0 0 1px #a019fa)
+      drop-shadow(0 0 6px #a019fa);
   }
 
-  .hero-logo:hover {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 0.8px rgba(26, 26, 46, 0.5))
-      drop-shadow(0 4px 12px rgba(26, 26, 46, 0.18));
-  }
-
-  .hero-slogan {
-    font-family: var(--font-script);
-    font-size: 2rem;
-    line-height: 2.5;
-    font-weight: 700;
-    color: hsl(234, 58%, 51%);
-    text-decoration: underline;
-  }
-
-  .hero-title-container {
-    position: relative;
-    top: 10%;
-    left: 60px;
-  }
-
-  .hero-tagline {
-    font-size: 2rem;
-    line-height: 0;
+  .hero-title {
+    margin: 0;
     font-weight: 600;
-    color: #010b69;
-    font-style: italic;
+    line-height: 1.16;
   }
 
   .hero-line1,
@@ -240,16 +234,12 @@ const benefitAccent: Record<string, string> = {
   .hero-line2b,
   .hero-line3a,
   .hero-line3b {
-    font-size: 4.5vw;
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
     letter-spacing: -0.025em;
-
-    text-shadow: 0 0 1px rgb(255, 255, 255);
-
-    filter: drop-shadow(0 0 1px rgba(26, 26, 46, 0.521))
-      drop-shadow(0 2px 1px rgba(26, 26, 46, 0.418));
-    transition:
-      transform 200ms ease,
-      filter 200ms ease;
+    text-shadow:
+      0 0 3px #ffffff,
+      0 0 3px #f7ff77,
+      0 0 3px #fff30078;
   }
 
   .hero-line1 {
@@ -261,49 +251,90 @@ const benefitAccent: Record<string, string> = {
   .hero-line2b {
     color: #002291;
   }
-
   .hero-line3a {
     color: #ff7c11;
   }
-
   .hero-line3b {
     color: #010b69;
   }
 
+  /* Contraste AA sin “pegatina”: lavado suave, sin borde ni sombra dura */
   .hero-subheadline {
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 600;
-    line-height: 1.4;
-    width: 24rem;
-    margin: 2rem 0;
+    line-height: 1.5;
+    width: 100%;
+    max-width: 22rem;
+    margin: 1rem 0 1.25rem;
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-surface) 78%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.65rem 0.85rem;
+    border-radius: var(--radius-sm);
   }
 
-  @media (min-width: 640px) {
-    .hero-logo-lg {
-      width: min(240px, 42vw);
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Tablet+: copy + logo juntos en la mitad izquierda */
+  @media (min-width: 768px) {
+    .hero-content {
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: clamp(1.25rem, 2.5vw, 2rem);
+      max-width: min(52rem, 62vw);
+      padding-block: calc(4.5rem + env(safe-area-inset-top, 0px)) 2.5rem;
     }
-  }
 
-  @media (min-width: 1024px) {
-    .hero-logo-lg {
-      /* Ancho estable sobre la pared blanca; no crece hasta las lavadoras */
-      width: clamp(280px, 22vw, 340px);
+    .hero-copy {
+      flex: 1 1 auto;
+      max-width: 28rem;
     }
 
     .hero-brand {
-      max-width: 800px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      bottom: 65%;
-      left: 25%;
+      flex: 0 0 auto;
+      align-self: center;
+    }
+
+    .hero-logo {
+      width: clamp(8.5rem, 12vw, 11.5rem); /* ~136–184px */
+    }
+
+    .hero-line1,
+    .hero-line2a,
+    .hero-line2b,
+    .hero-line3a,
+    .hero-line3b {
+      font-size: clamp(2.1rem, 3.2vw, 3rem);
+    }
+
+    .hero-subheadline {
+      font-size: 1.0625rem;
+      max-width: 24rem;
     }
   }
 
-  @media (min-width: 1440px) {
-    .hero-logo-lg {
-      width: max-content;
+  @media (min-width: 1280px) {
+    .hero-content {
+      max-width: min(54rem, 58vw);
+      padding-left: clamp(2.5rem, 6vw, 5rem);
+    }
+
+    .hero-logo {
+      width: 11rem; /* 176px — tope fijo en desktop grande */
+    }
+
+    .hero-line1,
+    .hero-line2a,
+    .hero-line2b,
+    .hero-line3a,
+    .hero-line3b {
+      font-size: clamp(2.4rem, 2.6vw, 3.15rem);
     }
   }
 </style>

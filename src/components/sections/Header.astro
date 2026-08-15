@@ -119,7 +119,10 @@ const navLinks = [
 
 <style>
   .site-header {
-    background: transparent;
+    /* Siempre un velo claro: el nav no se pierde sobre burbujas/foto */
+    background: color-mix(in srgb, var(--color-surface) 58%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid transparent;
     transition:
       background-color var(--duration-base) var(--ease-soft),
@@ -128,8 +131,7 @@ const navLinks = [
   }
 
   .site-header.is-scrolled {
-    background: rgb(255 255 255 / 0.82);
-    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
     border-bottom-color: var(--color-border);
     box-shadow: var(--shadow-xs);
   }

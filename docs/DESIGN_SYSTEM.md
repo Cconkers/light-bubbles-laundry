@@ -230,19 +230,24 @@ Consecuencias prácticas:
 
 ## Typography
 
-**Familia:** Poppins. Geométrica redondeada, coherente con la personalidad amable de la
-marca y con la referencia. Pesos: 400, 500, 600, 700.
+Tres familias autoalojadas en `public/fonts/`, con `font-display: swap` y sin CDN:
 
-Fallback obligatorio y `font-display: swap`:
+| Rol | Familia | Pesos | Uso |
+|-----|---------|-------|-----|
+| Cuerpo / UI | **Poppins** | 400, 500, 600, 700 | Texto, nav, botones, secciones |
+| Display | **Nunito** | 700, 800 | Titular multicolor del hero (`.hero-title` / `.hero-line*`) |
+| Script | **Caveat** | 600 | Eslogan manuscrito bajo el logo del hero |
+
+Fallback obligatorio:
 
 ```css
---font-body: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
---font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+--font-body:    "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+--font-display: "Nunito", "Poppins", ui-sans-serif, system-ui, sans-serif;
+--font-script:  "Caveat", "Segoe Script", cursive;
 ```
 
-> El mecanismo de carga (API nativa de fuentes de Astro frente a `@fontsource-variable/poppins`)
-> se decide al implementar. Requisito: autoalojada, con `swap` y sin bloquear el render.
-> No se admite CDN de terceros.
+> Carga: `@font-face` en [`src/styles/global.css`](../src/styles/global.css). Requisito:
+> autoalojada, con `swap` y sin bloquear el render. No se admite CDN de terceros.
 
 | Rol | Tamaño | Peso | Line-height | Uso |
 |-----|--------|------|-------------|-----|
