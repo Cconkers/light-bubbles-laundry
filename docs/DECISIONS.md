@@ -991,6 +991,48 @@ Reutilizar `Bubbles.astro` cumple D-009 (decoración, no ruido) y D-004 (sin dep
 
 ---
 
+## D-023 — Hosting de previews y producción en Vercel
+
+**Fecha:** agosto 2026
+**Estado:** Accepted
+**Área:** Architecture
+**Modifica a:** nada
+
+### Contexto
+
+El CI de GitHub Actions solo valida (`check` + `build`). Para revisar la landing publicada
+durante el desarrollo hace falta un hosting de estáticos con previews por rama, sin coste
+en el plan hobby.
+
+### Decisión
+
+Se despliega en **Vercel** (cuenta del equipo, integración con el repo de GitHub):
+
+1. **Producción** desde la rama base acordada (`main` o `develop`).
+2. **Preview deployments** automáticos en cada push/PR (p. ej. `cursor/hero-fondo-responsive`).
+3. Sitio **estático** Astro (`output` por defecto / `dist/`). Sin `@astrojs/vercel` adapter
+   mientras no se necesiten Functions, Image Optimization de Vercel o SSR.
+4. `installCommand`: `npm install` (no hay `package-lock.json` en el repo).
+5. Config mínima en [`vercel.json`](../vercel.json).
+
+### Motivo
+
+Encaja con Astro estático, previews gratis por rama, y el usuario ya tiene cuenta y acceso
+GitHub. No introduce dependencias npm nuevas (D-004).
+
+### Consecuencias
+
+- Cada push a una rama genera URL de preview en Vercel.
+- Si más adelante se necesitan Functions/SSR, se añade `@astrojs/vercel` y se registra.
+- El CI de GitHub Actions sigue siendo la puerta de tipos/build; Vercel es el hosting.
+
+### Relacionado
+
+- [`vercel.json`](../vercel.json)
+- D-004, D-011, D-012
+
+---
+
 ## Cómo añadir una nueva decisión
 
 ### Cuándo registrar

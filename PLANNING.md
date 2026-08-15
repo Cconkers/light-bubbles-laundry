@@ -48,6 +48,10 @@ razonamiento que lo sostenía, aunque parte de su contenido ya no describe el pr
 
 No hay librería de animación ni de audio. Node requerido: **>= 22.12.0**.
 
+**Hosting (ago 2026):** previews y producción en **Vercel** (D-023). Config en
+[`vercel.json`](vercel.json). El workflow de GitHub Actions sigue siendo solo CI
+(`.github/workflows/ci.yml`), no despliega.
+
 ### 0.3 Tailwind v4 se configura en CSS
 
 Tailwind v4 se integra como plugin de Vite y se configura mediante el bloque `@theme` dentro
