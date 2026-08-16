@@ -7,6 +7,7 @@ import Services from '../components/sections/Services.astro';
 import Pricing from '../components/sections/Pricing.astro';
 import HowItWorks from '../components/sections/HowItWorks.astro';
 import CtaFinal from '../components/sections/CtaFinal.astro';
+import Location from '../components/sections/Location.astro';
 import Footer from '../components/sections/Footer.astro';
 import { site } from '../data/content';
 
@@ -46,9 +47,12 @@ const pageDescription =
 
     <!-- 7. CTA Final -->
     <CtaFinal />
+
+    <!-- 8. Ubicación / Contacto (SPEC-006) -->
+    <Location />
   </main>
 
-  <!-- 7. Footer -->
+  <!-- Footer -->
   <Footer />
 
   <!-- Scroll reveals — cargado diferido, sin bloquear el render (D-018) -->

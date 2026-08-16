@@ -8,16 +8,14 @@ import { site, contact } from '../../data/content';
  * Footer — información práctica y cierre de marca.
  * Superficie clara (--color-background-alt). Sin bg-black (D-005).
  * Logo a 120px de ancho (respeta mínimo de 104px en móvil).
- * Teléfono, dirección, email y horario confirmados.
+ * Resumen de contacto sin mapa; ancla #contacto vive en Location (SPEC-006).
  * Redes: bloque omitido por falta de datos confirmados.
- * id="contacto" para ancla del header.
  */
 
 const year = new Date().getFullYear();
 ---
 
 <footer
-  id="contacto"
   class="bg-background-alt border-t border-border"
   role="contentinfo"
 >

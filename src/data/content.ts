@@ -243,3 +243,17 @@ export const contact = {
   address: 'C. Virgen de la Cinta, 41011 Sevilla',
   hours: 'Lunes a domingo, de 7:00 h a 23:00 h',
 };
+
+const mapsQuery = encodeURIComponent(contact.address);
+
+/** SPEC-006 — intro y URLs de mapa (D-024: iframe lazy + enlace externo). */
+export const locationIntro = {
+  title: 'Estamos aquí para ayudarte',
+  subtitle: 'Encuéntranos en Sevilla. Ven cuando quieras dentro del horario.',
+  ctaDirections: 'Cómo llegar',
+  ctaOpenMaps: 'Abrir en Google Maps',
+  mapTitle: `Mapa de Burbujas de Luz en ${contact.address}`,
+  mapsEmbedUrl: `https://maps.google.com/maps?q=${mapsQuery}&output=embed&hl=es`,
+  mapsDirectionsUrl: `https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`,
+  mapsOpenUrl: `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`,
+};

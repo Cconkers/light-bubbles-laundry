@@ -53,7 +53,6 @@ const accentClasses: Record<string, { bg: string; text: string }> = {
               <Card
                 variant="plain"
                 href={s.href}
-                ariaLabel={`${s.actionLabel} sobre ${s.title}`}
                 class="group flex h-full flex-col gap-4 p-[var(--space-5)] md:p-[var(--space-6)]"
               >
                 <div
@@ -74,10 +73,10 @@ const accentClasses: Record<string, { bg: string; text: string }> = {
                     class="mt-4 inline-flex min-h-[44px] items-center gap-1 type-small font-semibold text-primary
                            transition-colors duration-[var(--duration-fast)]
                            group-hover:text-primary-hover group-focus-visible:text-primary-hover"
-                    aria-hidden="true"
                   >
                     {s.actionLabel}
-                    <span>→</span>
+                    <span aria-hidden="true">→</span>
+                    <span class="sr-only"> sobre {s.title}</span>
                   </span>
                 </div>
               </Card>
@@ -100,7 +99,6 @@ const accentClasses: Record<string, { bg: string; text: string }> = {
         href={servicesContact.cta.href}
         variant="primary"
         class="shrink-0"
-        ariaLabel={`${servicesContact.cta.label}: ir a datos de contacto`}
       >
         {servicesContact.cta.label}
       </Button>

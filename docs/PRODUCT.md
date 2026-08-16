@@ -154,18 +154,25 @@ registrada para reactivarse:
 
 ## Datos pendientes de confirmación
 
-Nada de lo siguiente está confirmado. Aparece en las referencias visuales como
-**contenido de maqueta** y debe tratarse como `[PLACEHOLDER: ...]` hasta que el negocio lo
-verifique. Ver [`DECISIONS.md`](./DECISIONS.md) D-010.
+Los datos sin confirmar deben tratarse como `[PLACEHOLDER: ...]` hasta verificación del
+negocio (D-010). Los ya confirmados se listan aparte.
+
+### Confirmados
+
+| Dato | Valor |
+|------|--------|
+| Dirección postal | C. Virgen de la Cinta, 41011 Sevilla |
+| Teléfono | 629 517 805 |
+| WhatsApp | mismo móvil (`34629517805`) |
+| Email | viedmaelectric@gmail.com |
+| Horario de apertura | Lunes a domingo, de 7:00 h a 23:00 h |
+
+### Pendientes
 
 | Dato | Estado |
 |------|--------|
 | Precios por tamaño de carga | Sin confirmar |
 | Capacidades reales de lavadoras y secadoras | Sin confirmar |
-| Dirección postal | Sin confirmar |
-| Teléfono y WhatsApp | Sin confirmar |
-| Email | Sin confirmar |
-| Horario de apertura | Sin confirmar |
 | Métodos de pago aceptados | Sin confirmar |
 | Cifras de negocio (clientes, años, nº de máquinas) | Sin confirmar |
 | Servicios adicionales | Sin confirmar |

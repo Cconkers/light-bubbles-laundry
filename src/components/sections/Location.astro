@@ -1,0 +1,177 @@
+---
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { contact, locationIntro } from '../../data/content';
+
+/**
+ * Location / Contacto — SPEC-006 + D-024.
+ * id="contacto" canónico (sale del footer). Datos + iframe Maps lazy.
+ */
+
+const phoneHref = `tel:${contact.phone.replace(/\s/g, '')}`;
+---
+
+<section
+  id="contacto"
+  class="location-section relative py-[var(--section-gap)] px-[var(--gutter)] bg-background"
+  aria-labelledby="location-heading"
+>
+  <div class="mx-auto max-w-[var(--content-max)]">
+    <div class="mb-10 text-center md:mb-12" data-reveal>
+      <h2 id="location-heading" class="type-h2 text-text">
+        {locationIntro.title}
+      </h2>
+      <p
+        class="type-body-lg mt-3 text-text-secondary mx-auto"
+        style="max-width: 48ch;"
+      >
+        {locationIntro.subtitle}
+      </p>
+    </div>
+
+    <div
+      class="grid gap-8 md:grid-cols-2 md:gap-10 md:items-stretch"
+      data-reveal
+    >
+      <!-- Datos de contacto -->
+      <div class="flex flex-col gap-6">
+        <ul class="flex flex-col gap-4" role="list">
+          <li class="flex items-start gap-3">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-primary"
+              aria-hidden="true"
+            >
+              <Icon name="map-pin" size={20} />
+            </span>
+            <div>
+              <p class="type-label text-text mb-1">Dirección</p>
+              <p class="type-body text-text-secondary">{contact.address}</p>
+            </div>
+          </li>
+
+          <li class="flex items-start gap-3">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary-subtle text-secondary"
+              aria-hidden="true"
+            >
+              <Icon name="clock" size={20} />
+            </span>
+            <div>
+              <p class="type-label text-text mb-1">Horario</p>
+              <p class="type-body text-text-secondary">{contact.hours}</p>
+            </div>
+          </li>
+
+          <li class="flex items-start gap-3">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-primary"
+              aria-hidden="true"
+            >
+              <Icon name="phone" size={20} />
+            </span>
+            <div>
+              <p class="type-label text-text mb-1">Teléfono</p>
+              <a
+                href={phoneHref}
+                class="type-body inline-flex min-h-[44px] items-center text-text-secondary
+                       transition-colors duration-[var(--duration-fast)]
+                       hover:text-primary
+                       focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
+              >
+                {contact.phone}
+              </a>
+            </div>
+          </li>
+
+          <li class="flex items-start gap-3">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-success-subtle text-success"
+              aria-hidden="true"
+            >
+              <Icon name="mail" size={20} />
+            </span>
+            <div>
+              <p class="type-label text-text mb-1">Email</p>
+              <a
+                href={`mailto:${contact.email}`}
+                class="type-body inline-flex min-h-[44px] items-center text-text-secondary break-all
+                       transition-colors duration-[var(--duration-fast)]
+                       hover:text-primary
+                       focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
+              >
+                {contact.email}
+              </a>
+            </div>
+          </li>
+        </ul>
+
+        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap pt-2">
+          <Button
+            href={locationIntro.mapsDirectionsUrl}
+            variant="primary"
+            external
+          >
+            {locationIntro.ctaDirections}
+          </Button>
+          <Button
+            href={locationIntro.mapsOpenUrl}
+            variant="secondary"
+            external
+          >
+            {locationIntro.ctaOpenMaps}
+          </Button>
+        </div>
+      </div>
+
+      <!-- Mapa (D-024) -->
+      <div class="flex flex-col gap-3 min-w-0">
+        <div
+          class="location-map overflow-hidden rounded-card border border-border bg-surface shadow-sm
+                 min-h-[240px] md:min-h-[320px] lg:min-h-[360px] h-full"
+        >
+          <iframe
+            src={locationIntro.mapsEmbedUrl}
+            title={locationIntro.mapTitle}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="location-map__frame"
+          ></iframe>
+        </div>
+        <p class="type-small text-muted">
+          <a
+            href={locationIntro.mapsOpenUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-semibold text-primary underline-offset-2 hover:underline
+                   focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
+          >
+            {locationIntro.ctaOpenMaps}
+          </a>
+          {' '}si el mapa no carga.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .location-map__frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+    border: 0;
+  }
+
+  @media (min-width: 768px) {
+    .location-map__frame {
+      min-height: 320px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .location-map__frame {
+      min-height: 360px;
+    }
+  }
+</style>

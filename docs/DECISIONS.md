@@ -1033,6 +1033,51 @@ GitHub. No introduce dependencias npm nuevas (D-004).
 
 ---
 
+## D-024 — Un único iframe de mapa de terceros (lazy) para ubicación
+
+**Fecha:** agosto 2026
+**Estado:** Accepted
+**Área:** Architecture
+**Modifica a:** nada
+
+### Contexto
+
+La home necesita responder “¿dónde está?” y “¿cómo llego?” ([`PRODUCT.md`](./PRODUCT.md)).
+El mockup §7 muestra un mapa embebido. Un SDK de mapas (Google Maps JS, Mapbox, Leaflet)
+añadiría dependencia npm y JS en el cliente, en tensión con D-004 y con un sitio estático
+sin backend (D-011).
+
+### Decisión
+
+Se permite **un** `<iframe>` de mapa de terceros (p. ej. Google Maps embed) en la sección
+de ubicación / contacto de la homepage, con estas condiciones:
+
+1. `loading="lazy"` y `title` accesible.
+2. Enlace externo de respaldo (“Cómo llegar” / abrir en Maps) siempre en HTML.
+3. **Sin** SDK npm, sin API key en el cliente, sin scripts de mapas en el `<head>`.
+4. Un solo iframe de este tipo en la página; no autoriza CDNs genéricos ni otros widgets.
+
+La implementación vive en [`docs/specs/006-ubicacion.md`](./specs/006-ubicacion.md).
+
+### Motivo
+
+El embed iframe es el cambio mínimo que entrega mapa visual sin abrir la puerta a
+dependencias ni a una capa de JS de mapas. El enlace externo garantiza la tarea si el
+iframe se bloquea.
+
+### Consecuencias
+
+- Al entrar en viewport, el iframe puede cargar recursos/cookies del proveedor del mapa.
+- Cualquier segundo proveedor, SDK o mapa interactivo rico exige una decisión nueva.
+- No se interpreta como permiso general de “terceros en la página”.
+
+### Relacionado
+
+- [`docs/specs/006-ubicacion.md`](./specs/006-ubicacion.md)
+- D-004, D-011
+
+---
+
 ## Cómo añadir una nueva decisión
 
 ### Cuándo registrar
