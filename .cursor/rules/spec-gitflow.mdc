@@ -1,0 +1,17 @@
+---
+description: Flujo git al completar una SPEC (push, merge develop, rama +1)
+alwaysApply: true
+---
+
+# Flujo SPEC → develop
+
+Cuando una SPEC quede **completada** (implementada + `check`/`build` OK), **salvo que el usuario diga otra cosa**:
+
+1. Commit de los cambios de esa SPEC en la rama `cursor/spec-NNN`.
+2. Push a `origin/cursor/spec-NNN`.
+3. Checkout `develop`, merge fast-forward de la rama SPEC, push `origin/develop`.
+4. Borrar la rama local y remota `cursor/spec-NNN`.
+5. Crear y pushear `cursor/spec-(NNN+1)` desde el `develop` actualizado.
+6. Continuar con el plan/redacción de la siguiente SPEC (o preguntar tema si no está claro).
+
+No pedir confirmación extra para este flujo si la SPEC ya se dio por cerrada.
