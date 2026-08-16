@@ -1,76 +1,109 @@
 ---
+import Card from '../ui/Card.astro';
+import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
-import { services } from '../../data/content';
+import { services, servicesIntro, servicesContact } from '../../data/content';
 
 /**
- * Services — qué se ofrece.
- * Tarjetas reutilizables con placeholder de contenido (D-010).
+ * Services — SPEC-005.
+ * Cuatro categorías (placeholders D-010). Card completa = un solo enlace.
  * id="servicios" para ancla del header.
  */
 
 const accentClasses: Record<string, { bg: string; text: string }> = {
-  violet: { bg: 'bg-primary-subtle',  text: 'text-primary' },
-  cyan:   { bg: 'bg-secondary-subtle',text: 'text-secondary' },
-  mint:   { bg: 'bg-success-subtle',  text: 'text-success' },
-  orange: { bg: 'bg-warning-subtle',  text: 'text-warning' },
+  violet: { bg: 'bg-primary-subtle', text: 'text-primary' },
+  cyan: { bg: 'bg-secondary-subtle', text: 'text-secondary' },
+  mint: { bg: 'bg-success-subtle', text: 'text-success' },
+  orange: { bg: 'bg-warning-subtle', text: 'text-warning' },
 };
 ---
 
 <section
   id="servicios"
-  class="py-[var(--section-gap)] px-[var(--gutter)] bg-background"
+  class="services-section relative py-[var(--section-gap)] px-[var(--gutter)] bg-background"
   aria-labelledby="services-heading"
 >
   <div class="mx-auto max-w-[var(--content-max)]">
-
     <div class="mb-12 text-center" data-reveal>
-      <h2
-        id="services-heading"
-        class="type-h2 text-text"
-      >
-        Nuestros servicios
+      <h2 id="services-heading" class="type-h2 text-text">
+        {servicesIntro.title}
       </h2>
-      <p class="type-body-lg mt-3 text-text-secondary mx-auto" style="max-width: 48ch;">
-        Todo lo que necesitas para cuidar tu ropa, en un solo lugar.
+      <p
+        class="type-body-lg mt-3 text-text-secondary mx-auto"
+        style="max-width: 48ch;"
+      >
+        {servicesIntro.subtitle}
       </p>
     </div>
 
     <ul
-      class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+      class="grid gap-6 md:grid-cols-2"
       role="list"
     >
-      {services.map((s, i) => {
-        const accent = accentClasses[s.color] ?? accentClasses.violet;
-        return (
-          <li
-            class="flex flex-col gap-4 rounded-card bg-surface border border-border
-                   p-6 shadow-sm transition-shadow duration-(--duration-base)
-                   hover:shadow-md"
-            data-reveal
-            data-reveal-delay={String(Math.min(i + 1, 4)) as '1' | '2' | '3' | '4'}
-          >
-            <!-- Icono con contenedor circular -->
-            <div
-              class:list={[
-                'flex items-center justify-center w-12 h-12 rounded-full self-start',
-                accent.bg, accent.text,
-              ]}
-              aria-hidden="true"
+      {
+        services.map((s, i) => {
+          const accent = accentClasses[s.color] ?? accentClasses.violet;
+          return (
+            <li
+              data-reveal
+              data-reveal-delay={
+                String(Math.min(i + 1, 4)) as '1' | '2' | '3' | '4'
+              }
             >
-              <Icon name={s.icon} size={24} />
-            </div>
+              <Card
+                variant="plain"
+                href={s.href}
+                ariaLabel={`${s.actionLabel} sobre ${s.title}`}
+                class="group flex h-full flex-col gap-4 p-[var(--space-5)] md:p-[var(--space-6)]"
+              >
+                <div
+                  class:list={[
+                    'flex items-center justify-center w-12 h-12 rounded-full self-start',
+                    accent.bg,
+                    accent.text,
+                  ]}
+                  aria-hidden="true"
+                >
+                  <Icon name={s.icon} size={24} />
+                </div>
 
-            <div>
-              <h3 class="mb-2 type-h3 text-text">
-                {s.title}
-              </h3>
-              <p class="type-small text-muted">
-                {s.description}
-              </p>
-            </div>
-          </li>
-        );
-      })}
+                <div class="flex flex-1 flex-col">
+                  <h3 class="mb-2 type-h3 text-text">{s.title}</h3>
+                  <p class="type-small text-text-secondary flex-1">{s.description}</p>
+                  <span
+                    class="mt-4 inline-flex min-h-[44px] items-center gap-1 type-small font-semibold text-primary
+                           transition-colors duration-[var(--duration-fast)]
+                           group-hover:text-primary-hover group-focus-visible:text-primary-hover"
+                    aria-hidden="true"
+                  >
+                    {s.actionLabel}
+                    <span>→</span>
+                  </span>
+                </div>
+              </Card>
+            </li>
+          );
+        })
+      }
     </ul>
+
+    <div
+      class="services-help mt-10 flex flex-col items-start justify-between gap-4
+             rounded-card bg-secondary-subtle px-[var(--space-6)] py-[var(--space-5)]
+             md:flex-row md:items-center md:px-[var(--space-8)]"
+      data-reveal
+    >
+      <p class="type-body text-text max-w-[48ch]">
+        {servicesContact.text}
+      </p>
+      <Button
+        href={servicesContact.cta.href}
+        variant="primary"
+        class="shrink-0"
+        ariaLabel={`${servicesContact.cta.label}: ir a datos de contacto`}
+      >
+        {servicesContact.cta.label}
+      </Button>
+    </div>
   </div>
 </section>

@@ -54,34 +54,52 @@ export const benefits = [
   },
 ] as const;
 
+export const servicesIntro = {
+  title: 'Nuestros servicios',
+  subtitle: 'Todo lo que necesitas para cuidar tu ropa, en un solo lugar.',
+};
+
+export const servicesContact = {
+  text: '¿Necesitas ayuda personalizada? Estamos aquí para asesorarte',
+  cta: { label: 'Contáctanos', href: '#contacto' },
+};
+
 export const services = [
   {
     icon: 'washing-machine',
     color: 'violet',
     title: 'Lavado',
-    description: '[PLACEHOLDER: capacidades de lavadora disponibles]',
-    badge: null,
+    description:
+      'Lavadoras de distintas capacidades para todo tipo de colada: desde el día a día hasta edredones y textiles voluminosos.',
+    href: '#tarifas',
+    actionLabel: 'Ver más',
   },
   {
     icon: 'wind',
     color: 'cyan',
     title: 'Secado',
-    description: '[PLACEHOLDER: capacidades de secadora y temperaturas disponibles]',
-    badge: null,
+    description:
+      'Secadoras potentes con programas y temperaturas adaptables. Deja la ropa lista para guardar o planchar.',
+    href: '#tarifas',
+    actionLabel: 'Ver más',
   },
   {
     icon: 'spray',
     color: 'mint',
     title: 'Productos',
-    description: '[PLACEHOLDER: detergentes y suavizantes disponibles en el local]',
-    badge: null,
+    description:
+      'Detergentes y suavizantes a tu disposición en el local. Elige la dosis que necesites en cada ciclo.',
+    href: '#contacto',
+    actionLabel: 'Ver más',
   },
   {
     icon: 'plus-circle',
     color: 'orange',
     title: 'Extra',
-    description: '[PLACEHOLDER: servicios adicionales disponibles]',
-    badge: null,
+    description:
+      'Bolsas, cestas y otros complementos para que tu visita sea más cómoda. Pregúntanos si necesitas algo más.',
+    href: '#contacto',
+    actionLabel: 'Ver más',
   },
 ] as const;
 
@@ -191,32 +209,37 @@ export const steps = [
     number: 1,
     color: 'violet',
     title: 'Elige la máquina',
-    description: '[PLACEHOLDER: detalle del proceso de selección de máquina]',
+    description:
+      'Mira el volumen de tu colada y elige la lavadora libre que mejor le venga. La pantalla indica si está disponible y el programa recomendado.',
   },
   {
     number: 2,
     color: 'pink',
     title: 'Añade los productos',
-    description: '[PLACEHOLDER: instrucciones para añadir detergente y suavizante]',
+    description:
+      'Echa detergente y suavizante en los cajetines, o coge una dosis en el expositor del local. Cierra la puerta y listo.',
   },
   {
     number: 3,
     color: 'cyan',
     title: 'Inicia el ciclo',
-    description: '[PLACEHOLDER: método de pago aceptado y cómo iniciar el ciclo]',
+    description:
+      'Paga en el terminal de la máquina (tarjeta o monedas) y pulsa inicio. El ciclo arranca solo; no hace falta quedarse al lado.',
   },
   {
     number: 4,
     color: 'orange',
     title: 'Disfruta tu tiempo',
-    description: '[PLACEHOLDER: duración aproximada del ciclo de lavado y secado]',
+    description:
+      'El lavado suele durar unos 35 minutos; el secado, entre 20 y 40 según el programa. Espera en el local o date una vuelta.',
   },
 ] as const;
 
 export const contact = {
-  phone: '[PLACEHOLDER: teléfono]',
-  whatsapp: '[PLACEHOLDER: número WhatsApp]',
-  email: '[PLACEHOLDER: email]',
-  address: '[PLACEHOLDER: dirección postal completa, Sevilla]',
-  hours: '[PLACEHOLDER: horario de apertura]',
+  phone: '629 517 805',
+  /** wa.me: mismo móvil + prefijo España */
+  whatsapp: '34629517805',
+  email: 'viedmaelectric@gmail.com',
+  address: 'C. Virgen de la Cinta, 41011 Sevilla',
+  hours: 'Lunes a domingo, de 7:00 h a 23:00 h',
 };

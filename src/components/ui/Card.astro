@@ -8,6 +8,7 @@ interface Props {
   variant?: 'plain' | 'tinted' | 'featured' | 'sunken';
   interactive?: boolean;
   href?: string;
+  ariaLabel?: string;
   class?: string;
 }
 
@@ -15,12 +16,18 @@ const {
   variant = 'plain',
   interactive = false,
   href,
+  ariaLabel,
   class: cls = '',
 } = Astro.props;
+
+const isLink = Boolean(href);
 
 const base = [
   'rounded-card',
   'transition-shadow duration-[var(--duration-base)]',
+  isLink
+    ? 'no-underline text-inherit focus-visible:outline-none focus-visible:shadow-focus'
+    : '',
 ].join(' ');
 
 const variantStyles: Record<string, string> = {
@@ -33,14 +40,14 @@ const variantStyles: Record<string, string> = {
 const classes = [
   base,
   variantStyles[variant],
-  interactive ? 'cursor-pointer hover-lift' : '',
+  interactive || isLink ? 'cursor-pointer hover-lift' : '',
   cls,
 ].filter(Boolean).join(' ');
 ---
 
 {
   href ? (
-    <a href={href} class={classes}>
+    <a href={href} class={classes} aria-label={ariaLabel}>
       <slot />
     </a>
   ) : (

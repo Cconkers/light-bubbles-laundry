@@ -148,6 +148,10 @@ Contenido derivado de la referencia (icono + etiqueta + apoyo corto):
 
 Qué se ofrece. Responde "¿cabe mi colada?" y "¿qué puedo hacer aquí?".
 
+> **SPEC-005.** El alineamiento al mockup §2 (retícula 2×2, “Ver más” a anclas existentes,
+> franja de contacto, placeholders D-010) está en [`SPEC-005`](./005-servicios.md). Esta
+> sección de SPEC-001 conserva la IA; donde discrepen, manda SPEC-005.
+
 Cuatro tarjetas, según la referencia:
 
 | Servicio | Contenido |
