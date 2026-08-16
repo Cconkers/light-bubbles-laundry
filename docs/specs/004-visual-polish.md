@@ -4,7 +4,7 @@
 |---|---|
 | **ID** | SPEC-004 |
 | **Título** | Pulido visual global — valores exactos para coherencia mockup |
-| **Estado** | `In progress` |
+| **Estado** | `Done` — cerrado en [`SPEC-014`](./014-cerrar-polish.md) |
 | **Fecha** | agosto 2026 |
 | **Ruta** | `/` — Hero + Tarifas (prioridad); resto de secciones en fases posteriores |
 
@@ -183,48 +183,53 @@ No aplica cambio de metadatos. Contenido de tarifas sigue indexable.
 
 ### Build y tipos
 
-- [ ] `npm run check` — 0 errors, 0 warnings, 0 hints
-- [ ] `npm run build` sin errores
-- [ ] Sin errores de consola en la sección `#tarifas`
+- [x] `npm run check` — 0 errors, 0 warnings, 0 hints
+- [x] `npm run build` sin errores
+- [x] Sin errores de consola en la sección `#tarifas`
 
 ### Estructura
 
-- [ ] IA y anclas de SPEC-003 intactas (`#tarifas`, tabs Lavado/Secado, 4 cards)
-- [ ] Precios siguen siendo maqueta visible (D-010)
+- [x] IA y anclas de SPEC-003 intactas (`#tarifas`, tabs Lavado/Secado, 4 cards)
+- [x] Precios siguen siendo maqueta visible (D-010)
 
 ### Visual — Tarifas
 
-- [ ] Fondo no es un lila/azul plano único: hay wash + capa decorativa (burbujas y/o blobs)
-- [ ] Opacidad percibida de burbujas en desktop en rango ~8–12 %
-- [ ] Cards con layout SPEC-003 (`gap-3`, `p-6 pt-8`); el pase “más aire” quedó revertido
-- [ ] Precio con `clamp(1.75rem, 3vw, 2.25rem)` hasta nuevo acuerdo tipográfico
-- [ ] Ninguna superficie oscura a ancho completo (D-005)
-- [ ] Sin hex arbitrarios de marca: tokens / `color-mix` (D-006)
+- [x] Fondo no es un lila/azul plano único: hay wash + capa decorativa (burbujas y/o blobs)
+- [x] Opacidad percibida de burbujas en desktop en rango ~8–12 %
+- [x] Cards con layout SPEC-003 (`gap-3`, `p-6 pt-8`); el pase “más aire” quedó revertido
+- [x] Precio con `clamp(1.75rem, 3vw, 2.25rem)` hasta nuevo acuerdo tipográfico
+- [x] Ninguna superficie oscura a ancho completo (D-005)
+- [x] Sin hex arbitrarios de marca: tokens / `color-mix` (D-006)
 
 ### Visual — Hero (no regresión)
 
-- [ ] Bloque no pegado al borde izquierdo en desktop (margen `vw` en pared clara)
-- [ ] CTAs en una fila en desktop
-- [ ] Logo no comprime el H1 línea a línea
+- [x] Bloque no pegado al borde izquierdo en desktop (margen `vw` en pared clara)
+- [x] CTAs en una fila en desktop
+- [x] Logo no comprime el H1 línea a línea
 
 ### Responsive
 
-- [ ] Correcto a 320, 375, 768, 1024, 1440
-- [ ] Sin scroll horizontal
-- [ ] Badge “Más popular” visible (no clipped)
+- [x] Correcto a 320, 375, 768, 1024, 1440
+- [x] Sin scroll horizontal
+- [x] Badge “Más popular” visible (no clipped)
 
 ### Accesibilidad
 
-- [ ] Teclado + foco visible en tabs y enlaces
-- [ ] Contraste precio y cuerpo medido AA
-- [ ] `prefers-reduced-motion` respetado en decoración
+- [x] Teclado + foco visible en tabs y enlaces
+- [x] Contraste precio y cuerpo medido AA
+- [x] `prefers-reduced-motion` respetado en decoración
 
 ### Rendimiento
 
-- [ ] Sin dependencias nuevas
-- [ ] Decoración CSS / componente existente
+- [x] Sin dependencias nuevas
+- [x] Decoración CSS / componente existente
 
 ---
+
+## Cierre (SPEC-014)
+
+Hero + Tarifas cumplidos. Fases 3–5 (Servicios, Cómo funciona, Footer) quedan
+**fuera del Done** y pueden ser SPECs futuras de polish.
 
 ## Notas de implementación
 
