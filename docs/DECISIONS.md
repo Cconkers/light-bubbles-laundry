@@ -1078,6 +1078,46 @@ iframe se bloquea.
 
 ---
 
+## D-025 — URL canónica del sitio y Open Graph absolutos
+
+**Fecha:** agosto 2026
+**Estado:** Accepted
+**Área:** Architecture
+
+### Contexto
+
+Open Graph y JSON-LD `LocalBusiness` exigen URLs absolutas. El proyecto no tenía `site` en
+Astro y usaba `/og-placeholder.webp` relativo. El dominio de producción aún puede no estar
+fijado (D-023 Vercel), pero hace falta un valor único para build y metadatos.
+
+### Decisión
+
+- `site.url` vive en [`src/data/content.ts`](../src/data/content.ts) y se declara también
+  como `site` en [`astro.config.mjs`](../astro.config.mjs).
+- Mientras no exista dominio confirmado, el valor es un **placeholder de producción**
+  documentado con `[PLACEHOLDER: …]` (D-010); se sustituye en el mismo archivo al confirmar.
+- `og:image` / Twitter / `image` del schema se resuelven con `new URL(..., Astro.site)`.
+- La imagen OG es `public/og.webp` (1200×630, fondo sólido), nunca el logo con alfa solo
+  (D-016).
+
+### Motivo
+
+Un solo origen de verdad evita divergencia entre layout, schema y config. El placeholder
+permite cerrar SPEC-010 sin inventar un dominio “oficial” falso en copy de negocio.
+
+### Consecuencias
+
+- Cambiar de dominio = editar `site.url` (y el `site` de Astro si no se importa el mismo valor).
+- Depuradores de redes fallarán hasta que el placeholder coincida con la URL pública real.
+- No se añade sitemap/robots en esta decisión (SPEC futura).
+
+### Relacionado
+
+- [`docs/specs/010-seo-local.md`](./specs/010-seo-local.md)
+- D-010, D-016, D-023
+
+---
+
 ## Cómo añadir una nueva decisión
 
 ### Cuándo registrar

@@ -311,11 +311,12 @@ Básico, suficiente para búsqueda local. El SEO completo es una SPEC futura.
 - URL canónica.
 - Open Graph y Twitter Card: `og:title`, `og:description`, `og:image`, `og:type`, `og:locale` = `es_ES`.
   - **`og:image` no puede ser el logo transparente:** varias plataformas componen la transparencia sobre negro. Hace falta una variante con fondo sólido; si no existe todavía, marcar como `[PLACEHOLDER: imagen Open Graph 1200x630]` (D-016).
+    Resuelto en [`SPEC-010`](./010-seo-local.md) (`public/og.webp`).
 - Texto alternativo descriptivo en imágenes informativas.
 - Todo contenido indexable en HTML, no generado por JS.
 
-Fuera de alcance en esta SPEC: `schema.org` LocalBusiness, sitemap y `robots.txt`. Requieren
-datos de negocio confirmados (D-010) y son SPEC propia.
+Fuera de alcance en esta SPEC: `schema.org` LocalBusiness, sitemap y `robots.txt`.
+LocalBusiness + OG sólido: [`SPEC-010`](./010-seo-local.md). Sitemap/robots: SPEC futura.
 
 ---
 

@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import AmbientAudio from '../components/ui/AmbientAudio.astro';
+import { contact, site } from '../data/content';
 import '../styles/global.css';
 
 interface Props {
@@ -12,12 +13,47 @@ interface Props {
 }
 
 const {
-  title = 'Burbujas de Luz — Lavandería Autoservicio en Sevilla',
-  description = 'Lavandería autoservicio en Sevilla. Lava, seca y disfruta con máquinas modernas a tu ritmo. Descubre las tarifas y cómo funciona.',
+  title = `${site.name} — ${site.tagline} en ${site.location}`,
+  description = site.description,
   canonical = Astro.url.href,
-  ogImage = '/og-placeholder.webp',
+  ogImage = '/og.webp',
   ogType = 'website',
 } = Astro.props;
+
+const siteOrigin = Astro.site ?? new URL(site.url);
+const ogImageAbsolute = new URL(ogImage, siteOrigin).href;
+const pageUrl = new URL(canonical, siteOrigin).href;
+
+/** E.164 from confirmed WhatsApp id (same mobile as contact.phone). */
+const telephoneE164 = `+${contact.whatsapp}`;
+
+/** PostalAddress from confirmed contact.address: "C. Virgen de la Cinta, 41011 Sevilla" */
+const addressMatch = contact.address.match(/^(.+),\s*(\d{5})\s+(.+)$/);
+const streetAddress = addressMatch?.[1] ?? contact.address;
+const postalCode = addressMatch?.[2] ?? '';
+const addressLocality = addressMatch?.[3] ?? site.location;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.name,
+  description: site.description,
+  url: siteOrigin.href.replace(/\/$/, ''),
+  telephone: telephoneE164,
+  email: contact.email,
+  image: ogImageAbsolute,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress,
+    postalCode,
+    addressLocality,
+    addressCountry: 'ES',
+  },
+  /** Confirmed hours: Lunes a domingo, 7:00–23:00 */
+  openingHours: 'Mo-Su 07:00-23:00',
+};
+
+const localBusinessJson = JSON.stringify(localBusiness);
 ---
 
 <!doctype html>
@@ -31,21 +67,24 @@ const {
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
 
-    <link rel="canonical" href={canonical} />
+    <link rel="canonical" href={pageUrl} />
 
     <!-- Open Graph -->
     <meta property="og:type"        content={ogType} />
     <meta property="og:title"       content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image"       content={ogImage} />
+    <meta property="og:image"       content={ogImageAbsolute} />
+    <meta property="og:url"         content={pageUrl} />
     <meta property="og:locale"      content="es_ES" />
-    <meta property="og:site_name"   content="Burbujas de Luz" />
+    <meta property="og:site_name"   content={site.name} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card"        content="summary_large_image" />
     <meta name="twitter:title"       content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image"       content={ogImage} />
+    <meta name="twitter:image"       content={ogImageAbsolute} />
+
+    <script type="application/ld+json" is:inline set:html={localBusinessJson} />
 
     <title>{title}</title>
     <ClientRouter />

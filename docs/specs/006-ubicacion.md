@@ -208,8 +208,8 @@ Reglas generales en [`DESIGN_SYSTEM.md`](../DESIGN_SYSTEM.md) — Responsive.
 
 ## SEO
 
-- Dirección, horario y teléfono en HTML estático (útiles para LocalBusiness futuro)
-- **No** exigir `schema.org` LocalBusiness en esta SPEC (sigue fuera como en SPEC-001)
+- Dirección, horario y teléfono en HTML estático (base para LocalBusiness)
+- `schema.org` LocalBusiness: [`SPEC-010`](./010-seo-local.md) (no en esta SPEC)
 - No cambiar `<title>` / description de la página salvo que se decida en otra SPEC
 - El iframe no sustituye el texto de la dirección para indexación
 
