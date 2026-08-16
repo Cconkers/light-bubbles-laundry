@@ -87,6 +87,7 @@ ilustración y forma. No en interacciones ruidosas ni en movimiento constante.
 - **Contenido sobre fotografía** solo en zonas de baja actividad visual y siempre con separación de legibilidad (ver §5).
 - **Formas orgánicas como separadores** entre secciones, en lugar de líneas rectas o divisores duros.
 - **Retícula flexible:** las tarjetas se agrupan en 2, 3 o 4 columnas según contenido, nunca forzando huecos vacíos para cuadrar la retícula.
+- **Opiniones (SPEC-015):** prueba social en quote cards ligeras (citas 5★ curadas de Google), una idea por sección (“¿puedo fiarme?”), sin carruseles pesados ni widgets de terceros.
 
 ---
 

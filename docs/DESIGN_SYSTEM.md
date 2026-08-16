@@ -396,6 +396,14 @@ Contenedor por defecto para contenido agrupado.
 - Altura homogénea dentro de una misma cuadrícula
 - Si la tarjeta entera es un enlace, el elemento raíz es `<a>`; no anidar controles interactivos
 
+### Quote cards (reseñas — SPEC-015)
+
+- Misma base `card-plain` (surface + borde + `radius-card`)
+- Cita en `type-body` / `type-small`; autor en `type-label` o `type-small` semibold
+- Avatar: **iniciales** en círculo `*-subtle` (no hotlink de Google)
+- Rating: texto accesible “5 estrellas” + indicadores decorativos
+- No hover-lift (tarjeta no interactiva); el CTA “Ver en Google” es enlace aparte
+
 Variantes:
 
 | Variante | Diferencia |

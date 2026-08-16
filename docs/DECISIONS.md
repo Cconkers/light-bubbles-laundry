@@ -1193,6 +1193,43 @@ Desbloquea el footer y la publicación sin fingir que los datos mercantiles est�
 
 ---
 
+## D-028 — Reseñas Google curadas (sin API ni widget)
+
+**Fecha:** agosto 2026
+**Estado:** Accepted
+**Área:** Product
+
+### Contexto
+
+`PRODUCT.md` listaba reseñas como Non-goal. El negocio quiere prueba social en la home.
+Una API Places/Trustpilot o un embed añade coste, claves, cookies y peso (D-004, D-011).
+
+### Decisión
+
+- Se muestran reseñas **copiadas a mano** desde Google Maps a datos del repo
+  (`src/data/content.ts` / módulo de reviews).
+- Solo reseñas **5 estrellas con texto**; enlace a la ficha/búsqueda en Google para el resto.
+- Sin Places API, Trustpilot API ni widgets embebidos en esta fase.
+- Sin avatares hotlinked de Google; iniciales con tokens de marca.
+- Reactiva parcialmente el non-goal de reseñas en PRODUCT (curadas sí; embeds/APIs no).
+
+### Motivo
+
+Prueba social real con arquitectura estática y control editorial.
+
+### Consecuencias
+
+- Hay que actualizar el JSON/array al cambiar opiniones en Maps.
+- Mostrar solo 5★ es un recorte editorial: el CTA debe apuntar a Google para transparencia.
+- Schema `AggregateRating` queda fuera hasta decidir si el subset es aceptable (SPEC SEO).
+
+### Relacionado
+
+- [`docs/specs/015-opiniones.md`](./specs/015-opiniones.md)
+- D-004, D-010, D-011
+
+---
+
 ## Cómo añadir una nueva decisión
 
 ### Cuándo registrar

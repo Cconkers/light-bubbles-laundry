@@ -1,0 +1,86 @@
+---
+import Card from '../ui/Card.astro';
+import Button from '../ui/Button.astro';
+import { reviews, reviewsIntro } from '../../data/content';
+
+/**
+ * Opiniones — SPEC-015 / D-028.
+ * Reseñas Google curadas (5★ con texto). Sin API ni avatares hotlinked.
+ */
+---
+
+<section
+  id="opiniones"
+  class="relative py-[var(--section-gap)] px-[var(--gutter)] bg-background-alt"
+  aria-labelledby="reviews-heading"
+>
+  <div class="mx-auto max-w-[var(--content-max)]">
+    <div class="mb-10 text-center md:mb-12" data-reveal>
+      <h2 id="reviews-heading" class="type-h2 text-text">
+        {reviewsIntro.title}
+      </h2>
+      <p
+        class="type-body-lg mt-3 text-text-secondary mx-auto"
+        style="max-width: 48ch;"
+      >
+        {reviewsIntro.subtitle}
+      </p>
+    </div>
+
+    <ul
+      class="grid gap-6 sm:grid-cols-2 sm:gap-8"
+      role="list"
+    >
+      {
+        reviews.map((review, i) => (
+          <li
+            data-reveal
+            data-reveal-delay={String(Math.min(i + 1, 4)) as '1' | '2' | '3' | '4'}
+          >
+            <Card
+              variant="plain"
+              class="flex h-full flex-col gap-4 p-6"
+            >
+              <div class="flex items-center gap-3">
+                <span
+                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full
+                         bg-primary-subtle type-small font-semibold text-primary"
+                  aria-hidden="true"
+                >
+                  {review.initials}
+                </span>
+                <div class="min-w-0">
+                  <p class="type-small font-semibold text-text truncate">
+                    {review.author}
+                  </p>
+                  <p class="type-small text-muted">
+                    {review.relativeDate}
+                    <span aria-hidden="true"> · </span>
+                    {reviewsIntro.sourceNote}
+                  </p>
+                </div>
+              </div>
+
+              <p
+                class="type-small font-semibold text-warning"
+                aria-label={`${review.rating} estrellas`}
+              >
+                <span aria-hidden="true">{'★'.repeat(review.rating)}</span>
+              </p>
+
+              <blockquote class="type-body text-text-secondary flex-1 m-0">
+                <p class="m-0">“{review.text}”</p>
+              </blockquote>
+            </Card>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-10 flex justify-center" data-reveal>
+      <Button href={reviewsIntro.ctaHref} variant="secondary" external>
+        {reviewsIntro.ctaLabel}
+      </Button>
+    </div>
+  </div>
+</section>

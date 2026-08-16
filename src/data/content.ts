@@ -348,3 +348,36 @@ export const aboutValues = [
     description: 'Autoservicio con apoyo humano: estamos cerca si surge cualquier duda.',
   },
 ] as const;
+
+/** SPEC-015 / D-028 — reseñas Google curadas (solo 5★ con texto). */
+export const reviewsIntro = {
+  title: 'Lo que dicen quienes ya vinieron',
+  subtitle: 'Opiniones 5 estrellas publicadas en Google. También puedes leer el resto en Maps.',
+  ctaLabel: 'Ver en Google Maps',
+  /** Misma búsqueda por nombre que el botón de ubicación. */
+  ctaHref: `https://www.google.com/maps/search/?api=1&query=${mapsNameQuery}`,
+  sourceNote: 'Fuente: Google Maps',
+};
+
+export const reviews = [
+  {
+    id: 'jvd',
+    author: 'JVD',
+    initials: 'JV',
+    rating: 5 as const,
+    relativeDate: 'Hace 4 meses',
+    text:
+      '¡Excelente servicio! La ropa quedó impecable, con un olor muy fresco. Las máquinas lavan genial y secan rapidísimo. El personal es muy amable y atento. Sin duda, mi lavandería de confianza a partir de ahora :)',
+    source: 'Google' as const,
+  },
+  {
+    id: 'orejamx',
+    author: 'orejamx',
+    initials: 'O',
+    rating: 5 as const,
+    relativeDate: 'Hace 3 meses',
+    text:
+      'Está muy bien el sitio y el servicio. Para la ubicación: si pones Generali Seguros, está justo al lado.',
+    source: 'Google' as const,
+  },
+] as const;

@@ -147,7 +147,9 @@ registrada para reactivarse:
 - PWA, modo offline, notificaciones
 - Internacionalización (i18n) o multi-idioma
 - Estado de máquinas en tiempo real o telemetría
-- Reseñas, valoraciones o integraciones sociales
+- ~~Reseñas, valoraciones o integraciones sociales~~ — **reactivado** en parte por
+  [`D-028`](./DECISIONS.md) / [`SPEC-015`](./specs/015-opiniones.md): reseñas Google
+  **curadas** (5★) en la web. Siguen fuera: widgets embebidos, APIs en cliente, redes sociales.
 - Panel de administración
 
 ---
