@@ -4,7 +4,7 @@
 |---|---|
 | **ID** | SPEC-002 |
 | **Título** | Audio ambiental con control accesible |
-| **Estado** | Draft |
+| **Estado** | `Done` — implementada en [`SPEC-009`](./009-audio.md) |
 | **Fecha** | agosto 2026 |
 | **Ruta** | Control global en [`src/layouts/BaseLayout.astro`](../../src/layouts/BaseLayout.astro) |
 

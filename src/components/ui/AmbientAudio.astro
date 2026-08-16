@@ -1,0 +1,85 @@
+---
+import Icon from './Icon.astro';
+
+/**
+ * Audio ambiental — SPEC-009 / D-021.
+ * Sin autoplay; sin src hasta el primer gesto; preload none.
+ * [PLACEHOLDER: confirmar derechos de uso de la pista antes de publicar.]
+ */
+
+const src = '/music/ropa-limpia-web.mp3';
+const targetVolume = 0.32;
+---
+
+<div
+  class="ambient-audio"
+  data-ambient-audio
+  data-volume={String(targetVolume)}
+  data-src={src}
+>
+  <audio data-ambient-audio-el preload="none" loop playsinline></audio>
+
+  <button
+    type="button"
+    class="ambient-audio__btn"
+    data-ambient-audio-toggle
+    aria-pressed="false"
+    aria-label="Activar música ambiental"
+  >
+    <span class="ambient-audio__icon" data-icon-off>
+      <Icon name="volume-x" size={20} />
+    </span>
+    <span class="ambient-audio__icon hidden" data-icon-on>
+      <Icon name="volume" size={20} />
+    </span>
+  </button>
+</div>
+
+<style>
+  .ambient-audio {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 40;
+  }
+
+  .ambient-audio__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition:
+      box-shadow var(--duration-fast) var(--ease-soft),
+      background-color var(--duration-fast) var(--ease-soft);
+  }
+
+  .ambient-audio__btn:hover {
+    background: var(--color-primary-subtle);
+  }
+
+  .ambient-audio__btn:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
+
+  .ambient-audio__icon.hidden {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ambient-audio__btn {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import '../../scripts/ambient-audio';
+</script>
