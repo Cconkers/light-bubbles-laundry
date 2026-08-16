@@ -40,8 +40,8 @@ Excluye:
 - SFX, audio en hover/foco, múltiples pistas
 - Autoplay aunque `localStorage` diga `on`
 - Preload / `link rel="preload"` de la pista
-- Confirmar derechos legales de la pista (sigue bloqueante para **publicación** comercial;
-  la implementación UI puede avanzar con nota en código)
+- Confirmar derechos legales de la pista Suno (sigue bloqueante para **publicación** comercial;
+  la implementación UI puede avanzar). Procedencia documentada en [`002-audio.md`](./002-audio.md) §3.
 
 ---
 

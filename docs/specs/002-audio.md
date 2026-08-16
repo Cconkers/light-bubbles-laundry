@@ -108,7 +108,10 @@ sin metadatos ni artwork incrustado. Está dentro del límite de 400 KB.
 
 El original (`public/music/Ropa Limpia.mp3`, 2,5MB) permanece fuera del repositorio.
 
-- `[PLACEHOLDER: confirmar derechos de uso de la pista]` — imprescindible antes de publicar.
+- Procedencia: pista generada con **Suno**. Los términos de Suno (plan gratuito vs Pro/commercial)
+  condicionan el uso comercial y la atribución; **no están verificados** en este proyecto.
+- `[PLACEHOLDER: confirmar derechos de uso de la pista Suno antes de publicar]` — bloqueante
+  comercial; la UI puede seguir en staging/preview.
 - El bucle actual dura 45 s. Si el punto de empalme produce un corte audible, acortarlo
   hasta el compás anterior o utilizar un crossfade corto.
 - Volumen normalizado y conservador: el audio ambiental se sitúa claramente por debajo del nivel de una voz.
@@ -227,7 +230,7 @@ interprete como contenido principal, ni se precarga con `<link rel="preload">`.
 
 ### Contenido
 
-- [ ] Derechos de uso de la pista confirmados y documentados. **Bloqueante para publicar.**
+- [ ] Derechos de uso de la pista Suno confirmados (plan/licencia) y documentados. **Bloqueante para publicar.**
 
 ---
 
