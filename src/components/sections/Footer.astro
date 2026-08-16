@@ -118,7 +118,26 @@ const year = new Date().getFullYear();
       <p>
         © {year} {site.name} · {site.tagline} · {site.location}
       </p>
-      <!-- [PLACEHOLDER: aviso legal / política de privacidad] -->
+      <nav aria-label="Información legal" class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        <a
+          href="/aviso-legal"
+          class="min-h-[44px] inline-flex items-center text-muted
+                 transition-colors duration-[var(--duration-fast)]
+                 hover:text-primary
+                 focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
+        >
+          Aviso legal
+        </a>
+        <a
+          href="/privacidad"
+          class="min-h-[44px] inline-flex items-center text-muted
+                 transition-colors duration-[var(--duration-fast)]
+                 hover:text-primary
+                 focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
+        >
+          Privacidad
+        </a>
+      </nav>
     </div>
   </div>
 </footer>

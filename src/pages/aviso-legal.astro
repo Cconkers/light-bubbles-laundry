@@ -1,0 +1,90 @@
+---
+import LegalShell from '../components/layouts/LegalShell.astro';
+import { site, contact } from '../data/content';
+import { legalEntity } from '../data/legal';
+
+const title = `Aviso legal — ${site.name}`;
+const description =
+  'Aviso legal de Burbujas de Luz. Titular del sitio y condiciones de uso informativas.';
+---
+
+<LegalShell title={title} description={description}>
+  <h1 class="type-h1 text-text">Aviso legal</h1>
+  <p class="type-small mt-3 text-muted">
+    Texto informativo. Los datos registrales marcados como inventados deben sustituirse
+    antes de publicar en producción.
+  </p>
+
+  <section class="mt-10" aria-labelledby="titular-heading">
+    <h2 id="titular-heading" class="type-h3 text-text">1. Titular del sitio</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      En cumplimiento de la normativa aplicable, se informa de que el sitio web
+      <strong class="text-text">{site.name}</strong> ({site.tagline} en {site.location})
+      es operado, a efectos de este texto de ejemplo, por:
+    </p>
+    <ul class="type-body mt-4 list-disc space-y-2 pl-5 text-text-secondary">
+      <li>
+        <strong class="text-text">Razón social:</strong>
+        {' '}{legalEntity.legalName}
+        <span class="text-muted"> (inventada)</span>
+      </li>
+      <li>
+        <strong class="text-text">CIF:</strong>
+        {' '}{legalEntity.taxId}
+        <span class="text-muted"> (inventado — formato ejemplo B########)</span>
+      </li>
+      <li>
+        <strong class="text-text">Domicilio:</strong>
+        {' '}{legalEntity.address}
+      </li>
+      <li>
+        <strong class="text-text">Email:</strong>
+        {' '}
+        <a class="text-primary font-semibold underline-offset-2 hover:underline" href={`mailto:${contact.email}`}>
+          {contact.email}
+        </a>
+      </li>
+      <li>
+        <strong class="text-text">Teléfono:</strong>
+        {' '}
+        <a class="text-primary font-semibold underline-offset-2 hover:underline" href={`tel:${contact.phone.replace(/\s/g, '')}`}>
+          {contact.phone}
+        </a>
+      </li>
+    </ul>
+    <p class="type-small mt-4 text-muted">{legalEntity.registryNote}</p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="objeto-heading">
+    <h2 id="objeto-heading" class="type-h3 text-text">2. Objeto</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Este sitio es un escaparate informativo del local de lavandería autoservicio.
+      No gestiona reservas, pagos ni cuentas de usuario.
+    </p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="ip-heading">
+    <h2 id="ip-heading" class="type-h3 text-text">3. Propiedad intelectual</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Los textos, diseño, logotipo y demás contenidos del sitio pertenecen a sus titulares
+      o se usan con autorización. Queda prohibida su reproducción no autorizada.
+    </p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="resp-heading">
+    <h2 id="resp-heading" class="type-h3 text-text">4. Responsabilidad</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Se procura mantener la información actualizada (tarifas, horario, servicios), pero
+      puede haber errores u omisiones. En caso de duda, confirme en el local o por teléfono.
+      El titular no responde del uso que terceros hagan de la información publicada.
+    </p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="ley-heading">
+    <h2 id="ley-heading" class="type-h3 text-text">5. Ley aplicable</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Este aviso se interpreta conforme a la legislación española. Para cualquier
+      controversia, los juzgados competentes serán los que determine la normativa vigente.
+    </p>
+  </section>
+</LegalShell>

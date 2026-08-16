@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../sections/Header.astro';
+import Footer from '../sections/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <a href="#main-content" class="skip-link">Saltar al contenido</a>
+  <Header />
+  <main
+    id="main-content"
+    class="px-[var(--gutter)] pt-20 pb-[var(--section-gap)] bg-background"
+  >
+    <article class="mx-auto w-full max-w-[var(--content-max)]" style="max-width: 65ch;">
+      <slot />
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>

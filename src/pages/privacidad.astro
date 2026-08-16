@@ -1,0 +1,95 @@
+---
+import LegalShell from '../components/layouts/LegalShell.astro';
+import { site, contact } from '../data/content';
+import { legalEntity } from '../data/legal';
+
+const title = `Política de privacidad — ${site.name}`;
+const description =
+  'Política de privacidad de Burbujas de Luz: responsable, finalidades y terceros.';
+---
+
+<LegalShell title={title} description={description}>
+  <h1 class="type-h1 text-text">Política de privacidad</h1>
+  <p class="type-small mt-3 text-muted">
+    Texto informativo genérico. Los datos del responsable inventados deben sustituirse
+    antes de publicar. No constituye asesoramiento legal.
+  </p>
+
+  <section class="mt-10" aria-labelledby="resp-priv-heading">
+    <h2 id="resp-priv-heading" class="type-h3 text-text">1. Responsable</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Responsable del tratamiento (datos de ejemplo):
+      <strong class="text-text">{legalEntity.legalName}</strong>,
+      CIF <strong class="text-text">{legalEntity.taxId}</strong> (inventado),
+      domicilio en {legalEntity.address}.
+      Contacto:
+      <a class="text-primary font-semibold underline-offset-2 hover:underline" href={`mailto:${contact.email}`}>
+        {contact.email}
+      </a>
+      · {contact.phone}.
+    </p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="datos-heading">
+    <h2 id="datos-heading" class="type-h3 text-text">2. Qué datos tratamos</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      El sitio es estático y no dispone de formularios con envío a un servidor propio ni de
+      cuentas de usuario. Si nos escribe por email, teléfono o WhatsApp, trataremos los
+      datos que nos facilite voluntariamente (por ejemplo, número o dirección de correo)
+      solo para responderle.
+    </p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="finalidad-heading">
+    <h2 id="finalidad-heading" class="type-h3 text-text">3. Finalidad y base legal</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Finalidad: atender consultas y facilitar información sobre el local ({site.name}).
+      Base: su consentimiento al contactarnos y, en su caso, la ejecución de medidas
+      precontractuales a petición suya.
+    </p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="terceros-heading">
+    <h2 id="terceros-heading" class="type-h3 text-text">4. Terceros y tecnologías</h2>
+    <ul class="type-body mt-3 list-disc space-y-2 pl-5 text-text-secondary">
+      <li>
+        <strong class="text-text">Google Maps:</strong> el mapa embebido puede cargar
+        recursos y cookies del proveedor al visualizarse. El uso de Maps se rige por las
+        políticas de Google.
+      </li>
+      <li>
+        <strong class="text-text">Audio ambiental:</strong> si activa el sonido, el sitio
+        guarda su preferencia en <code class="text-text">localStorage</code> del navegador
+        (clave de preferencia local). No se envía a un servidor propio.
+      </li>
+      <li>
+        No usamos herramientas propias de analítica ni publicidad en esta fase.
+      </li>
+    </ul>
+  </section>
+
+  <section class="mt-10" aria-labelledby="conservacion-heading">
+    <h2 id="conservacion-heading" class="type-h3 text-text">5. Conservación</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Los mensajes que nos envíe se conservarán el tiempo necesario para gestionar la
+      consulta y las obligaciones legales aplicables.
+    </p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="derechos-heading">
+    <h2 id="derechos-heading" class="type-h3 text-text">6. Sus derechos</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Puede solicitar acceso, rectificación, supresión, oposición, limitación y
+      portabilidad, cuando procedan, escribiendo a {contact.email}. También puede
+      reclamar ante la Agencia Española de Protección de Datos (AEPD).
+    </p>
+  </section>
+
+  <section class="mt-10" aria-labelledby="cambios-heading">
+    <h2 id="cambios-heading" class="type-h3 text-text">7. Cambios</h2>
+    <p class="type-body mt-3 text-text-secondary">
+      Esta política puede actualizarse. La versión vigente será la publicada en esta
+      página.
+    </p>
+  </section>
+</LegalShell>

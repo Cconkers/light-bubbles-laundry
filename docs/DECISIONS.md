@@ -1155,6 +1155,44 @@ y revisable.
 
 ---
 
+## D-027 — Páginas legales estáticas con datos registrales placeholder
+
+**Fecha:** agosto 2026
+**Estado:** Accepted
+**Área:** Content
+
+### Contexto
+
+El footer reservaba `[PLACEHOLDER: aviso legal / política de privacidad]`. Hace falta un
+mínimo de textos legales para publicar, pero el negocio aún no ha facilitado razón social
+ni CIF reales. El sitio no tiene backend ni formularios con envío (D-011).
+
+### Decisión
+
+- Existen `/aviso-legal` y `/privacidad` como páginas Astro estáticas.
+- Los datos registrales viven en [`src/data/legal.ts`](../src/data/legal.ts) y son
+  **placeholders inventados a propósito** hasta confirmación (D-010).
+- Sin cookie banner: se documenta el iframe de Maps (D-024) y el `localStorage` del audio
+  (D-021) en la política de privacidad.
+- El footer enlaza ambas páginas; el sitemap las incluye (D-026).
+
+### Motivo
+
+Desbloquea el footer y la publicación sin fingir que los datos mercantiles están verificados.
+
+### Consecuencias
+
+- Publicar en producción con CIF/razón inventados es incorrecto: hay que sustituirlos.
+- No sustituye asesoramiento legal profesional.
+- Ampliar a CMP/banner requiere nueva SPEC y decisión.
+
+### Relacionado
+
+- [`docs/specs/013-legal.md`](./specs/013-legal.md)
+- D-010, D-011, D-021, D-024, D-026
+
+---
+
 ## Cómo añadir una nueva decisión
 
 ### Cuándo registrar

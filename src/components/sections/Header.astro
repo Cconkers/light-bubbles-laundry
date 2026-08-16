@@ -6,12 +6,12 @@
  */
 
 const navLinks = [
-  { label: 'Inicio',        href: '/',               section: null },
-  { label: 'Servicios',     href: '#servicios',      section: 'servicios' },
-  { label: 'Tarifas',       href: '#tarifas',        section: 'tarifas' },
-  { label: 'Cómo funciona', href: '#como-funciona',  section: 'como-funciona' },
-  { label: 'Preguntas',     href: '#preguntas',      section: 'preguntas' },
-  { label: 'Contacto',      href: '#contacto',       section: 'contacto' },
+  { label: 'Inicio',        href: '/',                section: null },
+  { label: 'Servicios',     href: '/#servicios',      section: 'servicios' },
+  { label: 'Tarifas',       href: '/#tarifas',        section: 'tarifas' },
+  { label: 'Cómo funciona', href: '/#como-funciona',  section: 'como-funciona' },
+  { label: 'Preguntas',     href: '/#preguntas',      section: 'preguntas' },
+  { label: 'Contacto',      href: '/#contacto',       section: 'contacto' },
 ] as const;
 ---
 
@@ -184,11 +184,11 @@ const navLinks = [
   /* ── Scroll-spy: marca el enlace de la sección visible ───────────────── */
   const spyOrder = [
     { href: '/', section: null as string | null },
-    { href: '#servicios', section: 'servicios' },
-    { href: '#tarifas', section: 'tarifas' },
-    { href: '#como-funciona', section: 'como-funciona' },
-    { href: '#preguntas', section: 'preguntas' },
-    { href: '#contacto', section: 'contacto' },
+    { href: '/#servicios', section: 'servicios' },
+    { href: '/#tarifas', section: 'tarifas' },
+    { href: '/#como-funciona', section: 'como-funciona' },
+    { href: '/#preguntas', section: 'preguntas' },
+    { href: '/#contacto', section: 'contacto' },
   ];
 
   function setActiveHref(href: string) {
