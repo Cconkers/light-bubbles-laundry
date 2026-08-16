@@ -252,6 +252,7 @@ export const contact = {
 };
 
 const mapsQuery = encodeURIComponent(contact.address);
+const mapsNameQuery = encodeURIComponent(`${site.name} ${site.location}`);
 
 /** SPEC-006 — intro y URLs de mapa (D-024: iframe lazy + enlace externo). */
 export const locationIntro = {
@@ -262,7 +263,8 @@ export const locationIntro = {
   mapTitle: `Mapa de Burbujas de Luz en ${contact.address}`,
   mapsEmbedUrl: `https://maps.google.com/maps?q=${mapsQuery}&output=embed&hl=es`,
   mapsDirectionsUrl: `https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`,
-  mapsOpenUrl: `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`,
+  /** Abrir en Maps: búsqueda por nombre de negocio (no solo calle). */
+  mapsOpenUrl: `https://www.google.com/maps/search/?api=1&query=${mapsNameQuery}`,
 };
 
 /** SPEC-007 — FAQ (copy de maqueta; horario/dirección desde contact). */
