@@ -27,7 +27,7 @@ const pageUrl = new URL(canonical, siteOrigin).href;
 /** E.164 from confirmed WhatsApp id (same mobile as contact.phone). */
 const telephoneE164 = `+${contact.whatsapp}`;
 
-/** PostalAddress from confirmed contact.address: "C. Virgen de la Cinta, 41011 Sevilla" */
+/** PostalAddress from contact.address: "C. Virgen de la Cinta, 20, 41011 Sevilla" */
 const addressMatch = contact.address.match(/^(.+),\s*(\d{5})\s+(.+)$/);
 const streetAddress = addressMatch?.[1] ?? contact.address;
 const postalCode = addressMatch?.[2] ?? '';

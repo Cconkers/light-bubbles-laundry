@@ -247,7 +247,7 @@ export const contact = {
   /** wa.me: mismo móvil + prefijo España */
   whatsapp: '34629517805',
   email: 'viedmaelectric@gmail.com',
-  address: 'C. Virgen de la Cinta, 41011 Sevilla',
+  address: 'C. Virgen de la Cinta, 20, 41011 Sevilla',
   hours: 'Lunes a domingo, de 7:00 h a 23:00 h',
 };
 
