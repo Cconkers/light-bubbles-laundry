@@ -32,7 +32,7 @@ Incluye:
 
 Excluye:
 
-- `sitemap.xml` / `robots.txt` (SPEC futura)
+- `sitemap.xml` / `robots.txt` → [`SPEC-011`](./011-sitemap-robots.md)
 - `FAQPage` schema (sigue fuera; SPEC-007)
 - Aviso legal / privacidad
 - GeoCoordinates inventadas, `priceRange` o reviews
@@ -114,7 +114,7 @@ Esta SPEC **es** el bloque SEO local aplazado en 001/006:
 - LocalBusiness JSON-LD
 - OG image válida (absoluta, fondo sólido)
 
-Fuera: sitemap, robots, FAQPage.
+Fuera: FAQPage. Sitemap/robots: [`SPEC-011`](./011-sitemap-robots.md).
 
 ---
 

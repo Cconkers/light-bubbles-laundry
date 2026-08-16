@@ -1109,12 +1109,49 @@ permite cerrar SPEC-010 sin inventar un dominio “oficial” falso en copy de n
 
 - Cambiar de dominio = editar `site.url` (y el `site` de Astro si no se importa el mismo valor).
 - Depuradores de redes fallarán hasta que el placeholder coincida con la URL pública real.
-- No se añade sitemap/robots en esta decisión (SPEC futura).
+- No se añade sitemap/robots en esta decisión → [`SPEC-011`](./specs/011-sitemap-robots.md) / D-026.
 
 ### Relacionado
 
 - [`docs/specs/010-seo-local.md`](./specs/010-seo-local.md)
 - D-010, D-016, D-023
+
+---
+
+## D-026 — Sitemap y robots estáticos en public/
+
+**Fecha:** agosto 2026
+**Estado:** Accepted
+**Área:** Architecture
+
+### Contexto
+
+SPEC-001 y SPEC-010 aplazaron `sitemap.xml` y `robots.txt`. El sitio es una sola página
+estática. `@astrojs/sitemap` añadiría una dependencia sin necesidad real (D-004).
+
+### Decisión
+
+- `public/robots.txt` y `public/sitemap.xml` se mantienen a mano.
+- La URL canónica coincide con `site.url` / `astro.config` `site` (D-025).
+- Al cambiar de dominio se actualizan content, astro config, robots y sitemap juntos.
+- No se usa `@astrojs/sitemap` en el MVP.
+
+### Motivo
+
+Cero peso de bundle y cero integración. Con una sola URL, un archivo estático es suficiente
+y revisable.
+
+### Consecuencias
+
+- Si el sitio gana rutas, habrá que ampliar el sitemap a mano o reconsiderar la integración
+  (nueva decisión).
+- Los previews de Vercel pueden enviar `X-Robots-Tag: noindex` aunque `robots.txt` permita
+  rastreo; eso es de plataforma, no del archivo.
+
+### Relacionado
+
+- [`docs/specs/011-sitemap-robots.md`](./specs/011-sitemap-robots.md)
+- D-004, D-025
 
 ---
 

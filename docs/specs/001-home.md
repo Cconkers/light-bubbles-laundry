@@ -316,7 +316,8 @@ Básico, suficiente para búsqueda local. El SEO completo es una SPEC futura.
 - Todo contenido indexable en HTML, no generado por JS.
 
 Fuera de alcance en esta SPEC: `schema.org` LocalBusiness, sitemap y `robots.txt`.
-LocalBusiness + OG sólido: [`SPEC-010`](./010-seo-local.md). Sitemap/robots: SPEC futura.
+LocalBusiness + OG sólido: [`SPEC-010`](./010-seo-local.md).
+Sitemap / robots: [`SPEC-011`](./011-sitemap-robots.md).
 
 ---
 
