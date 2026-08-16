@@ -257,3 +257,50 @@ export const locationIntro = {
   mapsDirectionsUrl: `https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`,
   mapsOpenUrl: `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`,
 };
+
+/** SPEC-007 — FAQ (copy de maqueta; horario/dirección desde contact). */
+export const faqIntro = {
+  title: 'Preguntas frecuentes',
+  subtitle: 'Resolvemos las dudas más habituales antes de tu visita.',
+  contactLead: '¿Sigues con dudas?',
+  contactCta: { label: 'Contáctanos', href: '#contacto' },
+};
+
+export const faqItems = [
+  {
+    id: 'reserva',
+    question: '¿Necesito reserva?',
+    answer:
+      'No. Somos lavandería de autoservicio: ven cuando quieras dentro del horario, elige una máquina libre y empieza. Sin cita previa ni app.',
+  },
+  {
+    id: 'pago',
+    question: '¿Qué métodos de pago aceptáis?',
+    answer:
+      'En el terminal de cada máquina puedes pagar con tarjeta o monedas. Si una máquina concreta pide otro formato, lo indica en pantalla; ante la duda, pregunta en el local.',
+  },
+  {
+    id: 'detergente',
+    question: '¿Hay detergente en el local?',
+    answer:
+      'Sí. Encontrarás detergente y suavizante en el expositor para dosificar en cada ciclo. También puedes traer tus propios productos si lo prefieres.',
+  },
+  {
+    id: 'cargas',
+    question: '¿Puedo lavar edredones o cargas grandes?',
+    answer:
+      'Sí. Hay lavadoras de distintas capacidades, incluidas las más grandes para edredones, cortinas y textiles voluminosos.',
+    link: { label: 'Ver tarifas y tamaños', href: '#tarifas' },
+  },
+  {
+    id: 'horario',
+    question: '¿Cuál es el horario?',
+    answer: `Estamos abiertos ${contact.hours}.`,
+  },
+  {
+    id: 'ubicacion',
+    question: '¿Dónde estáis?',
+    answer: `Estamos en ${contact.address}. En la sección de contacto tienes el mapa y cómo llegar.`,
+    link: { label: 'Ver ubicación y mapa', href: '#contacto' },
+  },
+] as const;

@@ -1,0 +1,140 @@
+---
+import Button from '../ui/Button.astro';
+import { faqIntro, faqItems } from '../../data/content';
+
+/**
+ * FAQ — SPEC-007.
+ * Accordion nativo <details>/<summary>. id="preguntas" para el Header.
+ */
+---
+
+<section
+  id="preguntas"
+  class="faq-section relative py-[var(--section-gap)] px-[var(--gutter)] bg-background-alt"
+  aria-labelledby="faq-heading"
+>
+  <div class="mx-auto max-w-[var(--content-max)]">
+    <div class="mb-10 text-center md:mb-12" data-reveal>
+      <h2 id="faq-heading" class="type-h2 text-text">
+        {faqIntro.title}
+      </h2>
+      <p
+        class="type-body-lg mt-3 text-text-secondary mx-auto"
+        style="max-width: 48ch;"
+      >
+        {faqIntro.subtitle}
+      </p>
+    </div>
+
+    <div class="faq-list mx-auto flex flex-col gap-3" style="max-width: 40rem;">
+      {
+        faqItems.map((item, i) => (
+          <details
+            class="faq-item group rounded-card border border-border bg-surface shadow-sm"
+            data-reveal
+            data-reveal-delay={
+              String(Math.min(i + 1, 4)) as '1' | '2' | '3' | '4'
+            }
+          >
+            <summary class="faq-summary type-body font-semibold text-text">
+              <span class="faq-summary__text">{item.question}</span>
+              <span class="faq-summary__icon" aria-hidden="true">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-answer type-small text-text-secondary">
+              <p>{item.answer}</p>
+              {'link' in item && item.link && (
+                <p class="mt-3">
+                  <a
+                    href={item.link.href}
+                    class="inline-flex min-h-[44px] items-center font-semibold text-primary
+                           transition-colors duration-[var(--duration-fast)]
+                           hover:text-primary-hover
+                           focus-visible:outline-none focus-visible:shadow-focus rounded-sm"
+                  >
+                    {item.link.label}
+                    <span aria-hidden="true"> →</span>
+                  </a>
+                </p>
+              )}
+            </div>
+          </details>
+        ))
+      }
+    </div>
+
+    <div
+      class="mt-10 flex flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-4"
+      data-reveal
+    >
+      <p class="type-body text-text-secondary">{faqIntro.contactLead}</p>
+      <Button href={faqIntro.contactCta.href} variant="secondary" size="sm">
+        {faqIntro.contactCta.label}
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 44px;
+    padding: var(--space-4) var(--space-5);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-summary:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+    border-radius: var(--radius-card);
+  }
+
+  .faq-summary__text {
+    flex: 1;
+    text-align: left;
+  }
+
+  .faq-summary__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--color-primary);
+    transition: transform var(--duration-fast) var(--ease-soft);
+  }
+
+  .faq-item[open] .faq-summary__icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-5) var(--space-5);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-summary__icon {
+      transition: none;
+    }
+  }
+</style>

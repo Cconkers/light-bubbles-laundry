@@ -110,7 +110,7 @@ Fijo en la parte superior, sobre superficie clara translúcida.
 
 - **Logo** — [`src/assets/brand/logo.webp`](../../src/assets/brand/logo.webp) vía `<Image>` de `astro:assets`, enlazado a `/`. Alto de 40-48px respetando el ancho mínimo de 104px en móvil (D-016).
   > **Corrige un fallo existente.** `index.astro` línea 29 apunta a `/images/logo.png`, archivo que ya se borró, de modo que hoy el logo de la cabecera devuelve 404. Al migrar a `<Image>` desaparece la referencia rota.
-- **Navegación** — Inicio, Servicios, Cómo funciona, Tarifas, Preguntas, Contacto. Las rutas aún no existen: en esta SPEC apuntan a anclas de la propia página cuando hay sección equivalente (`#como-funciona`, `#servicios`). **Tarifas** apunta a `#tarifas` (véase [`SPEC-003`](./003-tarifas.md)). **Contacto** apunta a `#contacto` en la sección de ubicación ([`SPEC-006`](./006-ubicacion.md)). `Preguntas` queda apuntando a `#cta`, nunca a un 404.
+- **Navegación** — Inicio, Servicios, Cómo funciona, Tarifas, Preguntas, Contacto. Las rutas aún no existen: en esta SPEC apuntan a anclas de la propia página cuando hay sección equivalente (`#como-funciona`, `#servicios`). **Tarifas** apunta a `#tarifas` (véase [`SPEC-003`](./003-tarifas.md)). **Contacto** apunta a `#contacto` en la sección de ubicación ([`SPEC-006`](./006-ubicacion.md)). **Preguntas** apunta a `#preguntas` ([`SPEC-007`](./007-faq.md)). `#cta` permanece para el CTA final.
 - **Píldora de ubicación** — "Sevilla", decorativa e informativa.
 - **Móvil** — navegación colapsada en menú accesible: operable por teclado, `aria-expanded`, foco atrapado si es overlay, cierre con `Escape`.
 - Superficie clara con `backdrop-filter`. **Nunca oscura** (D-005).
@@ -183,22 +183,27 @@ Pasos numerados, según la referencia:
 - `id="como-funciona"` para el ancla del header.
 - El paso de pago es el de mayor incertidumbre para el usuario: no inventar método (D-010).
 
-### 6. CTA final
+### 6. FAQ / Preguntas
+
+> **SPEC-007.** La sección FAQ (`id="preguntas"`), entre Cómo funciona y el CTA final,
+> está en [`SPEC-007`](./007-faq.md). El nav “Preguntas” apunta a `#preguntas`.
+
+### 7. CTA final
 
 Cierre orientado a la visita física.
 
 - Titular breve reforzando la acción.
 - CTA primario "Ver tarifas" (coherente con el hero).
-- CTA de apoyo: contacto directo mediante `tel:` y WhatsApp, ambos con `[PLACEHOLDER: teléfono]`.
+- CTA de apoyo: contacto directo mediante `tel:` y WhatsApp (datos confirmados en `contact`).
 - Fondo con `--gradient-wash` o superficie `*-subtle`. **Sin bloque oscuro** (D-005).
 
-### 7. Ubicación / Contacto
+### 8. Ubicación / Contacto
 
 > **SPEC-006.** La sección de mapa y datos de contacto (`id="contacto"`), entre el CTA
 > final y el footer, está especificada en [`SPEC-006`](./006-ubicacion.md). Donde
 > discrepen, manda SPEC-006. El ancla `#contacto` **ya no** vive en el footer.
 
-### 8. Footer
+### 9. Footer
 
 Información práctica y cierre de marca (sin ancla `#contacto`).
 
