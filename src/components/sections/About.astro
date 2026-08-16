@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../ui/Icon.astro';
+import aboutPhoto from '../../assets/images/background.webp';
+import { aboutIntro, aboutStats, aboutValues } from '../../data/content';
+
+/**
+ * About — SPEC-008 Sobre nosotros.
+ * Layout mockup §6: copy + foto; stats de maqueta; tres valores.
+ * id="sobre-nosotros".
+ */
+
+const accentClasses: Record<string, { bg: string; text: string }> = {
+  violet: { bg: 'bg-primary-subtle', text: 'text-primary' },
+  mint: { bg: 'bg-success-subtle', text: 'text-success' },
+  pink: { bg: 'bg-accent-subtle', text: 'text-accent' },
+  cyan: { bg: 'bg-secondary-subtle', text: 'text-secondary' },
+};
+---
+
+<section
+  id="sobre-nosotros"
+  class="about-section relative py-[var(--section-gap)] px-[var(--gutter)] bg-background"
+  aria-labelledby="about-heading"
+>
+  <div class="mx-auto max-w-[var(--content-max)]">
+    <div
+      class="grid gap-10 lg:grid-cols-2 lg:gap-12 lg:items-center mb-12 md:mb-14"
+      data-reveal
+    >
+      <div>
+        <h2 id="about-heading" class="type-h2 text-text">
+          {aboutIntro.title}
+        </h2>
+        <p class="type-body-lg mt-4 text-text-secondary" style="max-width: 42ch;">
+          {aboutIntro.body}
+        </p>
+
+        <ul
+          class="mt-8 grid grid-cols-3 gap-4"
+          role="list"
+        >
+          {
+            aboutStats.map((stat) => (
+              <li class="text-center sm:text-left">
+                <p class="type-h2 text-primary">{stat.value}</p>
+                <p class="type-small mt-1 text-text-secondary">{stat.label}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div
+        class="about-photo overflow-hidden rounded-card border border-border shadow-sm
+               aspect-[4/3] lg:aspect-auto lg:min-h-[320px]"
+        data-reveal
+        data-reveal-delay="1"
+      >
+        <Image
+          src={aboutPhoto}
+          alt={aboutIntro.imageAlt}
+          width={960}
+          height={720}
+          sizes="(max-width: 1023px) 100vw, 50vw"
+          class="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
+    <ul
+      class="grid gap-8 sm:grid-cols-3"
+      role="list"
+    >
+      {
+        aboutValues.map((v, i) => {
+          const accent = accentClasses[v.color] ?? accentClasses.violet;
+          return (
+            <li
+              class="flex flex-col items-center text-center gap-4"
+              data-reveal
+              data-reveal-delay={
+                String(Math.min(i + 1, 4)) as '1' | '2' | '3' | '4'
+              }
+            >
+              <div
+                class:list={[
+                  'flex items-center justify-center w-12 h-12 rounded-full',
+                  accent.bg,
+                  accent.text,
+                ]}
+                aria-hidden="true"
+              >
+                <Icon name={v.icon} size={24} />
+              </div>
+              <div>
+                <h3 class="mb-2 type-h3 text-text">{v.title}</h3>
+                <p class="type-small text-text-secondary">{v.description}</p>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

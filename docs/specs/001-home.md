@@ -185,10 +185,16 @@ Pasos numerados, según la referencia:
 
 ### 6. FAQ / Preguntas
 
-> **SPEC-007.** La sección FAQ (`id="preguntas"`), entre Cómo funciona y el CTA final,
+> **SPEC-007.** La sección FAQ (`id="preguntas"`), entre Cómo funciona y Sobre nosotros,
 > está en [`SPEC-007`](./007-faq.md). El nav “Preguntas” apunta a `#preguntas`.
 
-### 7. CTA final
+### 7. Sobre nosotros
+
+> **SPEC-008.** La sección de marca (`id="sobre-nosotros"`), entre FAQ y el CTA final,
+> está en [`SPEC-008`](./008-sobre-nosotros.md). Incluye foto del local (asset Hero) y
+> stats de maqueta (+500 / +20 / +8).
+
+### 8. CTA final
 
 Cierre orientado a la visita física.
 
@@ -197,19 +203,20 @@ Cierre orientado a la visita física.
 - CTA de apoyo: contacto directo mediante `tel:` y WhatsApp (datos confirmados en `contact`).
 - Fondo con `--gradient-wash` o superficie `*-subtle`. **Sin bloque oscuro** (D-005).
 
-### 8. Ubicación / Contacto
+### 9. Ubicación / Contacto
 
 > **SPEC-006.** La sección de mapa y datos de contacto (`id="contacto"`), entre el CTA
 > final y el footer, está especificada en [`SPEC-006`](./006-ubicacion.md). Donde
 > discrepen, manda SPEC-006. El ancla `#contacto` **ya no** vive en el footer.
 
-### 9. Footer
+### 10. Footer
 
 Información práctica y cierre de marca (sin ancla `#contacto`).
 
 - Logo (tamaño reducido, ancho mínimo respetado).
 - Resumen de dirección, horario, teléfono y email (datos confirmados; ver SPEC-006 /
   `content.ts`).
+- Enlace opcional a `#sobre-nosotros` (SPEC-008).
 - **Redes** — `[PLACEHOLDER: perfiles sociales]`. Si no hay dato confirmado, **omitir el bloque** en lugar de dejar iconos que no llevan a ningún sitio.
 - Aviso de copyright con año dinámico.
 - Superficie clara o `--color-background-alt`. **No `bg-black/40`**, como en la implementación actual (D-005).

@@ -304,3 +304,38 @@ export const faqItems = [
     link: { label: 'Ver ubicación y mapa', href: '#contacto' },
   },
 ] as const;
+
+/** SPEC-008 — Sobre nosotros (copy de maqueta; stats de maqueta D-010). */
+export const aboutIntro = {
+  title: 'Más que una lavandería, somos tu aliado en el día a día',
+  body:
+    'En Burbujas de Luz creemos que cuidar tu ropa puede ser sencillo, limpio y agradable. Somos una lavandería de autoservicio en Sevilla pensada para tu ritmo: máquinas modernas, ambiente luminoso y trato cercano.',
+  imageAlt: 'Interior luminoso de la lavandería Burbujas de Luz en Sevilla',
+};
+
+export const aboutStats = [
+  { value: '+500', label: 'Clientes que repiten' },
+  { value: '+20', label: 'Máquinas listas' },
+  { value: '+8', label: 'Años contigo' },
+] as const;
+
+export const aboutValues = [
+  {
+    icon: 'sparkle',
+    color: 'violet',
+    title: 'Máquinas modernas y fáciles de usar',
+    description: 'Programas claros e intuitivos para que tu colada fluya sin complicaciones.',
+  },
+  {
+    icon: 'leaf',
+    color: 'mint',
+    title: 'Cuidado de la ropa y del entorno',
+    description: 'Ciclos pensados para cuidar tejidos y reducir el impacto de cada lavado.',
+  },
+  {
+    icon: 'heart',
+    color: 'pink',
+    title: 'Atención cercana cuando la necesites',
+    description: 'Autoservicio con apoyo humano: estamos cerca si surge cualquier duda.',
+  },
+] as const;
