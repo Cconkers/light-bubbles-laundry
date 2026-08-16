@@ -14,9 +14,7 @@ import Footer from '../components/sections/Footer.astro';
 import { site } from '../data/content';
 
 const pageTitle = `${site.name} — ${site.tagline} en ${site.location}`;
-const pageDescription =
-  `Lavandería autoservicio en ${site.location}. Lava, seca y disfruta con máquinas modernas a tu ritmo. ` +
-  `Consulta las tarifas, capacidades y horario.`;
+const pageDescription = site.description;
 ---
 
 <BaseLayout

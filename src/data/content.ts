@@ -9,12 +9,14 @@ export const site = {
   tagline: 'Lavandería Autoservicio',
   location: 'Sevilla',
   description:
-    'Lavandería autoservicio en Sevilla. Lava, seca y disfruta con máquinas modernas a tu ritmo. Descubre las tarifas y cómo funciona.',
+    'Lavandería autoservicio en Sevilla: lava y seca a tu ritmo. Tarifas, horario y cómo llegar.',
   /**
    * [PLACEHOLDER: URL canónica de producción]
    * Sustituir por el dominio real al publicar (D-025). Debe coincidir con `site` en astro.config.
    */
   url: 'https://burbujasdeluz.es',
+  /** [PLACEHOLDER: rango de precios LocalBusiness — provisional para pruebas] */
+  priceRange: '€',
 };
 
 export const hero = {
